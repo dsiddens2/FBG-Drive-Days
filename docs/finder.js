@@ -8,8 +8,8 @@
   const FILTER_ROADS = ["technical", "scenic", "cruise"];
   const FILTER_EATS = ["bbq", "pie", "brewery", "german", "mix"];
   const FILTER_VEHICLES = ["motorcycle", "sports", "cruise"];
-  const SHARE_PAGE = "https://discoverfbg.com/drive-days";
-  const SHARE_INTRO = "Check out this filtered list of Hill Country Drive Days.";
+  const SHARE_PAGE = "https://discoverfbg.com/Best-Driving-Roads";
+  const SHARE_INTRO = "Check out these driving roads from Fredericksburg.";
   const FBG = [30.2752, -98.8717];
   let fitting = false;
 
@@ -558,7 +558,7 @@
   function showSelectedRoute() {
     const place = winnerPlace();
     if (!place) {
-      if (mapTitle) mapTitle.textContent = "Pick a Drive Day";
+      if (mapTitle) mapTitle.textContent = "Pick a drive";
       if (mapCaption) mapCaption.textContent = "Filter the list, then tap a route to see it on the map.";
       if (mapSend) {
         mapSend.removeAttribute("href");

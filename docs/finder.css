@@ -104,13 +104,15 @@
 }
 
 #fbg-drive-finder .panel-head h2 {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
-  line-height: 1.1;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
   text-transform: uppercase;
   color: #e0b060;
   min-width: 0;
+  flex: 1 1 auto;
+  white-space: normal;
 }
 
 #fbg-drive-finder .filter-reset-wrap {

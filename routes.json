@@ -28,7 +28,7 @@
       "Bent Rim Grill / Frio Canyon Motorcycle Stop, Leakey \u2014 burgers, Frito pie, bike parking",
       "The Hog Pen, RM 336 \u2014 BBQ and a beer if the hours line up (Wed / Fri\u2013Sun)"
     ],
-    "gotchas": "Fuel in Medina, Leakey, and Camp Wood. Blind crests, free-range cattle, thin shoulders. The Hog Pen is not daily. This is not a wine-tasting day.",
+    "gotchas": "Fuel in Medina, Leakey, and Camp Wood. Blind crests, free-range cattle, thin shoulders. The Hog Pen is not daily. This is not a wine-tasting day. Already rode 335, 336, and 337? That is the Rocksprings / Highway 55 day.",
     "waypoints": [
       {
         "name": "Fredericksburg",
@@ -93,6 +93,98 @@
     ]
   },
   {
+    "id": "rocksprings-55",
+    "name": "Rocksprings / Highway 55",
+    "title": "Rocksprings / Highway 55",
+    "tagline": "The day after the sisters. SH 41 into Rocksprings, 55 down to Camp Wood, 337 back through Leakey.",
+    "miles": "~220–250 mi",
+    "time": "full",
+    "timeLabel": "Full day from FBG",
+    "roads": "scenic",
+    "roadsLabel": "Plateau sweepers",
+    "eat": [
+      "mix"
+    ],
+    "eatLabel": "Small-town grill",
+    "vehicle": [
+      "motorcycle",
+      "sports"
+    ],
+    "vehicleLabel": "Motorcycle or sports car",
+    "difficulty": "3 / 5",
+    "description": "West out of Kerrville on 27 to Mountain Home, then SH 41 across the Edwards Plateau and US 377 into Rocksprings. That outbound is open country, not the canyons. Lunch on the square. South on SH 55 to Camp Wood — sweepers, trucks, the Nueces. Then RM 337 east to Leakey, the sister you already rode, and home 337 through Medina. Skip 335 and 336 on purpose. Longer miles than the three-sisters day; 55 is the point.",
+    "routeLabel": "FBG → Kerrville → 27 / 41 → Rocksprings → 55 → Camp Wood → 337 → Leakey → Medina → home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Kerrville,+TX/Ingram,+TX/Mountain+Home,+TX/Rocksprings,+TX/Camp+Wood,+TX/Leakey,+TX/Medina,+TX/Fredericksburg,+TX",
+    "stops": [
+      "Jailhouse Bar & Grill, 108 W Austin St, Rocksprings — lunch on the square. Confirm hours; closed Tuesday",
+      "King Burger, 102 Main St — the backup grill if Jailhouse is dark",
+      "Bent Rim Grill, Leakey — fuel and a pause after 337. You have been here"
+    ],
+    "gotchas": "Do not turn onto RM 335 at Barksdale — that is the sisters day. SH 41 is fast plateau; SH 55 has trucks and 70-mph stretches. Fuel in Rocksprings, Camp Wood, and Leakey. Jailhouse is closed Tuesday. Devil's Sinkhole is a side quest, not this drive. This is a long day from town.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Kerrville",
+        "lat": 30.0474,
+        "lng": -99.1403,
+        "kind": "via"
+      },
+      {
+        "name": "Ingram",
+        "lat": 30.0774,
+        "lng": -99.2403,
+        "kind": "via"
+      },
+      {
+        "name": "Mountain Home",
+        "lat": 30.1784,
+        "lng": -99.375,
+        "kind": "via"
+      },
+      {
+        "name": "Jailhouse Bar & Grill, Rocksprings",
+        "lat": 30.0167,
+        "lng": -100.2081,
+        "kind": "stop"
+      },
+      {
+        "name": "Camp Wood",
+        "lat": 29.6694,
+        "lng": -100.0115,
+        "kind": "via"
+      },
+      {
+        "name": "Bent Rim Grill, Leakey",
+        "lat": 29.7255,
+        "lng": -99.768,
+        "kind": "stop"
+      },
+      {
+        "name": "Lost Maples Country Store",
+        "lat": 29.7458,
+        "lng": -99.557,
+        "kind": "via"
+      },
+      {
+        "name": "Medina",
+        "lat": 29.7966,
+        "lng": -99.2464,
+        "kind": "via"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
     "id": "willow-city",
     "name": "Willow City Loop",
     "title": "Enchanted Rock + Willow City Loop",
@@ -122,7 +214,7 @@
       "Enchanted Rock State Natural Area \u2014 stretch, granite, photos",
       "Back on Main for lunch, or push north to Cooper's in Llano if you want BBQ as the destination"
     ],
-    "gotchas": "Spring wildflower weekends turn Willow City into a parking lot. Private ranch land \u2014 stay on the pavement. Cattle, cattle guards, and low-water crossings.",
+    "gotchas": "Spring wildflower weekends turn Willow City into a parking lot. Private ranch land \u2014 stay on the pavement. Cattle, cattle guards, and low-water crossings. East on 1323 past 1631 is the Horseshoe Bay day, not a longer loop.",
     "waypoints": [
       {
         "name": "Fredericksburg",
@@ -452,6 +544,305 @@
         "lat": 30.2472,
         "lng": -98.5836,
         "kind": "stop"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
+    "id": "johnson-city-2721",
+    "name": "Johnson City 2721",
+    "title": "2721 to Johnson City",
+    "tagline": "RM 2721, 1320, and 1323 instead of 290. Lunch on the Johnson City square. Same roads home.",
+    "miles": "~70–80 mi",
+    "time": "half",
+    "timeLabel": "Half day",
+    "roads": "scenic",
+    "roadsLabel": "Scenic sweepers",
+    "eat": [
+      "brewery",
+      "mix"
+    ],
+    "eatLabel": "Brewpub / square",
+    "vehicle": [
+      "motorcycle",
+      "sports",
+      "cruise"
+    ],
+    "vehicleLabel": "Any. Convertibles and club runs.",
+    "difficulty": "2 / 5",
+    "description": "East on RM 2721 — pick it up off 1631 out of town — the sweeper that parallels 290 without the tasting-room traffic. Left on RM 1320 at Post Oak, right on RM 1323 at Sandy, right on 281 into Johnson City. Pecan Street Brewing on the courthouse square is the lunch. Proof & Cooper and Hill Country Cupboard are walking distance if the table wants a different plate. Come home the same way. Those three ranch roads are why you came, and they are still the best pavement back. 290 is the cheat. 1623 through Blanco, 1323 west to Willow City, and 1631 all the way to Althaus Davis / Horseshoe Bay are other drives from town, not a clever loop.",
+    "routeLabel": "FBG → 2721 → 1320 → 1323 → 281 → Johnson City → same roads home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/30.30662,-98.56645/Sandy,+TX/Pecan+Street+Brewing,+106+East+Pecan+Drive,+Johnson+City,+TX/Sandy,+TX/30.30662,-98.56645/Fredericksburg,+TX",
+    "stops": [
+      "RM 2721 at Post Oak — left onto 1320 toward Sandy. Stay off 290",
+      "Pecan Street Brewing, 106 E Pecan Dr — brewpub on the square. Open daily; Wednesday closes at 3",
+      "Proof & Cooper or Hill Country Cupboard — the other square plates if the group splits"
+    ],
+    "gotchas": "Pecan Street closes at 3 on Wednesday. Maps will offer 290 both directions — decline. Ranch traffic and hidden driveways on 2721. The 281 stub is just the last two miles into town. Bryan's on 290 is dinner-only, not this lunch. Stay on 2721 once you peel off 1631 — the rest of 1631 to 1323 is the Horseshoe Bay day.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "RM 2721, Post Oak",
+        "lat": 30.3066,
+        "lng": -98.5664,
+        "kind": "via"
+      },
+      {
+        "name": "RM 2721 & 1320",
+        "lat": 30.3052,
+        "lng": -98.541,
+        "kind": "via"
+      },
+      {
+        "name": "Sandy",
+        "lat": 30.3608,
+        "lng": -98.4695,
+        "kind": "via"
+      },
+      {
+        "name": "RM 1323 & US 281",
+        "lat": 30.314,
+        "lng": -98.3917,
+        "kind": "via"
+      },
+      {
+        "name": "Pecan Street Brewing",
+        "lat": 30.2775,
+        "lng": -98.4113,
+        "kind": "stop"
+      },
+      {
+        "name": "RM 1323 & US 281",
+        "lat": 30.314,
+        "lng": -98.3917,
+        "kind": "via"
+      },
+      {
+        "name": "Sandy",
+        "lat": 30.3608,
+        "lng": -98.4695,
+        "kind": "via"
+      },
+      {
+        "name": "RM 2721, Post Oak",
+        "lat": 30.3066,
+        "lng": -98.5664,
+        "kind": "via"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
+    "id": "horseshoe-bay-althaus",
+    "name": "Horseshoe Bay",
+    "title": "Althaus Davis to Horseshoe Bay",
+    "tagline": "1631 to 1323 to Althaus Davis. Lake-view lunch in Cottonwood Shores. Same ranch roads home.",
+    "miles": "~90 mi",
+    "time": "half",
+    "timeLabel": "Half day",
+    "roads": "scenic",
+    "roadsLabel": "Scenic ranch roads",
+    "eat": [
+      "mix"
+    ],
+    "eatLabel": "Lake-view lunch",
+    "vehicle": [
+      "motorcycle",
+      "sports",
+      "cruise"
+    ],
+    "vehicleLabel": "Motorcycle, sports car, or convertible",
+    "difficulty": "3 / 5",
+    "description": "Stay on RM 1631 all the way out of town — do not peel onto 2721. That is the Johnson City day. Short east on 1323, then Althaus Davis (CR 310), paved through since about 2021 to RM 3347. 3347 to 962, north to 71, 2147 into Cottonwood Shores / Horseshoe Bay. Bay View Restaurant is the lake-view lunch. Julie's Cocina is next door if you want Mexican or Bay View is dark. Come home the same way. Those ranch roads are why you came, and they are still the best pavement back. 290 and 281 are the cheat. Willow City Loop is the other 1323 day. If you want a loop instead of an out-and-back, 281 south to 1323 west the long way to 1631 stays off 290 — more highway, less Althaus Davis, not twistier.",
+    "routeLabel": "FBG → 1631 → 1323 → Althaus Davis → 3347 → 962 → 71 / 2147 → Horseshoe Bay → same roads home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/30.34325,-98.70298/30.39071,-98.62701/30.49727,-98.43958/30.53666,-98.44303/Bay+View+Restaurant+%26+Bar,+4401+Cottonwood+Drive,+Cottonwood+Shores,+TX/30.53666,-98.44303/30.49727,-98.43958/30.39071,-98.62701/30.34325,-98.70298/Fredericksburg,+TX",
+    "stops": [
+      "RM 1631 to 1323 — stay on 1631. 2721 is the Johnson City day",
+      "Althaus Davis Rd (CR 310) — the paved ranch cut onto RM 3347",
+      "Bay View Restaurant, 4401 Cottonwood Dr — lake view. Closed Tuesday",
+      "Julie's Cocina, 4319 FM 2147 — Mexican next door. Tuesday play; Sunday lunch ends 1:30"
+    ],
+    "gotchas": "Bay View is closed Tuesday. Julie's is open Tuesday and closes 1:30 on Sunday. No fuel on 1631, Althaus Davis, or 3347 — fill in town and at the lake. Cattle and thin county pavement. Maps will offer 16 or 290 — decline. Do not turn 2721. Do not go west on 1323 into Willow City Loop. 962 east of Round Mountain is Hamilton Pool / Austin, not home.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "RM 1631",
+        "lat": 30.3433,
+        "lng": -98.703,
+        "kind": "via"
+      },
+      {
+        "name": "RM 1323 & Althaus Davis",
+        "lat": 30.3907,
+        "lng": -98.627,
+        "kind": "via"
+      },
+      {
+        "name": "RM 3347 & RM 962",
+        "lat": 30.4973,
+        "lng": -98.4396,
+        "kind": "via"
+      },
+      {
+        "name": "RM 962 & SH 71",
+        "lat": 30.5367,
+        "lng": -98.443,
+        "kind": "via"
+      },
+      {
+        "name": "Bay View Restaurant",
+        "lat": 30.5501,
+        "lng": -98.3328,
+        "kind": "stop"
+      },
+      {
+        "name": "RM 962 & SH 71",
+        "lat": 30.5367,
+        "lng": -98.443,
+        "kind": "via"
+      },
+      {
+        "name": "RM 3347 & RM 962",
+        "lat": 30.4973,
+        "lng": -98.4396,
+        "kind": "via"
+      },
+      {
+        "name": "RM 1323 & Althaus Davis",
+        "lat": 30.3907,
+        "lng": -98.627,
+        "kind": "via"
+      },
+      {
+        "name": "RM 1631",
+        "lat": 30.3433,
+        "lng": -98.703,
+        "kind": "via"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
+    "id": "devils-backbone",
+    "name": "Devil's Backbone",
+    "title": "Devil's Backbone Full Day",
+    "tagline": "RM 32's limestone ridge east of Blanco. The famous bit is short. The day is the loop from FBG.",
+    "miles": "~140–160 mi",
+    "time": "full",
+    "timeLabel": "Full day from FBG",
+    "roads": "scenic",
+    "roadsLabel": "Scenic ridge",
+    "eat": [
+      "mix"
+    ],
+    "eatLabel": "Wimberley lunch",
+    "vehicle": [
+      "motorcycle",
+      "sports",
+      "cruise"
+    ],
+    "vehicleLabel": "Motorcycle, sports car, or convertible",
+    "difficulty": "2 / 5",
+    "description": "South on 1376 past Luckenbach — keep rolling — then RM 473 toward Kendalia and onto RM 32. That is the Devil's Backbone: a few miles of ridge between Fischer and Wimberley, not a canyon. Pull off at the overlook. The tavern is a honky-tonk pause, not lunch. Eat in Wimberley, then home on 2325 and 165 through Blanco, 1623 and 2721 into Fredericksburg. This is not the Blanco BBQ day and it is not a 290 transfer. Skip FM 306 around Canyon Lake.",
+    "routeLabel": "FBG → 1376 → 473 → RM 32 → Wimberley → 2325 → 165 → Blanco → 1623 → 2721 → home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Luckenbach,+TX/Sisterdale,+TX/30.0488,-98.3531/29.9330,-98.1653/The+Leaning+Pear,+111+River+Road,+Wimberley,+TX/Blanco,+TX/30.278,-98.662/Fredericksburg,+TX",
+    "stops": [
+      "Devil's Backbone Overlook, RM 32 — the pull-off and the view. That is the reason for the extra miles",
+      "Devil's Backbone Tavern, 4041 FM 32, Fischer — honky-tonk pause. No kitchen; restaurant next door",
+      "The Leaning Pear, 111 River Rd, Wimberley — lunch Wednesday–Sunday. The square if Pear is dark Monday–Tuesday"
+    ],
+    "gotchas": "The famous ridge is a couple of miles — do not sell it as Twisted Sisters. Weekend motorcycle and Wimberley traffic. The tavern does not serve food. Leaning Pear is closed Monday–Tuesday; eat on the Wimberley square or grab Old 300 on the Blanco pass-through. Do not drop onto FM 306 / Canyon Lake. Glance Blanco; do not turn this into the BBQ day.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Luckenbach",
+        "lat": 30.1813,
+        "lng": -98.7536,
+        "kind": "via"
+      },
+      {
+        "name": "Sisterdale",
+        "lat": 29.9757,
+        "lng": -98.7216,
+        "kind": "via"
+      },
+      {
+        "name": "RM 32 west",
+        "lat": 30.0488,
+        "lng": -98.3531,
+        "kind": "via"
+      },
+      {
+        "name": "Fischer / Backbone Tavern",
+        "lat": 29.9701,
+        "lng": -98.2381,
+        "kind": "via"
+      },
+      {
+        "name": "Devil's Backbone Overlook",
+        "lat": 29.933,
+        "lng": -98.1653,
+        "kind": "stop"
+      },
+      {
+        "name": "The Leaning Pear, Wimberley",
+        "lat": 29.9963,
+        "lng": -98.0996,
+        "kind": "stop"
+      },
+      {
+        "name": "RM 165",
+        "lat": 30.1131,
+        "lng": -98.3157,
+        "kind": "via"
+      },
+      {
+        "name": "Blanco",
+        "lat": 30.1007,
+        "lng": -98.4221,
+        "kind": "via"
+      },
+      {
+        "name": "RM 1623",
+        "lat": 30.1284,
+        "lng": -98.5076,
+        "kind": "via"
+      },
+      {
+        "name": "RM 2721 & 1623",
+        "lat": 30.278,
+        "lng": -98.662,
+        "kind": "via"
       },
       {
         "name": "Fredericksburg",

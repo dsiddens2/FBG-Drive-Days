@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bake Drive Days CSS, JS, GitHub Pages preview, and Squarespace embed."""
+"""Bake Best Driving Roads CSS, JS, GitHub Pages preview, and Squarespace embed."""
 from __future__ import annotations
 
 import json
@@ -15,7 +15,7 @@ ROUTES = json.loads((ROOT / "routes.json").read_text())
 SRC_MILL = DOCS / "index.src.html"
 FINDER_CSS_SRC = ROOT / "finder.css"
 FINDER_JS = ROOT / "finder.js"
-EMBED_VERSION = "20260913-drive7"
+EMBED_VERSION = "20260914-roads2"
 EMBED_BASE = "https://dsiddens2.github.io/FBG-Drive-Days/"
 EMBED_OUT = ROOT / "squarespace-embed.html"
 CODE_BLOCK_LIMIT = 400 * 1024
@@ -215,12 +215,12 @@ def transform_mill(src: str) -> str:
     src = src.replace("restaurant-spinner-", "drive-spinner-")
     src = src.replace("Can't pick a meal? Spin the wheel!", "Can't pick a drive? Spin the wheel!")
     src = src.replace("Tonight's pick", "Today's drive")
-    src = src.replace("Matching places land on this wheel.", "Matching Drive Days land on this wheel.")
+    src = src.replace("Matching places land on this wheel.", "Matching drives land on this wheel.")
     src = src.replace(
         '" restaurants · Wheel pulls from filtered list"',
-        '" Drive Days · Wheel pulls from filtered list"',
+        '" driving roads · Wheel pulls from filtered list"',
     )
-    src = src.replace("FBG Restaurant Finder", "FBG Drive Day Finder")
+    src = src.replace("FBG Restaurant Finder", "FBG Driving Roads")
     src = src.replace("pick your next meal", "pick your next Hill Country drive")
     return src
 
@@ -297,7 +297,7 @@ def finder_snippet(
   <div class="finder-layout">
     <div class="finder-panel">
       <div class="panel-head">
-        <h2 id="list-heading">Drive Days</h2>
+        <h2 id="list-heading">Best Driving Roads</h2>
         <div class="filter-reset-wrap">
           <button class="filter-share" id="filter-surprise" type="button">Surprise me</button>
           <button class="filter-share" id="filter-share" type="button">Share</button>
@@ -363,7 +363,7 @@ def finder_snippet(
     <div class="fbg-spinner-wrap" id="drive-finder-wrap">
       <div class="drive-map-block">
         <header class="map-header">
-          <p class="map-header-kicker" id="map-title">Pick a Drive Day</p>
+          <p class="map-header-kicker" id="map-title">Pick a drive</p>
         </header>
         <div class="drive-map" id="drive-map" role="img" aria-label="Selected Hill Country drive map"></div>
         <p class="map-caption" id="map-caption">Filter the list, then tap a route to see it on the map.</p>
@@ -376,7 +376,7 @@ def finder_snippet(
   <div class="share-modal" id="share-modal" hidden>
     <div class="share-modal-backdrop" data-share-close></div>
     <div class="share-modal-card" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
-      <h3 id="share-modal-title">Check out this filtered list of Hill Country Drive Days.</h3>
+      <h3 id="share-modal-title">Check out these driving roads from Fredericksburg.</h3>
       <textarea class="share-modal-url" id="share-modal-url" readonly rows="8" aria-label="Share link"></textarea>
       <div class="share-modal-actions">
         <button type="button" id="share-close" data-share-close>Close</button>
@@ -404,7 +404,8 @@ def preview_html() -> str:
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hill Country Drive Days | Driver’s roads from Fredericksburg, TX</title>
+  <title>Best Driving Roads from Fredericksburg, TX</title>
+  <meta name="description" content="Curated Hill Country driving roads from Fredericksburg — named loops, pit stops, and the gotchas Maps will not tell you." />
   <style>
     html, body {{ min-height: 100%; margin: 0; background: #142018; }}
     .preview-frame {{ box-sizing: border-box; width: 100%; max-width: none; margin: 0; padding: 0.5rem; }}
@@ -464,11 +465,12 @@ def write_embed() -> str:
     size = len(combined.encode("utf-8"))
     pct = 100.0 * size / CODE_BLOCK_LIMIT
     embed_doc = f"""<!--
-  Discover FBG Drive Days — paste into ONE Squarespace Code Block (HTML).
+  Discover FBG Best Driving Roads — paste into ONE Squarespace Code Block (HTML).
   Squarespace limit is 400 KB. This bake is {size:,} bytes ({pct:.1f}% of that).
   CSS, JS, map library, and the logo load from GitHub Pages.
 
-  1. Create a Squarespace page with slug /drive-days and drag it to Not Linked.
+  1. Create a Squarespace page with slug /Best-Driving-Roads and drag it to Not Linked.
+     Page title: Best Driving Roads from Fredericksburg, TX.
   2. Paste the CODE BLOCK section below into one Code Block.
   3. After catalog or CSS/JS changes: python3 bake_drive.py, then paste the new CODE BLOCK.
      Integrity hashes mean an old paste will refuse updated CSS/JS.
@@ -493,7 +495,7 @@ def main() -> None:
     (DOCS / "preview.html").write_text(page)
     (DOCS / "index.html").write_text(page)
     combined = write_embed()
-    print(f"Baked {len(ROUTES)} Drive Days → docs/index.html, docs/preview.html, squarespace-embed.html ({len(combined.encode('utf-8')):,} bytes)")
+    print(f"Baked {len(ROUTES)} driving roads → docs/index.html, docs/preview.html, squarespace-embed.html ({len(combined.encode('utf-8')):,} bytes)")
 
 
 if __name__ == "__main__":
