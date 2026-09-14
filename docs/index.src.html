@@ -1,0 +1,4866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FBG Restaurant Finder</title>
+  <meta name="description" content="Spin the wheel to pick your next meal in Fredericksburg, Texas." />
+  <meta property="og:title" content="FBG Restaurant Finder" />
+  <meta property="og:description" content="Spin the wheel to pick your next meal in Fredericksburg, Texas." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dsiddens2.github.io/FBG-Restaurant-Finder/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="FBG Restaurant Finder" />
+  <meta name="twitter:description" content="Spin the wheel to pick your next meal in Fredericksburg, Texas." />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-64W1TQ32KH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-64W1TQ32KH", { anonymize_ip: true });
+  </script>
+  <style>
+    :root {
+      --bg-0: #1a2218;
+      --bg-1: #243028;
+      --bg-2: #2e3c32;
+      --border: rgba(180, 160, 120, 0.25);
+      --text: #f3efe6;
+      --muted: #a8b09a;
+      --wood: #8b5a2b;
+      --amber: #c4782a;
+      --moss: #4a6b3a;
+      --stone: #c4b8a0;
+      --danger: #d96a5a;
+      --radius: 14px;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 70% 50% at 10% 12%, #ffd080 0%, transparent 46%),
+        radial-gradient(ellipse 50% 40% at 88% 10%, #6a88c0 0%, transparent 48%),
+        radial-gradient(ellipse 60% 45% at 10% 88%, #1a3858 0%, transparent 50%),
+        linear-gradient(180deg, #6a8ec8 0%, #e8b878 38%, #c88858 55%, #4a6a88 78%, #142838 100%);
+      color: var(--text);
+      font-family: Georgia, "Palatino Linotype", "Times New Roman", serif;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .viewport-fit {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .app-scale-outer {
+      flex: none;
+      overflow: hidden;
+    }
+
+    .app-scale {
+      width: 1280px;
+      min-width: 1280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.25rem 1rem 2.5rem;
+      gap: 1.15rem;
+      transform-origin: top left;
+    }
+
+    .tavern-sign {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: min(320px, 100%);
+    }
+
+    .tavern-sign .brand-logo {
+      display: block;
+      width: min(320px, 100%);
+      margin: 0;
+    }
+
+    .tavern-sign .brand-logo img {
+      display: block;
+      width: min(320px, 100%);
+      height: auto;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.4));
+    }
+
+    .play-area {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 1.15rem;
+      width: 100%;
+      min-height: 0;
+    }
+
+    .stage-col {
+      flex: 1 1 0;
+      min-width: 0;
+      max-width: 820px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .wheel-block {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow), inset 0 0 0 1px var(--border);
+    }
+
+    .stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1.05;
+      flex-shrink: 0;
+      border-radius: 0;
+      background:
+        radial-gradient(ellipse 55% 45% at 14% 20%, rgba(255, 190, 90, 0.65), transparent 52%),
+        radial-gradient(ellipse 85% 55% at 50% 100%, rgba(20, 50, 80, 0.5), transparent 55%),
+        linear-gradient(180deg, #7aa0d0 0%, #e8c080 36%, #5a7a98 68%, #142838 100%);
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    #wheel-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .winner-banner {
+      position: absolute;
+      left: 50%;
+      bottom: 5%;
+      transform: translateX(-50%);
+      min-width: min(88%, 340px);
+      padding: 0.7rem 1.1rem;
+      border-radius: 10px;
+      background: rgba(20, 28, 18, 0.9);
+      border: 1px solid rgba(196, 184, 160, 0.45);
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+      z-index: 2;
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+    }
+
+    .winner-banner.visible { opacity: 1; }
+
+    .winner-banner .label {
+      display: block;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #c4a060;
+      margin-bottom: 0.1rem;
+    }
+
+    .winner-banner .name {
+      font-size: clamp(1.05rem, 3.5vw, 1.35rem);
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .spin-header {
+      margin: 0;
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.48rem 0.85rem;
+      text-align: center;
+      background: linear-gradient(180deg, #2a382c 0%, #1e2a20 100%);
+      border-bottom: 1px solid rgba(224, 176, 96, 0.35);
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+    }
+
+    .spin-header-kicker {
+      margin: 0;
+      font-size: 0.8rem;
+      letter-spacing: 0.03em;
+      color: #e0b060;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .spin-match {
+      margin: 0;
+      flex: 0 0 auto;
+      padding: 0.42rem 0.85rem;
+      text-align: center;
+      background: linear-gradient(180deg, #243028 0%, #1a241c 100%);
+      border-top: 1px solid rgba(196, 184, 160, 0.28);
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      font-size: 0.78rem;
+      line-height: 1.35;
+      color: #c4b8a0;
+    }
+
+    .wheel-block .spin-btn {
+      appearance: none;
+      border: none;
+      border-top: 2px solid rgba(196, 184, 160, 0.45);
+      cursor: pointer;
+      width: 100%;
+      flex: 0 0 auto;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.78rem 1.25rem;
+      min-height: 3.5rem;
+      border-radius: 0 0 18px 18px;
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      color: #1a140c;
+      background: linear-gradient(180deg, #e0b060 0%, #a86a28 45%, #6a4018 100%);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      transition: transform 0.15s ease, filter 0.15s ease, opacity 0.2s ease;
+    }
+
+    .wheel-block .spin-btn:hover:not(:disabled) {
+      filter: brightness(1.06);
+    }
+
+    .wheel-block .spin-btn:active:not(:disabled) {
+      filter: brightness(0.96);
+    }
+
+    .wheel-block .spin-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+      filter: grayscale(0.35);
+    }
+
+    .play-area .panel {
+      flex: 0 0 400px;
+      width: 400px;
+      max-width: 640px;
+      min-width: 400px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .panel {
+      width: 100%;
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.5rem 1.1rem 1.15rem;
+      box-shadow: var(--shadow);
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.45rem;
+      margin-bottom: 0.28rem;
+    }
+
+    .panel h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      line-height: 1.1;
+      text-transform: uppercase;
+      color: #e0b060;
+      margin: 0;
+      min-width: 0;
+    }
+
+    .filters {
+      --filter-col-gap: 0.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem var(--filter-col-gap);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      z-index: 2;
+    }
+
+    .filters label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .filters select {
+      appearance: none;
+      width: 100%;
+      min-width: 0;
+      height: 30px;
+      padding: 0.25rem 0.65rem;
+      line-height: 1.2;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--bg-2);
+      color: var(--text);
+      font-size: 0.88rem;
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      outline: none;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .filters select:focus { border-color: rgba(196, 160, 96, 0.65); }
+
+    .cuisine-filter {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-width: 0;
+      position: relative;
+    }
+
+    .filters label:has(.cuisine-filter) {
+      position: relative;
+      z-index: 3;
+    }
+
+    .filters-extra {
+      display: contents;
+    }
+
+    .filters.is-collapsed .filters-extra {
+      display: none;
+    }
+
+    .filters-collapse {
+      grid-column: 1 / -1;
+      appearance: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45em;
+      width: 100%;
+      margin: 0.05rem 0 0;
+      padding: 0.12rem 0 0;
+      border: 0;
+      background: transparent;
+      color: #e0b060;
+      font-size: 0.68rem;
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .filters-collapse:hover,
+    .filters-collapse:focus-visible {
+      color: #f0c878;
+    }
+
+    .filters-collapse:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .filters-collapse-chevron {
+      font-size: 1em;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    .cuisine-filter-toggle {
+      appearance: none;
+      width: 100%;
+      min-width: 0;
+      height: 30px;
+      padding: 0.25rem 0.65rem;
+      line-height: 1.2;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--bg-2);
+      color: var(--text);
+      font-size: 0.88rem;
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      text-align: left;
+      cursor: pointer;
+      outline: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cuisine-filter-toggle:focus,
+    .cuisine-filter-toggle[aria-expanded="true"] {
+      border-color: rgba(196, 160, 96, 0.65);
+    }
+
+    .cuisine-filter-toggle:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .cuisine-filter-options {
+      position: absolute;
+      z-index: 4;
+      left: 0;
+      width: calc(200% + var(--filter-col-gap));
+      top: calc(100% + 0.2rem);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.1rem 0.35rem;
+      max-height: 12rem;
+      overflow-y: auto;
+      padding: 0.4rem 0.45rem;
+      border-radius: 8px;
+      border: 1px solid rgba(224, 176, 96, 0.35);
+      background: var(--bg-2);
+      color-scheme: dark;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+    }
+
+    .cuisine-filter-options[hidden] {
+      display: none;
+    }
+
+    .filters label.cuisine-filter-option {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      letter-spacing: normal;
+      text-transform: none;
+      color: var(--text);
+      padding: 0.2rem 0.3rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .filters label.cuisine-filter-option:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .filters label.cuisine-filter-option input {
+      flex-shrink: 0;
+      width: 1em;
+      height: 1em;
+      margin: 0;
+    }
+
+    .filters .filter-span-2 { grid-column: 1 / -1; }
+
+    .area-filter {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .area-filter-label {
+      font-size: inherit;
+      letter-spacing: inherit;
+      text-transform: uppercase;
+      color: inherit;
+    }
+
+    .area-filter-pills {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .area-pill {
+      flex: 1;
+      min-width: 0;
+      height: 30px;
+      padding: 0.25rem 0.35rem;
+      line-height: 1.2;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--bg-2);
+      color: var(--text);
+      font-size: 0.82rem;
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .area-pill:focus-visible {
+      border-color: rgba(196, 160, 96, 0.65);
+      box-shadow: 0 0 0 2px rgba(224, 176, 96, 0.25);
+    }
+
+    .area-pill.is-active {
+      border-color: #e0b060;
+      color: #e0b060;
+      background: rgba(224, 176, 96, 0.12);
+    }
+
+    .area-pill:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .price-range {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .price-range select {
+      flex: 1;
+      min-width: 0;
+      padding-left: 0.45rem;
+      padding-right: 0.45rem;
+    }
+
+    .price-range-sep {
+      flex-shrink: 0;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .filter-reset-wrap {
+      display: flex;
+      flex-direction: row;
+      flex: none;
+      gap: 0.3rem;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .filter-reset,
+    .filter-share {
+      flex: none;
+      width: auto;
+      min-width: 0;
+      padding: 0.28rem 0.55rem;
+      border-radius: 8px;
+      border: 1px solid #e0b060;
+      background: var(--bg-2);
+      color: #e0b060;
+      font-size: 0.72rem;
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      outline: none;
+      transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .filter-reset:hover:not(:disabled),
+    .filter-share:hover:not(:disabled) {
+      color: #f0c878;
+      border-color: #f0c878;
+      background: rgba(224, 176, 96, 0.08);
+    }
+
+    .filter-reset:focus-visible,
+    .filter-share:focus-visible {
+      border-color: #f0c878;
+      box-shadow: 0 0 0 2px rgba(224, 176, 96, 0.25);
+    }
+
+    .filter-reset:disabled,
+    .filter-share:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .share-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+    }
+
+    .share-modal[hidden] {
+      display: none;
+    }
+
+    .share-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(12, 16, 12, 0.72);
+    }
+
+    .share-modal-card {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 560px);
+      min-height: 540px;
+      display: flex;
+      flex-direction: column;
+      padding: 1.15rem 1.2rem 1.1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(224, 176, 96, 0.45);
+      background: var(--bg-1);
+      box-shadow: var(--shadow);
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+    }
+
+    .share-modal-card h3 {
+      margin: 0 0 0.75rem;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--text);
+    }
+
+    .share-modal-url {
+      display: block;
+      width: 100%;
+      flex: 1 1 auto;
+      min-height: 16rem;
+      margin: 0 0 0.9rem;
+      padding: 0.55rem 0.65rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-2);
+      color: var(--text);
+      font-size: 0.78rem;
+      line-height: 1.4;
+      word-break: break-all;
+      resize: none;
+      font-family: inherit;
+    }
+
+    .share-modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      justify-content: flex-end;
+    }
+
+    .share-modal-actions button {
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #e0b060;
+      background: var(--bg-2);
+      color: #e0b060;
+      font-size: 0.82rem;
+      font-family: inherit;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .share-modal-actions button.share-copy {
+      background: #e0b060;
+      color: #1a1610;
+      border-color: #e0b060;
+      font-weight: 700;
+    }
+
+    .share-modal-actions button:hover {
+      border-color: #f0c878;
+      color: #f0c878;
+    }
+
+    .share-modal-actions button.share-copy:hover {
+      background: #f0c878;
+      color: #1a1610;
+    }
+
+    .list-shell {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .list-more {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+      padding: 1.35rem 0.4rem 0.28rem;
+      background: linear-gradient(to bottom, rgba(36, 48, 40, 0), var(--bg-1) 62%);
+      text-align: center;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
+    .list-more.is-visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .list-more-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45em;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #e0b060;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+    }
+
+    .list-more-chevron {
+      font-size: 1em;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    .list li {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.55rem;
+      padding: 0.55rem 0.65rem;
+      border-radius: 10px;
+      background: var(--bg-2);
+    }
+
+    .list li.off-wheel {
+      opacity: 0.48;
+    }
+
+    .list li.is-winner {
+      border: 1px solid rgba(224, 176, 96, 0.55);
+      background: rgba(224, 176, 96, 0.1);
+      box-shadow: inset 0 0 0 1px rgba(224, 176, 96, 0.2);
+    }
+
+    .list li.is-winner .item-name {
+      color: #f0c878;
+    }
+
+    .list li .item-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .list li .item-name {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .list li .item-meta {
+      display: block;
+      margin-top: 0.15rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    .list li .item-desc {
+      display: block;
+      margin-top: 0.28rem;
+      font-size: 0.78rem;
+      color: var(--text);
+      line-height: 1.35;
+      opacity: 0.88;
+    }
+
+    .list li .item-address {
+      display: block;
+      margin-top: 0.2rem;
+      font-size: 0.68rem;
+      color: #c4a060;
+      line-height: 1.3;
+      text-decoration: underline;
+      text-underline-offset: 0.15em;
+      cursor: pointer;
+    }
+
+    .list li a.item-address:hover {
+      color: #f0c878;
+    }
+
+    .list li .item-footer {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.2rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    .list li .item-footer .item-sep {
+      color: var(--muted);
+      opacity: 0.7;
+    }
+
+    .list li .item-link {
+      color: #c4a060;
+      text-decoration: none;
+    }
+
+    .list li .item-link:hover {
+      text-decoration: underline;
+    }
+
+    .list li .item-share-pick {
+      appearance: none;
+      flex: none;
+      padding: 0.12rem 0.4rem;
+      border-radius: 6px;
+      border: 1px solid #e0b060;
+      background: transparent;
+      color: #e0b060;
+      font-size: inherit;
+      font-family: inherit;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .list li .item-share-pick:hover,
+    .list li .item-share-pick:focus-visible {
+      color: #f0c878;
+      border-color: #f0c878;
+    }
+
+    .site-footer {
+      width: 100%;
+      margin-top: 0.55rem;
+      flex: none;
+      text-align: left;
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.03em;
+      line-height: 1.4;
+      color: rgba(243, 239, 230, 0.55);
+    }
+
+    /* Small screens: real stacked layout (not a scaled-down desktop) */
+    @media (max-width: 900px) {
+      html, body {
+        height: auto;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      body {
+        display: block;
+      }
+
+      .viewport-fit {
+        width: 100%;
+        height: auto;
+        min-height: 100%;
+        display: block;
+        overflow: visible;
+      }
+
+      .app-scale-outer {
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible;
+      }
+
+      .app-scale {
+        width: 100% !important;
+        min-width: 0 !important;
+        transform: none !important;
+        padding: 1rem 0.75rem 1.75rem;
+        gap: 1rem;
+      }
+
+      .play-area {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+      }
+
+      .stage-col {
+        flex: none;
+        width: 100%;
+      }
+
+      .wheel-block {
+        width: min(100%, 640px);
+        margin: 0 auto;
+      }
+
+      .play-area .panel {
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        height: auto !important;
+        max-height: none !important;
+      }
+
+      .list {
+        max-height: min(55vh, 480px);
+      }
+
+      .filters.is-collapsed ~ .list-shell .list {
+        max-height: min(72vh, 640px);
+      }
+    }
+
+    /* Embedded in an iframe: size to content (no tall letterboxing) */
+    html.is-embedded,
+    html.is-embedded body {
+      height: auto;
+      min-height: 0;
+      max-width: 100%;
+      overflow-x: hidden;
+      overflow-y: visible;
+    }
+
+    html.is-embedded body {
+      display: block;
+    }
+
+    html.is-embedded .viewport-fit {
+      width: 100%;
+      height: auto;
+      min-height: 0;
+      display: block;
+      overflow: visible;
+    }
+
+    html.is-embedded .app-scale-outer {
+      margin: 0 auto;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    html.is-embedded .tavern-sign {
+      width: min(320px, 100%);
+    }
+
+    html.is-embedded .app-scale,
+    html.is-embedded .play-area,
+    html.is-embedded .play-area .panel {
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+    /* Embedded in an iframe: avoid vh-based list height (it fights iframe resize) */
+    html.is-embedded .list {
+      max-height: 360px;
+    }
+
+    @media (max-width: 900px) {
+      /* Embedded stacked: let the wheel use the screen width */
+      html.is-embedded .wheel-block {
+        width: min(100%, 640px);
+      }
+    }
+
+    /* Wide embedded side-by-side: equal columns, scale to iframe */
+    @media (min-width: 901px) {
+      html.is-embedded .play-area {
+        justify-content: center;
+        width: 100%;
+      }
+
+      html.is-embedded .stage-col {
+        max-width: none;
+      }
+
+      html.is-embedded .app-scale-outer {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    /* Wide embeds: clip only after we've scaled to the iframe */
+    @media (min-width: 901px) {
+      html.is-embedded,
+      html.is-embedded body {
+        overflow-y: hidden;
+      }
+    }
+
+    /* Side-by-side landscape (standalone): slightly larger restaurant panel type */
+    @media (min-width: 901px) and (orientation: landscape) {
+      html:not(.is-embedded) .panel h2 {
+        font-size: 1.15rem;
+      }
+
+      html:not(.is-embedded) .filters label {
+        font-size: 0.92rem;
+      }
+
+      html:not(.is-embedded) .filters select,
+      html:not(.is-embedded) .cuisine-filter-toggle {
+        font-size: 1.15rem;
+      }
+
+      html:not(.is-embedded) .panel-head .filter-reset,
+      html:not(.is-embedded) .panel-head .filter-share {
+        font-size: 0.78rem;
+        padding: 0.28rem 0.6rem;
+      }
+
+      html:not(.is-embedded) .filters label.cuisine-filter-option {
+        font-size: 1.05rem;
+      }
+
+      html:not(.is-embedded) .list li .item-name {
+        font-size: 1.2rem;
+      }
+
+      html:not(.is-embedded) .list li .item-meta {
+        font-size: 0.95rem;
+      }
+
+      html:not(.is-embedded) .list li .item-desc {
+        font-size: 1.02rem;
+      }
+
+      html:not(.is-embedded) .list li .item-address {
+        font-size: 0.9rem;
+      }
+
+      html:not(.is-embedded) .list li .item-footer {
+        font-size: 0.95rem;
+      }
+
+    }
+
+    /* Embedded landscape: narrower 50/50 columns — tighter restaurant panel type */
+    @media (min-width: 901px) and (orientation: landscape) {
+      html.is-embedded .panel {
+        padding: 0.5rem 0.85rem 0.9rem;
+      }
+
+      html.is-embedded .panel-head {
+        margin-bottom: 0.22rem;
+      }
+
+      html.is-embedded .panel h2 {
+        font-size: 0.95rem;
+      }
+
+      html.is-embedded .filters {
+        --filter-col-gap: 0.4rem;
+        gap: 0.3rem var(--filter-col-gap);
+        margin-bottom: 0.55rem;
+        padding-bottom: 0.55rem;
+      }
+
+      html.is-embedded .filters label,
+      html.is-embedded .area-filter {
+        font-size: 0.58rem;
+      }
+
+      html.is-embedded .filters select,
+      html.is-embedded .cuisine-filter-toggle {
+        font-size: 0.75rem;
+        height: 30px;
+        padding: 0.25rem 0.5rem;
+      }
+
+      html.is-embedded .panel-head .filter-reset,
+      html.is-embedded .panel-head .filter-share {
+        font-size: 0.68rem;
+        padding: 0.22rem 0.45rem;
+      }
+
+      html.is-embedded .area-pill {
+        font-size: 0.72rem;
+        height: 30px;
+        padding: 0.25rem 0.3rem;
+      }
+
+      html.is-embedded .filters-collapse {
+        font-size: 0.58rem;
+      }
+
+      html.is-embedded .filters label.cuisine-filter-option {
+        font-size: 0.68rem;
+      }
+
+      html.is-embedded .list li {
+        padding: 0.45rem 0.5rem;
+      }
+
+      html.is-embedded .list li .item-name {
+        font-size: 0.78rem;
+      }
+
+      html.is-embedded .list li .item-meta {
+        font-size: 0.62rem;
+      }
+
+      html.is-embedded .list li .item-desc {
+        font-size: 0.66rem;
+      }
+
+      html.is-embedded .list li .item-address {
+        font-size: 0.6rem;
+      }
+
+      html.is-embedded .list li .item-footer {
+        font-size: 0.62rem;
+      }
+    }
+
+    /* Spinner-only embed: header + wheel + match count + SPIN. Filters and list live on the parent page. */
+    html.is-spinner-tool,
+    html.is-spinner-tool body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: block;
+      background: #6a4018;
+    }
+
+    html.is-spinner-tool .tavern-sign,
+    html.is-spinner-tool .panel,
+    html.is-spinner-tool .site-footer,
+    html.is-spinner-tool .share-modal {
+      display: none !important;
+    }
+
+    html.is-spinner-tool .viewport-fit,
+    html.is-spinner-tool .app-scale-outer,
+    html.is-spinner-tool .app-scale,
+    html.is-spinner-tool .play-area,
+    html.is-spinner-tool .stage-col,
+    html.is-spinner-tool .wheel-block {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: stretch;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    html.is-spinner-tool .wheel-block {
+      position: fixed;
+      inset: 0;
+      height: auto;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    html.is-spinner-tool .app-scale {
+      min-width: 0 !important;
+      transform: none !important;
+    }
+
+    html.is-spinner-tool .stage {
+      aspect-ratio: auto;
+      width: 100%;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    html.is-spinner-tool .spin-header,
+    html.is-spinner-tool .spin-match {
+      flex: 0 0 auto;
+    }
+
+    html.is-spinner-tool .wheel-block .spin-btn {
+      flex: 0 0 auto;
+      flex-shrink: 0;
+      min-height: 3.5rem;
+      height: auto;
+      border-radius: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="viewport-fit">
+    <div class="app-scale-outer" id="app-outer">
+      <div class="app-scale" id="app-scale">
+  <header class="tavern-sign">
+    <h1 class="brand-logo">
+      <img src="assets/discover-fredericksburg.png?v=2" alt="Discover Fredericksburg" width="320" height="168">
+    </h1>
+  </header>
+
+  <div class="play-area">
+    <div class="stage-col">
+      <div class="wheel-block">
+        <header class="spin-header" id="spin-header">
+          <p class="spin-header-kicker">Can't pick a meal? Spin the wheel!</p>
+        </header>
+        <div class="stage" id="stage">
+          <canvas id="wheel-canvas"></canvas>
+          <div class="winner-banner" id="winner-banner" aria-live="polite">
+            <span class="label">Tonight's pick</span>
+            <span class="name" id="winner-name">—</span>
+          </div>
+        </div>
+        <p class="spin-match" id="spin-match" aria-live="polite">Matching places land on this wheel.</p>
+        <button class="spin-btn" id="spin-btn" type="button">SPIN</button>
+      </div>
+    </div>
+
+    <section class="panel" aria-labelledby="list-heading">
+      <div class="panel-head">
+        <h2 id="list-heading">Restaurants</h2>
+        <div class="filter-reset-wrap">
+          <button class="filter-share" id="filter-share" type="button">Share</button>
+          <button class="filter-reset" id="filter-reset" type="button">RESET</button>
+        </div>
+      </div>
+      <div class="filters" id="filters">
+        <div class="filters-extra" id="filters-extra">
+          <label>
+            Days open
+            <select id="filter-day">
+              <option value="">Any day</option>
+              <option value="mon" data-label="Monday">Monday</option>
+              <option value="tue" data-label="Tuesday">Tuesday</option>
+              <option value="wed" data-label="Wednesday">Wednesday</option>
+              <option value="thu" data-label="Thursday">Thursday</option>
+              <option value="fri" data-label="Friday">Friday</option>
+              <option value="sat" data-label="Saturday">Saturday</option>
+              <option value="sun" data-label="Sunday">Sunday</option>
+            </select>
+          </label>
+          <label>Open for
+            <select id="filter-meal">
+              <option value="">Any meal</option>
+              <option value="breakfast">Breakfast</option>
+              <option value="lunch">Lunch</option>
+              <option value="dinner">Dinner</option>
+            </select>
+          </label>
+          <label>Cuisine
+            <div class="cuisine-filter" id="filter-cuisine">
+              <button class="cuisine-filter-toggle" id="filter-cuisine-toggle" type="button" aria-expanded="false" aria-controls="filter-cuisine-options">
+                <span id="filter-cuisine-summary">Any cuisine</span>
+              </button>
+              <div class="cuisine-filter-options" id="filter-cuisine-options" hidden></div>
+            </div>
+          </label>
+          <label>Price
+            <span class="price-range">
+              <select id="filter-price-min" aria-label="Minimum price">
+                <option value="">Any</option>
+                <option value="$">$</option>
+                <option value="$$">$$</option>
+                <option value="$$$">$$$</option>
+                <option value="$$$$">$$$$</option>
+              </select>
+              <span class="price-range-sep">–</span>
+              <select id="filter-price-max" aria-label="Maximum price">
+                <option value="">Any</option>
+                <option value="$">$</option>
+                <option value="$$">$$</option>
+                <option value="$$$">$$$</option>
+                <option value="$$$$">$$$$</option>
+              </select>
+            </span>
+          </label>
+          <label>Seed oil
+            <select id="filter-seed-oil">
+              <option value="">No preference</option>
+              <option value="yes">Seed oil free</option>
+            </select>
+          </label>
+          <label>Reservations
+            <select id="filter-reservations">
+              <option value="">Any</option>
+              <option value="walkin">Walk-ins ok</option>
+              <option value="optional">Optional</option>
+              <option value="recommended">Recommended</option>
+              <option value="required">Required</option>
+            </select>
+          </label>
+        </div>
+        <div class="area-filter" id="filter-area" role="group" aria-label="Area">
+          <span class="area-filter-label">Area</span>
+          <div class="area-filter-pills">
+            <button type="button" class="area-pill is-active" data-area="" aria-pressed="true">Anywhere</button>
+            <button type="button" class="area-pill" data-area="walkable" aria-pressed="false">Walkable</button>
+            <button type="button" class="area-pill" data-area="drive" aria-pressed="false">Off-Main</button>
+          </div>
+        </div>
+        <button class="filters-collapse" id="filters-collapse" type="button" aria-expanded="true" aria-controls="filters-extra">
+          <span class="filters-collapse-chevron" aria-hidden="true">▲</span>
+          <span id="filters-collapse-label">Collapse filters</span>
+          <span class="filters-collapse-chevron" aria-hidden="true">▲</span>
+        </button>
+      </div>
+      <div class="list-shell" id="list-shell">
+        <ul class="list" id="restaurant-list"></ul>
+        <div class="list-more" id="list-more" aria-hidden="true">
+          <span class="list-more-label"><span class="list-more-chevron" aria-hidden="true">▼</span>Scroll for more<span class="list-more-chevron" aria-hidden="true">▼</span></span>
+        </div>
+      </div>
+      <footer class="site-footer">For informational purposes only. Discover FBG does not warrant the accuracy of listings or filters. Verify details before visiting. · © 2026 Discover Fredericksburg. All rights reserved.</footer>
+    </section>
+  </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-modal" id="share-modal" hidden>
+    <div class="share-modal-backdrop" data-share-close></div>
+    <div class="share-modal-card" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
+      <h3 id="share-modal-title">Check out this filtered list of Fredericksburg Restaurants.</h3>
+      <textarea class="share-modal-url" id="share-modal-url" readonly rows="8" aria-label="Share link"></textarea>
+      <div class="share-modal-actions">
+        <button type="button" id="share-close" data-share-close>Close</button>
+        <button type="button" id="share-native" hidden>Send</button>
+        <button type="button" class="share-copy" id="share-copy">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script>
+    /**
+     * Restaurant Finder — rustic wooden water wheel
+     * Weathered timber buckets · limestone piers · Three.js r134
+     */
+    (function () {
+      "use strict";
+
+      const COLORS = {
+        wetAmber: "#b86a28",
+        wetHoney: "#c8883a",
+        dryGray: "#4a453c",
+        dryBrown: "#5c4a36",
+        darkTimber: "#2a241c",
+        moss: "#3d5a32",
+      };
+
+      const WHEEL = {
+        radius: 2.2,
+        thickness: 2.35,
+        innerRadius: 0.32,
+        finThickness: 0.14,
+      };
+
+      // Wheel shows at most 14 buckets; catalog holds the full curated list
+      const MAX_SEGMENTS = 14;
+      const MEALS = ["breakfast", "lunch", "dinner"];
+      const DAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+      const PRICES = ["$", "$$", "$$$", "$$$$"];
+
+      const PHYSICS = {
+        minInitialOmega: 12,
+        maxInitialOmega: 19,
+        friction: 1.05,
+        settleThreshold: 0.32,
+        settleSpeed: 7.5,
+      };
+
+      // Google Analytics 4 custom events (gtag loaded in <head>)
+      // When embedded, also notify the parent page so events fire as first-party
+      // on discoverfbg.com (browsers often block GA inside cross-origin iframes).
+      function isTrustedParentOrigin(origin) {
+        if (!origin) return false;
+        try {
+          const url = new URL(origin);
+          const host = url.hostname;
+          if (host === "localhost" || host === "127.0.0.1") {
+            return url.protocol === "http:" || url.protocol === "https:";
+          }
+          if (url.protocol !== "https:") return false;
+          return (
+            host === "discoverfbg.com" ||
+            host === "www.discoverfbg.com" ||
+            host === "dsiddens2.github.io"
+          );
+        } catch (err) {
+          return false;
+        }
+      }
+
+      let trustedParentOrigin = "";
+
+      function rememberParentOrigin(origin) {
+        if (isTrustedParentOrigin(origin)) trustedParentOrigin = origin;
+      }
+
+      function parentTargetOrigin() {
+        if (trustedParentOrigin) return trustedParentOrigin;
+        try {
+          if (document.referrer) {
+            const origin = new URL(document.referrer).origin;
+            if (isTrustedParentOrigin(origin)) {
+              trustedParentOrigin = origin;
+              return origin;
+            }
+          }
+        } catch (err) {
+          /* ignore */
+        }
+        return "";
+      }
+
+      function notifyParent(type, extra) {
+        try {
+          if (window.self === window.top) return;
+          const target = parentTargetOrigin();
+          if (!target) return;
+          const payload = Object.assign({ type: type }, extra || {});
+          window.parent.postMessage(payload, target);
+        } catch (err) {
+          /* ignore */
+        }
+      }
+
+      function trackGa4Event(name, params) {
+        const payload = params || {};
+        if (typeof gtag === "function") {
+          gtag("event", name, payload);
+        }
+        notifyParent("restaurant-spinner-analytics", { event: name, params: payload });
+      }
+
+      const DEFAULT_RESTAURANTS = [
+        { name: "1894 Ranch to Table", price: "$$", priceMax: "$$$", cuisine: "American", meals: ["lunch", "dinner"], daysOpen: "Thu–Mon", reservationsRecommended: "Optional", area: "drive", address: "4160 US-290, Fredericksburg, TX 78624", website: "http://www.archrayresort.com/", description: "Ranch-to-table dining at Arch Ray with family-raised Angus-Wagyu beef, lunch plates, and dinner steaks plus on-site wine, beer, and spirits." },
+        { name: "Airport Diner", price: "$", cuisine: "American / Cafe", meals: ["breakfast", "lunch"], daysOpen: "Wed–Sun", reservationsRecommended: "No", area: "drive", address: "155 Airport Rd, Fredericksburg, TX 78624", website: "http://www.airportdiner.com/", description: "Classic 1940s airport diner with breakfast all day, burgers, sandwiches, and plane-watching booths." },
+        { name: "Alamo Springs Cafe", price: "$$", cuisine: "American / Burgers", meals: ["lunch", "dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "No", area: "drive", address: "107 Alamo Rd, Fredericksburg, TX 78624", description: "Hill Country cafe known for burgers, sandwiches, and casual American plates off the beaten path." },
+        { name: "Alla Campagna", price: "$$$", priceMax: "$$$$", cuisine: "Italian", meals: ["dinner"], daysOpen: "Daily", reservationsRecommended: "Yes", area: "walkable", address: "342 W Main St, Fredericksburg, TX 78624", website: "https://www.allacampagnafbg.com/", description: "Italian countryside–inspired restaurant on Main with handmade pasta, antipasti, and wine." },
+        { name: "Altdorf Biergarten", price: "$$", cuisine: "German / Beer Garden", meals: ["lunch", "dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "No", area: "walkable", address: "301 W Main St, Fredericksburg, TX 78624", website: "https://altdorfs.com/", description: "Main Street German biergarten with schnitzel, sausages, pretzels, and cold beer in the courtyard." },
+        { name: "Altstadt Brewery", price: "$$", cuisine: "American / German / Beer Garden", meals: ["lunch", "dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "Optional", area: "drive", address: "6120 East, US-290, Fredericksburg, TX 78624", website: "https://www.altstadtbeer.com/", description: "Bavarian brewery restaurant with schnitzel, sausages, pretzels, burgers, and German-style beer." },
+        { name: "Asian Garden", price: "$", cuisine: "Chinese / Asian", meals: ["lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "No", area: "drive", address: "1408 E Main St, Fredericksburg, TX 78624", description: "Casual Chinese and Asian takeout favorites—stir-fries, fried rice, noodles, and lunch specials." },
+        { name: "Backwoods BBQ", price: "$$", cuisine: "BBQ", meals: ["lunch", "dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "No", area: "drive", seedOilFree: true, address: "320 FM 2093, Fredericksburg, TX 78624", website: "http://www.backwoodsbbq.net/", description: "Smoked Texas barbecue with brisket, ribs, and classic sides in a rustic Hill Country setting." },
+        { name: "Bella Sera", price: "$$", cuisine: "Italian / Pizza", meals: ["lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "Optional", area: "drive", address: "1311 S State Hwy 16, Fredericksburg, TX 78624", website: "https://bellaserafredericksburg.com/", description: "Italian pasta, pizza, and chicken dishes in a neighborhood restaurant south of downtown." },
+        { name: "Belly Up Brew Pub", price: "$$", cuisine: "American / Beer Garden", meals: ["lunch", "dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "Optional", area: "walkable", seedOilFree: true, address: "207 S Llano St, Fredericksburg, TX 78624", website: "http://bellyupbrewpub.com/", description: "Brew-pub fare—burgers, pub plates, and local beer in a lively downtown spot." },
+        { name: "Blue Thistle Tea Bar", price: "$$", cuisine: "Coffee / Cafe", meals: ["breakfast", "lunch"], daysOpen: "Tue–Sun", reservationsRecommended: "No", area: "walkable", address: "339 E Main St, Fredericksburg, TX 78624", website: "https://littlebluethistle.com/", description: "Main Street tea bar with sweet treats — unhurried Hill Country sipping, not a full meal stop." },
+        { name: "Bottega Salaria", price: "$$$", priceMax: "$$$$", cuisine: "Italian", meals: ["dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "Yes", area: "walkable", seedOilFree: true, address: "312 E Austin St, Fredericksburg, TX 78624", website: "https://bottegasalaria.com/", description: "Upscale Italian dinner house with handmade pasta, antipasti, and refined wine-country plates." },
+        { name: "Burger Burger", price: "$", cuisine: "American / Burgers", meals: ["lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "209 E Main St, Fredericksburg, TX 78624", website: "https://www.burgerburgerfbg.com/", description: "Main Street burger shop with creative build-your-own burgers, fries, and shakes." },
+        { name: "Cabernet Grill", price: "$$$", priceMax: "$$$$", cuisine: "American / Steakhouse", meals: ["dinner"], daysOpen: "Tue–Sat", reservationsRecommended: "Yes", area: "drive", address: "2805 S State Hwy 16, Fredericksburg, TX 78624", website: "https://www.cabernetgrill.com", description: "Wine-country steakhouse serving steaks, seafood, and Texas Hill Country fine dining." },
+        { name: "Cafe Dimona", price: "$$$", cuisine: "Mediterranean", meals: ["lunch", "dinner"], daysOpen: "Thu–Mon", reservationsRecommended: "Optional", area: "drive", address: "607 S Washington St, Fredericksburg, TX 78624", website: "https://cafedimona.com/", description: "Mediterranean cafe with hummus, kebabs, salads, and fresh Middle Eastern–inspired plates." },
+        { name: "Caliche Coffee", price: "$", cuisine: "Coffee / Cafe", meals: ["breakfast", "lunch"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "338 W Main St, Fredericksburg, TX 78624", website: "https://calichecoffee.com/", description: "Specialty coffee bar on Main with light breakfast plates. Patio-friendly Hill Country cafe stop." },
+        { name: "Calivence Bistro", price: "$$$", priceMax: "$$$$", cuisine: "French / Bistro", meals: ["lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "Yes", area: "walkable", address: "419 W Main St, Fredericksburg, TX 78624", website: "https://calivencefbg.com/menu/", description: "French-inspired wine bistro with seasonal small plates, entrees, and a curated wine list." },
+        { name: "Campo Azul", price: "$$", cuisine: "Mexican", meals: ["breakfast", "lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "Optional", area: "drive", address: "413 S Washington St, Fredericksburg, TX 78624", website: "http://www.campoazulfbg.com/", description: "Mexican restaurant for tacos, enchiladas, breakfast plates, and all-day Tex-Mex comfort food." },
+        { name: "Casa Chloe", price: "$$$", priceMax: "$$$$", cuisine: "Mexican", meals: ["dinner"], daysOpen: "Wed–Mon", reservationsRecommended: "Yes", area: "walkable", address: "209 E San Antonio St, Fredericksburg, TX 78624", website: "https://casachloetx.com/", description: "Upscale authentic Mexican dinner spot and a tequila-and-mezcal bar—not Tex-Mex." },
+        { name: "Chef Leo", price: "$$$", priceMax: "$$$$", cuisine: "Private Chef", meals: ["breakfast", "lunch", "dinner"], daysOpen: "By appointment", reservationsRecommended: "Required", area: "drive", address: "Fredericksburg, TX 78624", website: "https://www.eatfbgtx.com", description: "Escoffier-trained private chef who cooks in your home or B&B — brunch, lunch, or a three-course dinner for 2 to 50. Hill Country and Mexican-inspired menus; book online." },
+        { name: "Clear River Bakery & Deli", price: "$", cuisine: "Bakery / Deli", meals: ["lunch"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "138 E Main St, Fredericksburg, TX 78624", website: "http://www.icecreamandfun.com/", description: "Main Street bakery-deli with sandwiches, soups, pastries, and grab-and-go lunch." },
+        { name: "Crossroads Steakhouse", price: "$$$", priceMax: "$$$$", cuisine: "Steakhouse / American", meals: ["dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "Yes", area: "walkable", seedOilFree: true, address: "305 W Main St, Fredericksburg, TX 78624", website: "https://crossroads-texas.com/", description: "Downtown steakhouse and saloon with steaks, chops, and classic American dinner fare." },
+        { name: "Cultures Grill and Bar", price: "$", cuisine: "American", meals: ["lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "318 E Main St, Fredericksburg, TX 78624", website: "http://www.culturesgrillandbar.com/", description: "Main Street American grill with burgers, salads, and bar-friendly lunch and dinner plates." },
+        { name: "David's Old Fashion BBQ", price: "$$", cuisine: "BBQ", meals: ["breakfast", "lunch"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "809 W Main St, Fredericksburg, TX 78624", website: "http://davidsoldfashionedpitbbqtx.com/", description: "Old-fashioned Texas BBQ and breakfast plates—smoked meats, tacos, and hearty morning fare." },
+        { name: "Der Lindenbaum", price: "$$", cuisine: "German", meals: ["lunch", "dinner"], daysOpen: "Wed–Mon", reservationsRecommended: "Optional", area: "walkable", address: "312 E Main St, Fredericksburg, TX 78624", website: "http://derlindenbaum.figma.site/", description: "Traditional German restaurant on Main with schnitzel, sausages, spaetzle, and hearty sides." },
+        { name: "Eaker Barbecue", price: "$$", cuisine: "BBQ", meals: ["lunch"], daysOpen: "Wed–Sun", reservationsRecommended: "No", area: "walkable", seedOilFree: true, address: "607 W Main St, Fredericksburg, TX 78624", website: "https://www.eakerbarbecue.com", description: "Korean-Texas barbecue fusion—smoked meats with gochujang, kimchi, and creative sides." },
+        { name: "Easy Company", price: "$", cuisine: "Coffee / Cafe", meals: ["breakfast", "lunch"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "308 E Main St, Fredericksburg, TX 78624", website: "https://facebook.com/easycompanybooks", description: "Main Street bookstore with fresh coffee, pastries, and a reading nook. Good for a sit with a book, not a full meal." },
+        { name: "El Milagro", price: "$$", cuisine: "Mexican", meals: ["breakfast", "lunch", "dinner"], daysOpen: "Tue–Sun", reservationsRecommended: "Optional", area: "walkable", address: "249 E Main St, Fredericksburg, TX 78624", description: "Downtown Mexican spot for enchiladas, fajitas, breakfast, and family-style Tex-Mex." },
+        { name: "El Quincho", price: "$$$", priceMax: "$$$$", cuisine: "Argentinian", meals: ["dinner"], daysOpen: "Thu–Mon", reservationsRecommended: "Yes", area: "drive", address: "721 Brehmer Ln, Fredericksburg, TX 78624", website: "https://elquinchotx.com/", description: "Argentinian grill focused on wood-fired steaks, sausages, and South American sides." },
+        { name: "Emi's on Austin", price: "$", priceMax: "$$", cuisine: "Tex-Mex", meals: ["breakfast", "lunch"], daysOpen: "Tue–Sun", reservationsRecommended: "No", area: "walkable", seedOilFree: true, address: "318 E Austin St, Fredericksburg, TX 78624", website: "https://www.emisonaustin.com/", description: "Seed-oil-conscious Tex-Mex cafe with breakfast tacos, burritos, and fresh lunch plates." },
+        { name: "Fredericksburg Brunch Co", price: "$", priceMax: "$$", cuisine: "American / Cafe", meals: ["breakfast", "lunch"], daysOpen: "Fri–Wed", reservationsRecommended: "No", area: "drive", address: "902 S Adams St, Fredericksburg, TX 78624", website: "http://www.fredericksburgbrunchco.com/", description: "Brunch cafe with eggs, pancakes, sandwiches, and casual morning-into-lunch American fare." },
+        { name: "Fresh Pickens Market", price: "$$", cuisine: "American", meals: ["breakfast", "lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "No", area: "drive", address: "206 N Milam St Ste 100, Fredericksburg, TX 78624", website: "http://freshpickensfbg.com/", description: "All-day American cafe near Luckenbach with comfort classics, burgers, and country plates." },
+        { name: "Friedhelm's Bavarian Inn", price: "$$", cuisine: "German", meals: ["lunch", "dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "Optional", area: "drive", address: "905 W Main St, Fredericksburg, TX 78624", website: "https://www.friedhelmsbavarianinn.com/", description: "Bavarian German kitchen with schnitzel, sausages, sauerkraut, and beer-hall favorites." },
+        { name: "Granite House Lounge", price: "$$$", cuisine: "American / Cajun", meals: ["dinner"], daysOpen: "Tue–Sat", reservationsRecommended: "Yes", area: "drive", seedOilFree: true, address: "504 Granite Ave, Fredericksburg, TX 78624", website: "http://granitehouselounge.com/", description: "Relaxed American lounge dinner spot with elevated plates and a seed-oil-aware kitchen." },
+        { name: "Halter Ranch", price: "$$$", cuisine: "American / Bistro", meals: ["lunch"], daysOpen: "Thu–Sun", reservationsRecommended: "Yes", area: "drive", address: "8561 US-290, Fredericksburg, TX 78624", website: "https://www.halterranch.com/halterranchtexas", description: "Winery bistro lunch with seasonal American plates paired with estate wines." },
+        { name: "Hidden Hideaway on Main", price: "$$", cuisine: "American / Burgers", meals: ["breakfast", "lunch", "dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "No", area: "walkable", address: "319 E Main St B, Fredericksburg, TX 78624", website: "https://hiddenhideawaysche.wixsite.com/hidden-hideaway-bar", description: "Main Street bar and grill with burgers, wings, weekend brunch, a patio, and live music — open late." },
+        { name: "Hilda's Tortillas", price: "$$", cuisine: "Mexican", meals: ["breakfast", "lunch", "dinner"], daysOpen: "Mon–Sat", reservationsRecommended: "No", area: "drive", address: "149 FM 2093, Fredericksburg, TX 78624", website: "http://hildastortillas.com/", description: "Mexican home cooking centered on fresh tortillas, tacos, enchiladas, and breakfast plates." },
+        { name: "Hill & Vine", price: "$$", priceMax: "$$$", cuisine: "American", meals: ["dinner"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "210 S Adams St, Fredericksburg, TX 78624", website: "https://www.hillandvinetx.com", description: "Modern American dinner restaurant with seasonal Hill Country ingredients and wine pairings." },
+        { name: "Hill Country Herb Garden", price: "$$", priceMax: "$$$", cuisine: "American", meals: ["breakfast", "lunch", "dinner"], daysOpen: "Tue–Sun", reservationsRecommended: "Optional", area: "drive", address: "405 Whitney St, Fredericksburg, TX 78624", website: "https://www.hillcountryherbgarden.com/", description: "Garden restaurant with seasonal American plates, weekend brunch, and steak-night dinners on a botanical campus just off Main." },
+        { name: "Hill Top Cafe", price: "$$", cuisine: "Greek / Cajun / American", meals: ["lunch", "dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "Optional", area: "drive", address: "10661 N US Hwy 87, Fredericksburg, TX 78624", website: "http://www.hilltopcafe.com/", description: "Eclectic roadhouse mixing Greek, Cajun, and American plates in a vintage Hill Country cafe." },
+        { name: "Hitchin' Post Steakhouse", price: "$$", priceMax: "$$$", cuisine: "American / Steakhouse", meals: ["lunch", "dinner"], daysOpen: "Thu–Tue", reservationsRecommended: "Optional", area: "walkable", seedOilFree: true, address: "105 S Llano St, Fredericksburg, TX 78624", website: "http://hitchinpoststeakhousefbg.com/", description: "Casual Texas steakhouse with ribeyes, chicken fried steak, big burgers, and a full bar." },
+        { name: "Hondo's on Main", price: "$$", cuisine: "American / Burgers", meals: ["lunch", "dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "Optional", area: "walkable", address: "312 W Main St, Fredericksburg, TX 78624", website: "http://www.hondosonmain.com/", description: "Main Street institution for burgers, chicken-fried steak, and Texas comfort food." },
+        { name: "Jack's Chop House", price: "$$$", priceMax: "$$$$", cuisine: "Steakhouse", meals: ["dinner"], daysOpen: "Daily", reservationsRecommended: "Yes", area: "walkable", address: "505 W Main St, Fredericksburg, TX 78624", website: "http://www.jackssteaks.com/", description: "Classic chop house with steaks, chops, and upscale downtown dinner service." },
+        { name: "Java Ranch Coffee", price: "$", cuisine: "Coffee / Cafe", meals: ["breakfast", "lunch"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "114 E Main St, Fredericksburg, TX 78624", website: "https://javaranchcoffee.com/", description: "Main Street coffee shop with Hill Country roasted drinks, bakery pastries, and light breakfast and lunch." },
+        { name: "Junebug's BBQ", price: "$$$", cuisine: "BBQ", meals: ["lunch", "dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "Optional", area: "walkable", seedOilFree: true, address: "205 E Austin St, Fredericksburg, TX 78624", website: "https://junebugsbbq.com/", description: "Central Fredericksburg BBQ with smoked brisket, ribs, and traditional Texas sides." },
+        { name: "Kaffee Haus", price: "$", cuisine: "Coffee / Bakery / Grab-and-go", meals: ["breakfast"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "109 N Adams St, Fredericksburg, TX 78624", description: "Downtown coffee and scratch bakery with housemade pastries, specialty toasts, and light grab-and-go lunch." },
+        { name: "Keidel's Pharmacy", price: "$", cuisine: "Coffee / Cafe / Bakery", meals: ["breakfast", "lunch"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "248 E Main St, Fredericksburg, TX 78624", website: "https://alberthotel.com/the-pharmacy", description: "Historic Keidel Pharmacy turned market cafe. Coffee, Pastries, and grab-and-go sandwiches, wraps, and soups." },
+        { name: "La Tequila Jalisco", price: "$$", cuisine: "Mexican", meals: ["breakfast", "lunch", "dinner"], daysOpen: "Tue–Sun", reservationsRecommended: "Optional", area: "drive", address: "1035 S State Hwy 16, Fredericksburg, TX 78624", website: "https://fredericksburg.latequilarestaurant.com/", description: "Mexican restaurant for fajitas, enchiladas, margaritas, and all-day family meals." },
+        { name: "Leroy's Tex-Mex BBQ", price: "$$", cuisine: "Tex-Mex / BBQ", meals: ["lunch", "dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "Optional", area: "drive", seedOilFree: true, address: "8301 US-290, Fredericksburg, TX 78624", website: "https://www.leroystexmexbbq.com/", description: "Tex-Mex barbecue fusion—smoked meats with fajita flavors, tacos, and bold sides." },
+        { name: "Longhorn Street Café", price: "$$", cuisine: "American / Steakhouse", meals: ["breakfast", "lunch"], daysOpen: "Tue–Thu", reservationsRecommended: "No", area: "drive", address: "621 Longhorn St, Fredericksburg, TX 78624", description: "Local cafe for breakfast plates, steaks, and classic American lunch near the edge of town." },
+        { name: "Los Tios", price: "$$", cuisine: "Tex-Mex", meals: ["lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "Optional", area: "walkable", address: "203 E San Antonio St, Fredericksburg, TX 78624", website: "https://www.lostiosrestaurant.com/", description: "Family Tex-Mex with enchiladas, fajitas, chile rellenos, and classic combination plates." },
+        { name: "Mamacita's", price: "$$", cuisine: "Mexican", meals: ["lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "Optional", area: "walkable", address: "506 E Main St, Fredericksburg, TX 78624", website: "https://www.mamacitas.com", description: "Popular Main Street Mexican for enchiladas, fajitas, chips and salsa, and big portions." },
+        { name: "Martini's Seafood House", price: "$$$", priceMax: "$$$$", cuisine: "Seafood", meals: ["dinner"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "107 N Adams St, Fredericksburg, TX 78624", website: "https://martinisse.wpengine.com/", description: "Upscale seafood house with fresh fish, shellfish, and polished dinner service downtown." },
+        { name: "Mesquite at the Warehouse", price: "$$", priceMax: "$$$", cuisine: "American / Southern / Steakhouse", meals: ["lunch", "dinner"], daysOpen: "Wed–Sun", reservationsRecommended: "Optional", area: "walkable", seedOilFree: true, address: "305 S Lincoln St, Fredericksburg, TX 78624", website: "https://mesquiteatthewarehouse.com/?utm_source=google", description: "Southern smokehouse in a restored mercantile. Wood-smoked meats, hand-cut steaks, Gulf seafood, and craft cocktails off Main." },
+        { name: "Mystic Lobster Roll Co", price: "$$", cuisine: "Seafood", meals: ["lunch", "dinner"], daysOpen: "Tue–Sun", reservationsRecommended: "Optional", area: "walkable", seedOilFree: true, address: "409 E Main St, Fredericksburg, TX 78624", website: "https://www.mysticlobsterrollsfbg.com/", description: "Maine-style lobster rolls, seafood sandwiches, and coastal sides on Main Street." },
+        { name: "Nan's Thai To-Go", price: "$", priceMax: "$$", cuisine: "Thai", meals: ["lunch", "dinner"], daysOpen: "Tue–Sat", reservationsRecommended: "No", area: "drive", address: "733 Brehmer Ln, Fredericksburg, TX 78624", website: "https://www.favordelivery.com/order-delivery/nans-thai-to-go-51898/733-brehmer-lane-fredericksburg-tx-78624-97337/", description: "Thai takeout with curries, pad Thai, stir-fries, and spicy noodle dishes." },
+        { name: "Nury's", price: "$", priceMax: "$$", cuisine: "American / Mexican / Cafe", meals: ["breakfast", "lunch"], daysOpen: "Tue–Sun", reservationsRecommended: "No", area: "drive", address: "714 S Washington St, Fredericksburg, TX 78624", website: "http://nuryscuisine.com/", description: "Scratch-made American and Mexican brunch cafe with daily lunch specials." },
+        { name: "Old German Bakery", price: "$$", cuisine: "German / Bakery", meals: ["breakfast", "lunch"], daysOpen: "Fri–Tue", reservationsRecommended: "No", area: "walkable", address: "225 W Main St, Fredericksburg, TX 78624", website: "https://www.oldgermanbakeryandrestaurant.com", description: "German bakery-restaurant for breakfast, sandwiches, schnitzel, and fresh breads and pastries." },
+        { name: "Opa's Smoked Meats", price: "$", cuisine: "German / Deli", meals: ["lunch"], daysOpen: "Mon–Sat", reservationsRecommended: "No", area: "drive", address: "410 S Washington St, Fredericksburg, TX 78624", website: "https://opassmokedmeats.com/", description: "German smokehouse deli for made-to-order sandwiches, sausage, and picnic sides — counter, Toast pickup, or curbside." },
+        { name: "Otto's German Bistro", price: "$$$", cuisine: "German / Bistro", meals: ["dinner"], daysOpen: "Daily", reservationsRecommended: "Yes", area: "walkable", address: "316 E Austin St, Fredericksburg, TX 78624", website: "https://www.ottosfbg.com", description: "Modern German bistro with refined dinner plates and occasional brunch service." },
+        { name: "Panda Chinese", price: "$", cuisine: "Chinese", meals: ["lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "504 E Main St, Fredericksburg, TX 78624", website: "https://www.pandachineserestaurantfb.com/", description: "Casual Chinese restaurant with stir-fries, fried rice, noodles, and affordable lunch specials." },
+        { name: "Pasta Bella", price: "$$", cuisine: "Italian", meals: ["lunch", "dinner"], daysOpen: "Mon–Sat", reservationsRecommended: "Optional", area: "walkable", address: "103 S Llano St, Fredericksburg, TX 78624", website: "https://www.pastabellarestaurant.com/", description: "Italian pasta house with classic red-sauce dishes, chicken parm, and family-friendly plates." },
+        { name: "Pecan Grove Store", price: "$", priceMax: "$$", cuisine: "American / Burgers", meals: ["lunch", "dinner"], daysOpen: "Wed–Sat", reservationsRecommended: "No", area: "drive", address: "5244 N State Hwy 16, Fredericksburg, TX 78624", website: "http://pecangrovestore.com/", description: "Country store cafe with burgers, sandwiches, and simple American comfort food north of town." },
+        { name: "Pi Social", price: "$$", cuisine: "American", meals: ["lunch", "dinner"], daysOpen: "Tue–Sun", reservationsRecommended: "Optional", area: "drive", address: "206 N Milam St Ste 700, Fredericksburg, TX 78624", website: "http://pi.social/menu", description: "Social American kitchen with shareable plates, pizza-style pies, and casual lunch and dinner." },
+        { name: "Prometheus Pizza Trattoria", price: "$$", priceMax: "$$$", cuisine: "Italian / Pizza", meals: ["lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "Optional", area: "walkable", address: "108 S Lincoln St, Fredericksburg, TX 78624", website: "https://prometheus-pizza.com/", description: "Italian trattoria for wood-fired pizza, pasta, and Mediterranean-inspired lunch and dinner." },
+        { name: "Rathskeller", price: "$$", cuisine: "German / American", meals: ["breakfast", "lunch", "dinner"], daysOpen: "Wed–Mon", reservationsRecommended: "Optional", area: "walkable", address: "260 E Main St, Fredericksburg, TX 78624", website: "https://www.rathskellerrestaurant.net", description: "Basement German-American spot with breakfast, schnitzel, burgers, and all-day comfort food." },
+        { name: "Red Bird Grill", price: "$$", cuisine: "American", meals: ["breakfast", "lunch"], daysOpen: "Daily", reservationsRecommended: "No", area: "drive", address: "341 Golfers Loop, Fredericksburg, TX 78624", website: "https://www.ladybirdgolf.com/red-bird-grill", description: "Golf-course grill with breakfast plates, burgers, and casual American lunch overlooking the links." },
+        { name: "Revive Organics", price: "$", priceMax: "$$", cuisine: "Coffee / Smoothies", meals: ["breakfast", "lunch"], daysOpen: "Mon–Sat", reservationsRecommended: "No", area: "walkable", address: "102 E Ufer St, Fredericksburg, TX 78624", website: "http://reviveorganicstx.com/", description: "Family-run juicery off Main. Cold-pressed juices, superfood smoothies, specialty coffee, power bowls, and light organic bites." },
+        { name: "RockHaus Coffee", price: "$", cuisine: "Coffee / Cafe", meals: ["breakfast", "lunch"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "215 W Main St, Fredericksburg, TX 78624", website: "https://rockhauscoffee.com/", description: "Main Street coffee with fresh pastries, kolaches, and quiche. Part coffee shop, part Hill Country home-decor." },
+        { name: "Silver Creek Grill", price: "$$", cuisine: "American / Beer Garden", meals: ["lunch", "dinner"], daysOpen: "Fri–Mon", reservationsRecommended: "Optional", area: "walkable", address: "310 E Main St, Fredericksburg, TX 78624", website: "https://www.silvercreekfbg.com", description: "Beer garden grill with burgers, sausages, salads, and outdoor Main Street dining." },
+        { name: "Sozial Haus", price: "$$", cuisine: "Italian / Pizza", meals: ["lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "107 S Llano St, Fredericksburg, TX 78624", website: "https://sozialhaus.wixsite.com/sozial-haus", description: "Casual Italian spot just off Main with a lively patio vibe, no reservations." },
+        { name: "Simply Dipped Fondue", price: "$$$", cuisine: "American / Fondue", meals: ["dinner"], daysOpen: "Thu–Mon", reservationsRecommended: "Yes", area: "drive", seedOilFree: true, address: "913 E Main St, Fredericksburg, TX 78624", website: "http://www.simplydippedfondue.com/", description: "Interactive fondue dinner with a four-course experience: gourmet salads, cook-at-the-table entrées, and chocolate fondue. BYOB" },
+        { name: "Sunday Supply", price: "$", cuisine: "Coffee / Grab-and-go", meals: ["breakfast"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "206 S Adams St, Fredericksburg, TX 78624", website: "https://www.sundaysupplytx.com/", description: "Coffee shop in a historic Sunday House - pastries, kolaches, breakfast tacos, and grab-and-go picnic lunches." },
+        { name: "Sunset Grill", price: "$$", cuisine: "American / Cafe", meals: ["breakfast", "lunch"], daysOpen: "Thu–Tue", reservationsRecommended: "No", area: "drive", seedOilFree: true, address: "405 E Live Oak St, Fredericksburg, TX 78624", website: "https://www.sunsetgrillfbgtx.com", description: "Neighborhood cafe for breakfast and lunch—eggs, sandwiches, and from-scratch American plates." },
+        { name: "Sushi Tiki", price: "$$$", cuisine: "Sushi / Japanese", meals: ["dinner"], daysOpen: "Daily", reservationsRecommended: "Yes", area: "walkable", address: "507 W Main St, Fredericksburg, TX 78624", website: "https://fredericksburgsushi.com/", description: "Japanese sushi bar with rolls, nigiri, sashimi, and dinner-only Japanese specialties." },
+        { name: "Taqueria Altos de Jalisco", price: "$", priceMax: "$$", cuisine: "Mexican", meals: ["breakfast", "lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "No", area: "drive", address: "1410 E Main St, Fredericksburg, TX 78624", website: "http://taqueriaaltosdejaliscotx.com/", description: "Taqueria for authentic tacos, breakfast plates, and affordable Mexican street-food favorites." },
+        { name: "Taquería Machetes", price: "$", priceMax: "$$", cuisine: "Mexican", meals: ["breakfast", "lunch", "dinner"], daysOpen: "Tue–Sun", reservationsRecommended: "No", area: "walkable", address: "326 E Main St, Fredericksburg, TX 78624", website: "https://taqueriamachetesfredericksburg.com/", description: "Main Street taqueria for street tacos, birria, and breakfast plates. Open late on weekends." },
+        { name: "Texas Sunrise", price: "$", priceMax: "$$", cuisine: "American / Cafe", meals: ["breakfast", "lunch"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", address: "105 S Adams St, Fredericksburg, TX 78624", website: "http://texassunrisefbg.com/", description: "Downtown breakfast-and-lunch cafe with eggs, pancakes, sandwiches, and Texas morning classics." },
+        { name: "The Auslander", price: "$$", cuisine: "German / Beer Garden", meals: ["lunch", "dinner"], daysOpen: "Thu–Tue", reservationsRecommended: "Optional", area: "walkable", address: "323 E Main St, Fredericksburg, TX 78624", website: "https://www.theauslander.com", description: "Landmark German biergarten with schnitzel, sausages, pretzels, and a big Main Street patio." },
+        { name: "The Club at Barons CreekSide", price: "$$", cuisine: "American / European / Bistro", meals: ["dinner"], daysOpen: "Thu–Sat", reservationsRecommended: "Optional", area: "drive", address: "316 Goehmann Ln, Fredericksburg, TX 78624", website: "http://www.theclubfbg.com/", description: "Vineyard bistro and wine bar just off Main, with paninis, gumbo, patio-grilled burgers and steaks, and live music." },
+        { name: "The Race Barn", price: "$$", cuisine: "American", meals: ["lunch", "dinner"], daysOpen: "Thu–Sun", reservationsRecommended: "Optional", area: "drive", address: "35 Fair Drive, Fredericksburg, TX 78624", website: "http://theracebarnfbg.com/", description: "American fairgrounds restaurant with burgers, sandwiches, and casual event-day comfort food." },
+        { name: "The Wellhouse", price: "$$$", cuisine: "American", meals: ["breakfast", "lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "Yes", area: "walkable", address: "213 E Austin St, Fredericksburg, TX 78624", website: "https://alberthotel.com/the-wellhouse", description: "Seasonal Hill Country dining at the Albert Hotel, built around Texas ingredients and local farms." },
+        { name: "Vaudeville Bistro", price: "$$$", priceMax: "$$$$", cuisine: "American / European / Bistro", meals: ["lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "Yes", area: "walkable", address: "230 E Main St, Fredericksburg, TX 78624", website: "https://www.vaudeville-living.com", description: "Upscale American-European bistro above the design shop with limited lunch and dinner service." },
+        { name: "West End Pizza Co", price: "$$", cuisine: "Pizza", meals: ["lunch", "dinner"], daysOpen: "Daily", reservationsRecommended: "Optional", area: "walkable", address: "207 E San Antonio St, Fredericksburg, TX 78624", website: "http://www.westendpizzacompany.com/", description: "Brick-oven pizza spot with signature pies, build-your-own options and salads." },
+        { name: "Woerner Cafe", price: "$", priceMax: "$$", cuisine: "American / Cafe", meals: ["breakfast", "lunch"], daysOpen: "Mon–Sat", reservationsRecommended: "No", area: "drive", seedOilFree: true, address: "407 E Live Oak St, Fredericksburg, TX 78624", website: "https://www.woernerwarehouse.com/", description: "Warehouse cafe with fresh breakfast and lunch plates in a seed-oil-conscious kitchen." },
+        { name: "Zulys", price: "$", priceMax: "$$", cuisine: "Coffee / Bakery / Bistro", meals: ["breakfast", "lunch"], daysOpen: "Daily", reservationsRecommended: "No", area: "walkable", seedOilFree: true, address: "116 N Crockett St Ste B, Fredericksburg, TX 78624", website: "https://zulysbakery.com/bistro-menu", description: "Bakery-bistro with pastries, breads, breakfast, and light lunch in a seed-oil-free kitchen." }
+      ];
+
+      function uid() {
+        return "r" + Math.random().toString(36).slice(2, 10);
+      }
+
+      function placeId(name) {
+        return String(name || "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "") || uid();
+      }
+
+      function parsePriceFields(raw) {
+        if (raw.priceMax && PRICES.includes(raw.price) && PRICES.includes(raw.priceMax)) {
+          const a = PRICES.indexOf(raw.price);
+          const b = PRICES.indexOf(raw.priceMax);
+          return {
+            price: PRICES[Math.min(a, b)],
+            priceMax: PRICES[Math.max(a, b)],
+          };
+        }
+        const s = String(raw.price || "$$").replace(/[–—]/g, "-").trim();
+        if (s.includes("-")) {
+          const parts = s.split("-").map((part) => part.trim());
+          let min = PRICES.includes(parts[0]) ? parts[0] : "$$";
+          let max = PRICES.includes(parts[parts.length - 1]) ? parts[parts.length - 1] : min;
+          const a = PRICES.indexOf(min);
+          const b = PRICES.indexOf(max);
+          return {
+            price: PRICES[Math.min(a, b)],
+            priceMax: PRICES[Math.max(a, b)],
+          };
+        }
+        const price = PRICES.includes(s) ? s : "$$";
+        return { price, priceMax: price };
+      }
+
+      function normalizePlace(raw) {
+        if (typeof raw === "string") {
+          raw = { name: raw };
+        }
+        const meals = Array.isArray(raw.meals)
+          ? raw.meals.filter((m) => MEALS.includes(m))
+          : ["lunch", "dinner"];
+        const { price, priceMax } = parsePriceFields(raw);
+        return {
+          id: raw.id || placeId(raw.name),
+          name: String(raw.name || "").trim().replace(/\s+/g, " "),
+          price,
+          priceMax,
+          cuisine: String(raw.cuisine || "American").trim() || "American",
+          meals: meals.length ? meals : ["lunch", "dinner"],
+          seedOilFree: !!raw.seedOilFree,
+          address: String(raw.address || "").trim(),
+          website: String(raw.website || "").trim(),
+          description: String(raw.description || "").trim(),
+          daysOpen: String(raw.daysOpen || "Daily").trim() || "Daily",
+          reservationsRecommended: String(raw.reservationsRecommended || "No").trim() || "No",
+          area: String(raw.area || "walkable").trim() === "drive" ? "drive" : "walkable",
+        };
+      }
+
+      let restaurants = DEFAULT_RESTAURANTS.map(normalizePlace);
+      let displayedPlaces = [];
+      let spinPool = [];
+      let spinning = false;
+      const spinnerTool = new URLSearchParams(window.location.search).get("tool") === "spinner";
+      if (spinnerTool) {
+        document.documentElement.classList.add("is-spinner-tool");
+      }
+      let parentMatchIds = null;
+      let angularVelocity = 0;
+      let settling = false;
+      let targetRotation = 0;
+      let lastTime = 0;
+      let lastWinnerId = null;
+      const pondWaterMaps = { color: null, normal: null };
+
+      const canvas = document.getElementById("wheel-canvas");
+      const stage = document.getElementById("stage");
+      const spinBtn = document.getElementById("spin-btn");
+      const listEl = document.getElementById("restaurant-list");
+      const listMore = document.getElementById("list-more");
+      const spinMatch = document.getElementById("spin-match");
+      const winnerBanner = document.getElementById("winner-banner");
+      const winnerName = document.getElementById("winner-name");
+      const filterDay = document.getElementById("filter-day");
+      const filterMeal = document.getElementById("filter-meal");
+      const filterPriceMin = document.getElementById("filter-price-min");
+      const filterPriceMax = document.getElementById("filter-price-max");
+      const filterCuisineToggle = document.getElementById("filter-cuisine-toggle");
+      const filterCuisineSummary = document.getElementById("filter-cuisine-summary");
+      const filterCuisineOptions = document.getElementById("filter-cuisine-options");
+      const filterSeedOil = document.getElementById("filter-seed-oil");
+      const filterReservations = document.getElementById("filter-reservations");
+      const filterArea = document.getElementById("filter-area");
+      const filtersEl = document.getElementById("filters");
+      const filtersCollapse = document.getElementById("filters-collapse");
+      const filtersCollapseLabel = document.getElementById("filters-collapse-label");
+      const filterShare = document.getElementById("filter-share");
+      const filterReset = document.getElementById("filter-reset");
+      const shareModal = document.getElementById("share-modal");
+      const shareModalTitle = document.getElementById("share-modal-title");
+      const shareModalUrl = document.getElementById("share-modal-url");
+      const shareCopyBtn = document.getElementById("share-copy");
+      const shareNativeBtn = document.getElementById("share-native");
+      const SHARE_PAGE = "https://discoverfbg.com/restaurant-finder";
+      const SHARE_INTRO = "Check out this filtered list of Fredericksburg Restaurants.";
+      const FILTER_DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+      const FILTER_MEALS = ["breakfast", "lunch", "dinner"];
+      const FILTER_PRICES = ["$", "$$", "$$$", "$$$$"];
+      const FILTER_RESERVATIONS = ["walkin", "optional", "recommended", "required"];
+      const FILTER_AREAS = ["walkable", "drive"];
+      const AREA_SHARE = { walkable: "walkable", drive: "off-main" };
+      const FBG_TIMEZONE = "America/Chicago";
+      let pendingCuisines = null;
+      let shareFocusEl = null;
+      let shareKind = "list";
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance",
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.22;
+      renderer.physicallyCorrectLights = true;
+
+      canvas.addEventListener("webglcontextlost", (event) => {
+        event.preventDefault();
+      });
+      canvas.addEventListener("webglcontextrestored", () => {
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        resize();
+        rebuildWheel();
+      });
+
+      const scene = new THREE.Scene();
+      scene.background = createGardenBackground();
+      scene.fog = new THREE.FogExp2(0xd4b090, 0.012);
+
+      const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+      camera.position.set(0, 0.1, 8.4);
+      camera.lookAt(0, -0.2, 0);
+
+      // Camera looks north; west is -X (left) — late-afternoon golden hour
+      const ambient = new THREE.AmbientLight(0xffe8d0, 0.42);
+      scene.add(ambient);
+      const hemi = new THREE.HemisphereLight(0xffd8a0, 0x4a6880, 0.72);
+      scene.add(hemi);
+
+      // Western sun, still well above the horizon
+      const sun = new THREE.DirectionalLight(0xffd090, 2.55);
+      sun.position.set(-5.4, 4.0, 2.4);
+      scene.add(sun);
+
+      // Soft eastern fill
+      const fill = new THREE.DirectionalLight(0xa8c0d8, 0.55);
+      fill.position.set(5.0, 2.6, 2.2);
+      scene.add(fill);
+
+      // Warm light from the camera so the wheel face isn't a silhouette
+      const front = new THREE.DirectionalLight(0xffe4c0, 0.58);
+      front.position.set(-1.2, 2.0, 7.0);
+      scene.add(front);
+
+      const rim = new THREE.DirectionalLight(0xfff0d8, 0.62);
+      rim.position.set(1.8, 3.0, -5.0);
+      scene.add(rim);
+
+      const bounce = new THREE.DirectionalLight(0x6a98b8, 0.38);
+      bounce.position.set(-1.2, -3.5, 3.5);
+      scene.add(bounce);
+
+      // Simple garden HDR-style environment for PBR reflections
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      pmrem.compileEquirectangularShader();
+      const envMapSource = createEnvironmentMap();
+      const envRT = pmrem.fromEquirectangular(envMapSource);
+      scene.environment = envRT.texture;
+      envMapSource.dispose();
+      pmrem.dispose();
+
+      const wheelGroup = new THREE.Group();
+      scene.add(wheelGroup);
+
+      const stageGroup = new THREE.Group();
+      scene.add(stageGroup);
+
+      // -----------------------------------------------------------------------
+      // Textures
+      // -----------------------------------------------------------------------
+
+      /** Soft garden backdrop: afternoon sky, sun glow, foliage */
+      function createGardenBackground() {
+        const w = 1024;
+        const h = 1024;
+        const c = document.createElement("canvas");
+        c.width = w;
+        c.height = h;
+        const ctx = c.getContext("2d");
+
+        // Late afternoon: gold west, still-blue zenith
+        const sky = ctx.createLinearGradient(0, 0, 0, h);
+        sky.addColorStop(0, "#5a82c4");
+        sky.addColorStop(0.28, "#c8b8d0");
+        sky.addColorStop(0.42, "#f0c070");
+        sky.addColorStop(0.52, "#e8d4a8");
+        sky.addColorStop(0.64, "#7a9ab0");
+        sky.addColorStop(0.82, "#2a5070");
+        sky.addColorStop(1, "#142838");
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, w, h);
+
+        const westWash = ctx.createLinearGradient(0, 0, w, 0);
+        westWash.addColorStop(0, "rgba(255, 170, 60, 0.4)");
+        westWash.addColorStop(0.38, "rgba(255, 200, 100, 0.12)");
+        westWash.addColorStop(1, "rgba(80, 110, 160, 0.12)");
+        ctx.fillStyle = westWash;
+        ctx.fillRect(0, 0, w, h);
+
+        // Western sun, still a couple hours above the horizon
+        const sunGlow = ctx.createRadialGradient(w * 0.12, h * 0.22, 8, w * 0.12, h * 0.22, w * 0.42);
+        sunGlow.addColorStop(0, "rgba(255, 248, 210, 0.98)");
+        sunGlow.addColorStop(0.14, "rgba(255, 200, 90, 0.5)");
+        sunGlow.addColorStop(0.45, "rgba(255, 170, 70, 0.16)");
+        sunGlow.addColorStop(1, "rgba(255, 160, 80, 0)");
+        ctx.fillStyle = sunGlow;
+        ctx.fillRect(0, 0, w, h);
+
+        // Soft clouds across the upper sky
+        function drawCloud(cx, cy, scale, alpha) {
+          const puffs = [
+            [0, 0, 1],
+            [-0.55, 0.08, 0.72],
+            [0.5, 0.1, 0.78],
+            [-0.25, -0.22, 0.65],
+            [0.28, -0.18, 0.7],
+            [0.75, 0.05, 0.55],
+            [-0.8, 0.12, 0.5],
+          ];
+          puffs.forEach(([ox, oy, rs]) => {
+            const r = 48 * scale * rs;
+            const x = cx + ox * 90 * scale;
+            const y = cy + oy * 55 * scale;
+            const g = ctx.createRadialGradient(x, y - r * 0.15, r * 0.1, x, y, r);
+            g.addColorStop(0, `rgba(255, 248, 232, ${alpha})`);
+            g.addColorStop(0.45, `rgba(255, 220, 180, ${alpha * 0.55})`);
+            g.addColorStop(1, "rgba(200, 180, 170, 0)");
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.ellipse(x, y, r * 1.35, r * 0.85, 0, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        }
+
+        drawCloud(w * 0.18, h * 0.1, 1.15, 0.72);
+        drawCloud(w * 0.42, h * 0.06, 0.85, 0.55);
+        drawCloud(w * 0.55, h * 0.16, 1.35, 0.48);
+        drawCloud(w * 0.88, h * 0.08, 1.0, 0.5);
+        drawCloud(w * 0.72, h * 0.14, 0.7, 0.4);
+        drawCloud(w * 0.08, h * 0.2, 0.65, 0.38);
+
+        // Distant tree silhouettes along the far bank
+        function drawTree(x, baseY, scale, color) {
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.moveTo(x, baseY);
+          ctx.quadraticCurveTo(x - 40 * scale, baseY - 80 * scale, x - 10 * scale, baseY - 140 * scale);
+          ctx.quadraticCurveTo(x, baseY - 180 * scale, x + 15 * scale, baseY - 130 * scale);
+          ctx.quadraticCurveTo(x + 50 * scale, baseY - 70 * scale, x, baseY);
+          ctx.fill();
+          for (let i = 0; i < 5; i++) {
+            ctx.beginPath();
+            ctx.arc(
+              x + (Math.random() - 0.5) * 50 * scale,
+              baseY - (90 + Math.random() * 70) * scale,
+              (18 + Math.random() * 22) * scale,
+              0,
+              Math.PI * 2
+            );
+            ctx.fill();
+          }
+        }
+
+        drawTree(w * 0.1, h * 0.58, 1.2, "rgba(40, 70, 35, 0.45)");
+        drawTree(w * 0.22, h * 0.59, 0.85, "rgba(50, 85, 40, 0.35)");
+        drawTree(w * 0.88, h * 0.57, 1.3, "rgba(35, 65, 30, 0.4)");
+        drawTree(w * 0.78, h * 0.58, 0.8, "rgba(55, 90, 45, 0.32)");
+
+        // Pond surface shimmer + depth
+        for (let i = 0; i < 80; i++) {
+          const x = Math.random() * w;
+          const y = h * 0.62 + Math.random() * h * 0.35;
+          const r = 10 + Math.random() * 40;
+          const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+          g.addColorStop(0, Math.random() > 0.5
+            ? "rgba(180, 220, 240, 0.25)"
+            : "rgba(20, 60, 90, 0.35)");
+          g.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(x - r, y - r, r * 2, r * 2);
+        }
+
+        // Soft sun reflection on water
+        const waterGlint = ctx.createRadialGradient(w * 0.14, h * 0.66, 5, w * 0.14, h * 0.66, w * 0.32);
+        waterGlint.addColorStop(0, "rgba(255, 210, 120, 0.38)");
+        waterGlint.addColorStop(1, "rgba(255, 170, 80, 0)");
+        ctx.fillStyle = waterGlint;
+        ctx.fillRect(0, 0, w, h);
+
+        // Deep water at bottom
+        const deep = ctx.createLinearGradient(0, h * 0.78, 0, h);
+        deep.addColorStop(0, "rgba(20, 50, 70, 0)");
+        deep.addColorStop(1, "rgba(10, 30, 50, 0.65)");
+        ctx.fillStyle = deep;
+        ctx.fillRect(0, 0, w, h);
+
+        const tex = new THREE.CanvasTexture(c);
+        tex.encoding = THREE.sRGBEncoding;
+        return tex;
+      }
+
+      /** Equirectangular env map for PBR reflections (sky + sun + pond) */
+      function createEnvironmentMap() {
+        const w = 1024;
+        const h = 512;
+        const c = document.createElement("canvas");
+        c.width = w;
+        c.height = h;
+        const ctx = c.getContext("2d");
+
+        // Vertical: zenith → horizon → nadir (pond)
+        const sky = ctx.createLinearGradient(0, 0, 0, h);
+        sky.addColorStop(0, "#4a78b8");
+        sky.addColorStop(0.35, "#e0b070");
+        sky.addColorStop(0.48, "#f0d0a0");
+        sky.addColorStop(0.52, "#88a8c0");
+        sky.addColorStop(0.7, "#2a5070");
+        sky.addColorStop(1, "#0e2030");
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, w, h);
+
+        // Western sun, still high (left / -X)
+        const sx = w * 0.18;
+        const sy = h * 0.28;
+        const glow = ctx.createRadialGradient(sx, sy, 4, sx, sy, w * 0.3);
+        glow.addColorStop(0, "rgba(255, 245, 200, 1)");
+        glow.addColorStop(0.1, "rgba(255, 190, 90, 0.85)");
+        glow.addColorStop(0.3, "rgba(255, 150, 60, 0.28)");
+        glow.addColorStop(1, "rgba(255, 140, 70, 0)");
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, w, h);
+
+        const cool = ctx.createRadialGradient(w * 0.82, h * 0.3, 10, w * 0.82, h * 0.3, w * 0.32);
+        cool.addColorStop(0, "rgba(120, 160, 210, 0.32)");
+        cool.addColorStop(1, "rgba(120, 160, 210, 0)");
+        ctx.fillStyle = cool;
+        ctx.fillRect(0, 0, w, h);
+
+        // Pond reflection band (lower half shimmer)
+        for (let i = 0; i < 40; i++) {
+          const x = Math.random() * w;
+          const y = h * 0.55 + Math.random() * h * 0.4;
+          const r = 20 + Math.random() * 80;
+          const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+          g.addColorStop(0, Math.random() > 0.4
+            ? "rgba(200, 230, 255, 0.22)"
+            : "rgba(255, 210, 140, 0.12)");
+          g.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(x - r, y - r, r * 2, r * 2);
+        }
+
+        // Soft sun mirror on water
+        const mirror = ctx.createRadialGradient(sx, h * 0.72, 2, sx, h * 0.72, w * 0.22);
+        mirror.addColorStop(0, "rgba(255, 210, 130, 0.5)");
+        mirror.addColorStop(1, "rgba(255, 170, 80, 0)");
+        ctx.fillStyle = mirror;
+        ctx.fillRect(0, 0, w, h);
+
+        const tex = new THREE.CanvasTexture(c);
+        tex.encoding = THREE.sRGBEncoding;
+        tex.mapping = THREE.EquirectangularReflectionMapping;
+        return tex;
+      }
+
+      function makeTex(canvas, srgb) {
+        const tex = new THREE.CanvasTexture(canvas);
+        if (srgb) tex.encoding = THREE.sRGBEncoding;
+        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        return tex;
+      }
+
+      function createWoodTexture(wet) {
+        const w = 512;
+        const h = 512;
+        const c = document.createElement("canvas");
+        c.width = w;
+        c.height = h;
+        const ctx = c.getContext("2d");
+
+        const base = ctx.createLinearGradient(0, 0, w, 0);
+        if (wet) {
+          base.addColorStop(0, "#6a3a18");
+          base.addColorStop(0.3, "#c8883a");
+          base.addColorStop(0.55, "#a86828");
+          base.addColorStop(0.8, "#7a4818");
+          base.addColorStop(1, "#4a2810");
+        } else {
+          base.addColorStop(0, "#2a261e");
+          base.addColorStop(0.35, "#4a453c");
+          base.addColorStop(0.6, "#5c5040");
+          base.addColorStop(1, "#1e1a14");
+        }
+        ctx.fillStyle = base;
+        ctx.fillRect(0, 0, w, h);
+
+        // Grain lines
+        for (let x = 0; x < w; x += 2) {
+          const n = Math.sin(x * 0.08) * 0.5 + Math.random();
+          ctx.globalAlpha = 0.06 + n * 0.08;
+          ctx.fillStyle = n > 0.5 ? "#1a1008" : "#e8c080";
+          ctx.fillRect(x, 0, 1 + Math.random(), h);
+        }
+        ctx.globalAlpha = 1;
+
+        // Knots / wear
+        for (let i = 0; i < 8; i++) {
+          const x = Math.random() * w;
+          const y = Math.random() * h;
+          const r = 8 + Math.random() * 22;
+          const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+          g.addColorStop(0, "rgba(30,20,10,0.55)");
+          g.addColorStop(0.5, "rgba(80,50,20,0.2)");
+          g.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(x - r, y - r, r * 2, r * 2);
+        }
+
+        // Moss patches on drier wood
+        if (!wet) {
+          for (let i = 0; i < 25; i++) {
+            const x = Math.random() * w;
+            const y = Math.random() * h;
+            const r = 6 + Math.random() * 28;
+            const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+            g.addColorStop(0, "rgba(60, 100, 45, 0.45)");
+            g.addColorStop(1, "rgba(60, 100, 45, 0)");
+            ctx.fillStyle = g;
+            ctx.fillRect(x - r, y - r, r * 2, r * 2);
+          }
+        } else {
+          // Wet sheen streaks
+          ctx.globalAlpha = 0.15;
+          for (let i = 0; i < 30; i++) {
+            ctx.fillStyle = "#ffe0a0";
+            ctx.fillRect(Math.random() * w, 0, 1 + Math.random() * 2, h);
+          }
+          ctx.globalAlpha = 1;
+        }
+
+        // Edge darkening
+        const vig = ctx.createRadialGradient(w / 2, h / 2, h * 0.2, w / 2, h / 2, h * 0.7);
+        vig.addColorStop(0, "rgba(0,0,0,0)");
+        vig.addColorStop(1, "rgba(0,0,0,0.35)");
+        ctx.fillStyle = vig;
+        ctx.fillRect(0, 0, w, h);
+
+        const map = makeTex(c, true);
+        map.repeat.set(1.5, 1);
+        return map;
+      }
+
+      function createStoneTexture() {
+        const w = 512;
+        const h = 512;
+        const c = document.createElement("canvas");
+        c.width = w;
+        c.height = h;
+        const ctx = c.getContext("2d");
+
+        ctx.fillStyle = "#b8ae96";
+        ctx.fillRect(0, 0, w, h);
+
+        // Porous noise
+        for (let i = 0; i < 8000; i++) {
+          const x = Math.random() * w;
+          const y = Math.random() * h;
+          const s = 1 + Math.random() * 3;
+          const shade = 140 + Math.random() * 80;
+          ctx.fillStyle = `rgba(${shade}, ${shade - 10}, ${shade - 30}, ${0.15 + Math.random() * 0.35})`;
+          ctx.fillRect(x, y, s, s);
+        }
+
+        // Larger stone face variation
+        for (let i = 0; i < 40; i++) {
+          const x = Math.random() * w;
+          const y = Math.random() * h;
+          const r = 20 + Math.random() * 80;
+          const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+          const roll = Math.random();
+          if (roll > 0.6) {
+            g.addColorStop(0, "rgba(220, 210, 190, 0.5)");
+          } else if (roll > 0.3) {
+            g.addColorStop(0, "rgba(120, 115, 100, 0.45)");
+          } else {
+            g.addColorStop(0, "rgba(90, 95, 85, 0.35)");
+          }
+          g.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(x - r, y - r, r * 2, r * 2);
+        }
+
+        // Cracks
+        ctx.strokeStyle = "rgba(60,55,45,0.35)";
+        for (let i = 0; i < 18; i++) {
+          ctx.lineWidth = 0.5 + Math.random();
+          ctx.beginPath();
+          let x = Math.random() * w;
+          let y = Math.random() * h;
+          ctx.moveTo(x, y);
+          for (let j = 0; j < 5; j++) {
+            x += (Math.random() - 0.5) * 40;
+            y += (Math.random() - 0.5) * 40;
+            ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+
+        // Weathering: lichen / moss stains
+        for (let i = 0; i < 28; i++) {
+          const x = Math.random() * w;
+          const y = Math.random() * h;
+          const r = 12 + Math.random() * 50;
+          const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+          g.addColorStop(0, Math.random() > 0.4
+            ? "rgba(90, 110, 70, 0.35)"
+            : "rgba(70, 85, 55, 0.28)");
+          g.addColorStop(1, "rgba(90, 110, 70, 0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(x - r, y - r, r * 2, r * 2);
+        }
+
+        // Pitting / eroded dark spots
+        for (let i = 0; i < 120; i++) {
+          const x = Math.random() * w;
+          const y = Math.random() * h;
+          const r = 1 + Math.random() * 4;
+          ctx.fillStyle = `rgba(40, 38, 32, ${0.2 + Math.random() * 0.4})`;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Soft worn edge darkening
+        const edge = ctx.createRadialGradient(w / 2, h / 2, w * 0.28, w / 2, h / 2, w * 0.65);
+        edge.addColorStop(0, "rgba(0,0,0,0)");
+        edge.addColorStop(1, "rgba(50, 48, 40, 0.28)");
+        ctx.fillStyle = edge;
+        ctx.fillRect(0, 0, w, h);
+
+        return makeTex(c, true);
+      }
+
+      /** Soft-edged box for weathered limestone blocks */
+      function createRoundedBoxGeometry(width, height, depth, radius = 0.1) {
+        const r = Math.min(radius, width * 0.28, height * 0.28, depth * 0.28);
+        const shape = new THREE.Shape();
+        const x = -width / 2;
+        const y = -height / 2;
+        shape.moveTo(x, y + r);
+        shape.lineTo(x, y + height - r);
+        shape.quadraticCurveTo(x, y + height, x + r, y + height);
+        shape.lineTo(x + width - r, y + height);
+        shape.quadraticCurveTo(x + width, y + height, x + width, y + height - r);
+        shape.lineTo(x + width, y + r);
+        shape.quadraticCurveTo(x + width, y, x + width - r, y);
+        shape.lineTo(x + r, y);
+        shape.quadraticCurveTo(x, y, x, y + r);
+
+        const bevel = Math.min(r * 0.85, depth * 0.22);
+        const geo = new THREE.ExtrudeGeometry(shape, {
+          depth: Math.max(depth - bevel * 2, depth * 0.55),
+          bevelEnabled: true,
+          bevelThickness: bevel,
+          bevelSize: r * 0.75,
+          bevelOffset: -r * 0.08,
+          bevelSegments: 5,
+          curveSegments: 6,
+        });
+        geo.center();
+        return geo;
+      }
+
+      function createSpokeFaceTexture() {
+        const size = 1024;
+        const c = document.createElement("canvas");
+        c.width = size;
+        c.height = size;
+        const ctx = c.getContext("2d");
+        const cx = size / 2;
+        const cy = size / 2;
+
+        // Timber disc with a barrel-oak outer rim
+        const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, size * 0.5);
+        bg.addColorStop(0, "#5c4a36");
+        bg.addColorStop(0.55, "#4a3a28");
+        bg.addColorStop(0.82, "#8a5a32");
+        bg.addColorStop(1, "#c08a4a");
+        ctx.fillStyle = bg;
+        ctx.beginPath();
+        ctx.arc(cx, cy, size * 0.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Spokes
+        const spokeCount = 12;
+        for (let i = 0; i < spokeCount; i++) {
+          const a = (i / spokeCount) * Math.PI * 2;
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(a);
+          const g = ctx.createLinearGradient(0, -18, 0, 18);
+          g.addColorStop(0, "#2a2218");
+          g.addColorStop(0.5, "#8a6a40");
+          g.addColorStop(1, "#2a2218");
+          ctx.fillStyle = g;
+          ctx.fillRect(40, -16, size * 0.42, 32);
+          // Bolt
+          ctx.fillStyle = "#6a6a6a";
+          ctx.beginPath();
+          ctx.arc(size * 0.38, 0, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // Outer rim ring — same oak as the planter barrels
+        ctx.strokeStyle = "#c08a4a";
+        ctx.lineWidth = 28;
+        ctx.beginPath();
+        ctx.arc(cx, cy, size * 0.46, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.strokeStyle = "#8a5a32";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+
+        // Hub
+        const hub = ctx.createRadialGradient(cx, cy, 0, cx, cy, size * 0.09);
+        hub.addColorStop(0, "#a0a0a0");
+        hub.addColorStop(0.5, "#5a5a5a");
+        hub.addColorStop(1, "#2a2a2a");
+        ctx.beginPath();
+        ctx.arc(cx, cy, size * 0.09, 0, Math.PI * 2);
+        ctx.fillStyle = hub;
+        ctx.fill();
+
+        return makeTex(c, true);
+      }
+
+      function createLabelTexture(text, wet) {
+        const w = 1536;
+        const h = 480;
+        const c = document.createElement("canvas");
+        c.width = w;
+        c.height = h;
+        const ctx = c.getContext("2d");
+
+        // Wood panel for the bucket face
+        const base = ctx.createLinearGradient(0, 0, w, 0);
+        if (wet) {
+          base.addColorStop(0, "#6a3a18");
+          base.addColorStop(0.35, "#c8883a");
+          base.addColorStop(0.7, "#8a5018");
+          base.addColorStop(1, "#4a2810");
+        } else {
+          base.addColorStop(0, "#2a261e");
+          base.addColorStop(0.4, "#4a453c");
+          base.addColorStop(1, "#1e1a14");
+        }
+        ctx.fillStyle = base;
+        ctx.fillRect(0, 0, w, h);
+        for (let x = 0; x < w; x += 3) {
+          ctx.globalAlpha = 0.07;
+          ctx.fillStyle = Math.random() > 0.5 ? "#1a1008" : "#e8c080";
+          ctx.fillRect(x, 0, 2, h);
+        }
+        ctx.globalAlpha = 1;
+        if (!wet) {
+          for (let i = 0; i < 20; i++) {
+            const x = Math.random() * w;
+            const y = Math.random() * h;
+            const r = 8 + Math.random() * 30;
+            const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+            g.addColorStop(0, "rgba(60,100,45,0.4)");
+            g.addColorStop(1, "rgba(60,100,45,0)");
+            ctx.fillStyle = g;
+            ctx.fillRect(x - r, y - r, r * 2, r * 2);
+          }
+        }
+
+        const shade = ctx.createLinearGradient(0, 0, 0, h);
+        shade.addColorStop(0, "rgba(255,255,255,0.18)");
+        shade.addColorStop(0.5, "rgba(0,0,0,0)");
+        shade.addColorStop(1, "rgba(0,0,0,0.4)");
+        ctx.fillStyle = shade;
+        ctx.fillRect(0, 0, w, h);
+
+        // Name plate
+        ctx.fillStyle = "rgba(15, 12, 8, 0.45)";
+        roundRect(ctx, 60, 90, w - 120, h - 180, 16);
+        ctx.fill();
+
+        const words = text.trim().split(/\s+/).filter(Boolean).map((w) => w.toUpperCase());
+        const fullLine = words.join(" ");
+        const fontFamily = 'Georgia, "Palatino Linotype", serif';
+        const maxWidth = w - 160;
+        const maxBlockHeight = h - 200;
+        const lineGap = 1.15;
+
+        // Prefer a single line; stack only when the name won't fit across the bucket
+        let lines = [fullLine];
+        let fontSize = 130;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        function fits(candidateLines, size) {
+          ctx.font = `700 ${size}px ${fontFamily}`;
+          const widest = Math.max(...candidateLines.map((l) => ctx.measureText(l).width));
+          const blockH = size * lineGap * candidateLines.length;
+          return widest <= maxWidth && blockH <= maxBlockHeight;
+        }
+
+        while (fontSize > 48 && !fits(lines, fontSize)) {
+          fontSize -= 2;
+        }
+
+        // Still too wide as one line — stack into balanced rows
+        if (!fits(lines, fontSize) && words.length > 1) {
+          fontSize = 110;
+          if (words.length === 2) {
+            lines = [words[0], words[1]];
+          } else if (words.length === 3) {
+            lines = [words[0] + " " + words[1], words[2]];
+            if (!fits(lines, 80)) lines = words.slice();
+          } else {
+            const mid = Math.ceil(words.length / 2);
+            lines = [words.slice(0, mid).join(" "), words.slice(mid).join(" ")];
+            if (!fits(lines, 70)) lines = words.slice();
+          }
+          while (fontSize > 36 && !fits(lines, fontSize)) {
+            fontSize -= 2;
+          }
+        }
+
+        ctx.font = `700 ${fontSize}px ${fontFamily}`;
+        const startY = h / 2 - (fontSize * lineGap * lines.length) / 2 + fontSize / 2;
+        lines.forEach((line, i) => {
+          const y = startY + i * fontSize * lineGap;
+          ctx.lineJoin = "round";
+          ctx.strokeStyle = "rgba(20,12,5,0.85)";
+          ctx.lineWidth = Math.max(10, fontSize * 0.14);
+          ctx.strokeText(line, w / 2, y);
+          ctx.fillStyle = wet ? "#fff4d8" : "#e8dcc0";
+          ctx.fillText(line, w / 2, y);
+        });
+
+        return makeTex(c, true);
+      }
+
+      function roundRect(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+      }
+
+      function colorForIndex(i) {
+        // Alternate wet amber buckets and weathered dry timber
+        return i % 2 === 0 ? COLORS.wetAmber : COLORS.dryGray;
+      }
+
+      function isWetIndex(i) {
+        return i % 2 === 0;
+      }
+
+      // -----------------------------------------------------------------------
+      // Stage: limestone piers
+      // -----------------------------------------------------------------------
+
+      function buildStageDressing(root) {
+        while (root.children.length) {
+          const ch = root.children[0];
+          root.remove(ch);
+          ch.traverse((o) => {
+            if (o.geometry) o.geometry.dispose();
+            if (o.material) {
+              const mats = Array.isArray(o.material) ? o.material : [o.material];
+              mats.forEach((m) => {
+                if (m.map) m.map.dispose();
+                m.dispose();
+              });
+            }
+          });
+        }
+
+        const stoneMap = createStoneTexture();
+        stoneMap.repeat.set(1.2, 1.5);
+        const stoneMat = new THREE.MeshStandardMaterial({
+          map: stoneMap,
+          roughness: 0.94,
+          metalness: 0.04,
+          color: 0xb8b09a,
+          envMapIntensity: 0.35,
+        });
+
+        const ironMat = new THREE.MeshPhysicalMaterial({
+          color: 0x3a3a3a,
+          metalness: 0.95,
+          roughness: 0.28,
+          clearcoat: 0.35,
+          clearcoatRoughness: 0.25,
+          envMapIntensity: 1.25,
+        });
+
+        // Rusty bronze / black iron selection arrows
+        const rustMap = createRustyIronTexture();
+        const pointerMat = new THREE.MeshPhysicalMaterial({
+          map: rustMap,
+          color: 0x3a2416,
+          metalness: 0.55,
+          roughness: 0.58,
+          clearcoat: 0.1,
+          clearcoatRoughness: 0.65,
+          envMapIntensity: 0.75,
+          side: THREE.DoubleSide,
+        });
+
+        const pierX = WHEEL.thickness * 0.5 + 1.15;
+
+        [-1, 1].forEach((side) => {
+          const pier = new THREE.Group();
+          pier.position.x = side * pierX;
+
+          // Lowest courses sit partially in the pond
+          const blocks = [
+            { y: -2.25, w: 1.4, h: 0.72, d: 1.15, ox: 0.05 },
+            { y: -1.5, w: 1.3, h: 0.72, d: 1.05, ox: -0.04 },
+            { y: -0.78, w: 1.25, h: 0.7, d: 1.0, ox: 0.05 },
+            { y: -0.18, w: 1.2, h: 0.55, d: 1.05, ox: -0.02 },
+          ];
+
+          blocks.forEach((b, bi) => {
+            const radius = 0.09 + Math.random() * 0.05;
+            const mesh = new THREE.Mesh(
+              createRoundedBoxGeometry(b.w, b.h, b.d, radius),
+              stoneMat.clone()
+            );
+            mesh.rotation.y = (Math.random() - 0.5) * 0.12;
+            mesh.rotation.z = (Math.random() - 0.5) * 0.07;
+            mesh.rotation.x = (Math.random() - 0.5) * 0.05;
+            mesh.position.set(side * b.ox, b.y, (bi % 2) * 0.04);
+            if (mesh.material.map) {
+              mesh.material.map = stoneMap.clone();
+              mesh.material.map.offset.set(Math.random(), Math.random());
+              mesh.material.map.needsUpdate = true;
+            }
+            // Slight color variation per block (more weathered lower courses)
+            mesh.material.color.offsetHSL(
+              (Math.random() - 0.5) * 0.02,
+              (Math.random() - 0.5) * 0.04,
+              (Math.random() - 0.5) * 0.06 - bi * 0.01
+            );
+            pier.add(mesh);
+          });
+
+          // Cap stone sits at axle height (middle of the wheel)
+          const cap = new THREE.Mesh(
+            createRoundedBoxGeometry(1.35, 0.32, 1.15, 0.08),
+            stoneMat.clone()
+          );
+          cap.position.y = 0.28;
+          if (cap.material.map) {
+            cap.material.map = stoneMap.clone();
+            cap.material.map.offset.set(Math.random(), Math.random());
+            cap.material.map.needsUpdate = true;
+          }
+          pier.add(cap);
+
+          // Little wood barrel overflowing with roses
+          const planter = createBarrelPlanter();
+          planter.position.set(side * 0.02, 0.44, 0.05);
+          pier.add(planter);
+
+          // Iron axle bearing plate on the inner face at hub height
+          const plate = new THREE.Mesh(
+            new THREE.BoxGeometry(0.15, 0.5, 0.5),
+            ironMat
+          );
+          plate.position.set(side * -0.58, 0, 0);
+          pier.add(plate);
+
+          root.add(pier);
+        });
+
+        // Iron axle through hub
+        const axle = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.12, 0.12, WHEEL.thickness + 1.6, 16),
+          ironMat
+        );
+        axle.rotation.z = Math.PI / 2;
+        root.add(axle);
+
+        // Selection pointers — forged wrought-iron arrows
+        [-1, 1].forEach((side) => {
+          root.add(createIronPointer(side, pointerMat));
+        });
+
+        // --- Pond: dirt under limestone, water under the wheel ---
+        const dirtMap = createDirtTexture();
+        const dirtMat = new THREE.MeshStandardMaterial({
+          map: dirtMap,
+          color: 0x8a6a42,
+          roughness: 0.95,
+          metalness: 0.02,
+          envMapIntensity: 0.2,
+        });
+
+        const siltMap = createDirtTexture();
+        siltMap.offset.set(0.3, 0.1);
+        const siltMat = new THREE.MeshStandardMaterial({
+          map: siltMap,
+          color: 0x1a2430,
+          roughness: 0.98,
+          metalness: 0.02,
+          envMapIntensity: 0.15,
+        });
+
+        // Earthen banks under each limestone pier
+        [-1, 1].forEach((side) => {
+          const bank = new THREE.Group();
+          bank.position.x = side * pierX;
+
+          const pad = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.95, 1.15, 0.45, 10),
+            dirtMat.clone()
+          );
+          pad.position.y = -2.72;
+          pad.rotation.y = side * 0.2;
+          bank.add(pad);
+
+          // Extra soil spill toward the pond
+          const spill = new THREE.Mesh(
+            new THREE.BoxGeometry(0.7, 0.28, 1.4),
+            dirtMat.clone()
+          );
+          spill.position.set(side * -0.35, -2.78, 0.1);
+          spill.rotation.z = side * 0.12;
+          bank.add(spill);
+
+          root.add(bank);
+        });
+
+        // Broader dirt shelf behind / beside the pond
+        const dirtShelf = new THREE.Mesh(
+          new THREE.BoxGeometry(8.5, 0.35, 4.2),
+          dirtMat
+        );
+        dirtShelf.position.set(0, -2.95, 0.15);
+        root.add(dirtShelf);
+
+        // Dark silt bed under the wheel (visible through water)
+        const siltBed = new THREE.Mesh(
+          new THREE.CircleGeometry(2.15, 48),
+          siltMat
+        );
+        siltBed.rotation.x = -Math.PI / 2;
+        siltBed.position.set(0, -2.72, 0);
+        root.add(siltBed);
+
+        // Pond water — centered under the wheel between the piers
+        const waterMap = createPondWaterTexture();
+        waterMap.wrapS = waterMap.wrapT = THREE.RepeatWrapping;
+        const waterNormal = createWaterNormalMap();
+        const waterMat = new THREE.MeshPhysicalMaterial({
+          color: 0x0c3050,
+          map: waterMap,
+          normalMap: waterNormal,
+          normalScale: new THREE.Vector2(1.15, 1.15),
+          transparent: true,
+          opacity: 0.88,
+          metalness: 0.22,
+          roughness: 0.18,
+          clearcoat: 1,
+          clearcoatRoughness: 0.08,
+          transmission: 0.04,
+          thickness: 0.6,
+          envMapIntensity: 0.85,
+          side: THREE.DoubleSide,
+        });
+        const water = new THREE.Mesh(
+          new THREE.CircleGeometry(2.1, 72),
+          waterMat
+        );
+        water.rotation.x = -Math.PI / 2;
+        // Wheel bottom is at -radius (−2.2); water sits just below so the rim dips in
+        water.position.set(0, -2.18, 0);
+        root.add(water);
+        pondWaterMaps.color = waterMap;
+        pondWaterMaps.normal = waterNormal;
+
+        // Muddy shore ring where dirt meets water
+        const shoreMat = new THREE.MeshStandardMaterial({
+          map: dirtMap.clone(),
+          color: 0x5a4a32,
+          roughness: 0.92,
+          metalness: 0.02,
+          envMapIntensity: 0.2,
+        });
+        const shore = new THREE.Mesh(
+          new THREE.RingGeometry(2.05, 2.95, 48),
+          shoreMat
+        );
+        shore.rotation.x = -Math.PI / 2;
+        shore.position.set(0, -2.16, 0);
+        root.add(shore);
+
+        // Soft blue water edge fade
+        const edgeMat = new THREE.MeshStandardMaterial({
+          color: 0x1a3858,
+          transparent: true,
+          opacity: 0.22,
+          roughness: 0.5,
+          metalness: 0.05,
+          depthWrite: false,
+        });
+        const waterEdge = new THREE.Mesh(
+          new THREE.RingGeometry(1.95, 2.2, 48),
+          edgeMat
+        );
+        waterEdge.rotation.x = -Math.PI / 2;
+        waterEdge.position.set(0, -2.165, 0);
+        root.add(waterEdge);
+      }
+
+      function createDirtTexture() {
+        const size = 512;
+        const c = document.createElement("canvas");
+        c.width = size;
+        c.height = size;
+        const ctx = c.getContext("2d");
+
+        ctx.fillStyle = "#6b4e32";
+        ctx.fillRect(0, 0, size, size);
+
+        for (let i = 0; i < 12000; i++) {
+          const x = Math.random() * size;
+          const y = Math.random() * size;
+          const s = 1 + Math.random() * 2.5;
+          const shade = 70 + Math.random() * 90;
+          const r = shade + Math.random() * 20;
+          const g = shade * 0.75;
+          const b = shade * 0.45;
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${0.2 + Math.random() * 0.45})`;
+          ctx.fillRect(x, y, s, s);
+        }
+
+        // Clumps / pebbles
+        for (let i = 0; i < 80; i++) {
+          const x = Math.random() * size;
+          const y = Math.random() * size;
+          const r = 3 + Math.random() * 14;
+          const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+          if (Math.random() > 0.55) {
+            g.addColorStop(0, "rgba(50, 38, 24, 0.55)");
+          } else {
+            g.addColorStop(0, "rgba(140, 110, 70, 0.4)");
+          }
+          g.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(x - r, y - r, r * 2, r * 2);
+        }
+
+        return makeTex(c, true);
+      }
+
+      function createPondWaterTexture() {
+        const size = 512;
+        const c = document.createElement("canvas");
+        c.width = size;
+        c.height = size;
+        const ctx = c.getContext("2d");
+        const g = ctx.createRadialGradient(size / 2, size / 2, 20, size / 2, size / 2, size * 0.55);
+        g.addColorStop(0, "#143050");
+        g.addColorStop(0.4, "#0a1c38");
+        g.addColorStop(1, "#030814");
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, size, size);
+
+        const cx = size / 2;
+        const cy = size / 2;
+        for (let i = 4; i < 28; i++) {
+          const r = 12 + i * 9;
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, r * 1.15, r * 0.72, 0.35, 0, Math.PI * 2);
+          ctx.strokeStyle = i % 2 === 0
+            ? "rgba(90, 140, 180, 0.16)"
+            : "rgba(10, 20, 40, 0.22)";
+          ctx.lineWidth = 1.2 + (i % 3) * 0.6;
+          ctx.stroke();
+        }
+
+        ctx.strokeStyle = "rgba(120, 170, 210, 0.12)";
+        for (let i = 0; i < 18; i++) {
+          ctx.lineWidth = 1 + Math.random();
+          ctx.beginPath();
+          let x = Math.random() * size;
+          let y = Math.random() * size;
+          ctx.moveTo(x, y);
+          for (let s = 0; s < 8; s++) {
+            x += 18 + Math.random() * 28;
+            y += Math.sin(s * 0.9 + i) * 10;
+            ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+
+        for (let i = 0; i < 80; i++) {
+          const x = Math.random() * size;
+          const y = Math.random() * size;
+          const r = 4 + Math.random() * 30;
+          const rg = ctx.createRadialGradient(x, y, 0, x, y, r);
+          rg.addColorStop(0, "rgba(40, 80, 120, 0.18)");
+          rg.addColorStop(1, "rgba(40, 80, 120, 0)");
+          ctx.fillStyle = rg;
+          ctx.fillRect(x - r, y - r, r * 2, r * 2);
+        }
+        const tex = makeTex(c, true);
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        return tex;
+      }
+
+      function createWaterNormalMap() {
+        const size = 256;
+        const height = new Float32Array(size * size);
+        for (let y = 0; y < size; y++) {
+          for (let x = 0; x < size; x++) {
+            const u = (x / size) * Math.PI * 2;
+            const v = (y / size) * Math.PI * 2;
+            height[y * size + x] =
+              Math.sin(u * 7 + v * 2.2) * 0.5 +
+              Math.sin(u * 3 - v * 11) * 0.28 +
+              Math.sin(v * 17 + u * 5) * 0.18 +
+              Math.sin((u + v) * 9) * 0.12;
+          }
+        }
+        const data = new Uint8Array(size * size * 4);
+        const wrap = (n) => ((n % size) + size) % size;
+        const str = 5.5;
+        for (let y = 0; y < size; y++) {
+          for (let x = 0; x < size; x++) {
+            const l = height[y * size + wrap(x - 1)];
+            const r = height[y * size + wrap(x + 1)];
+            const d = height[wrap(y + 1) * size + x];
+            const u = height[wrap(y - 1) * size + x];
+            let nx = (l - r) * str;
+            let ny = (d - u) * str;
+            let nz = 1;
+            const len = Math.hypot(nx, ny, nz) || 1;
+            nx /= len;
+            ny /= len;
+            nz /= len;
+            const i = (y * size + x) * 4;
+            data[i] = (nx * 0.5 + 0.5) * 255;
+            data[i + 1] = (ny * 0.5 + 0.5) * 255;
+            data[i + 2] = (nz * 0.5 + 0.5) * 255;
+            data[i + 3] = 255;
+          }
+        }
+        const tex = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        tex.repeat.set(2.4, 2.4);
+        tex.needsUpdate = true;
+        return tex;
+      }
+
+      function createWroughtIronTexture() {
+        const size = 512;
+        const c = document.createElement("canvas");
+        c.width = size;
+        c.height = size;
+        const ctx = c.getContext("2d");
+
+        ctx.fillStyle = "#2e2c2a";
+        ctx.fillRect(0, 0, size, size);
+
+        // Hammer-scale mottling
+        for (let i = 0; i < 9000; i++) {
+          const x = Math.random() * size;
+          const y = Math.random() * size;
+          const s = 1 + Math.random() * 3;
+          const v = 30 + Math.random() * 55;
+          ctx.fillStyle = `rgba(${v}, ${v - 2}, ${v - 4}, ${0.15 + Math.random() * 0.4})`;
+          ctx.fillRect(x, y, s, s);
+        }
+
+        // Forge black patches + slight rust flecks
+        for (let i = 0; i < 60; i++) {
+          const x = Math.random() * size;
+          const y = Math.random() * size;
+          const r = 8 + Math.random() * 40;
+          const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+          if (Math.random() > 0.78) {
+            g.addColorStop(0, "rgba(110, 55, 30, 0.35)");
+          } else {
+            g.addColorStop(0, "rgba(12, 12, 14, 0.55)");
+          }
+          g.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(x - r, y - r, r * 2, r * 2);
+        }
+
+        // Hammer strike streaks
+        ctx.strokeStyle = "rgba(70, 68, 64, 0.35)";
+        for (let i = 0; i < 35; i++) {
+          ctx.lineWidth = 0.5 + Math.random() * 2;
+          ctx.beginPath();
+          const x = Math.random() * size;
+          const y = Math.random() * size;
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + (Math.random() - 0.5) * 50, y + (Math.random() - 0.5) * 18);
+          ctx.stroke();
+        }
+
+        // Soft highlight ridges (polished faces)
+        for (let i = 0; i < 25; i++) {
+          const x = Math.random() * size;
+          const y = Math.random() * size;
+          const r = 6 + Math.random() * 20;
+          const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+          g.addColorStop(0, "rgba(160, 155, 145, 0.28)");
+          g.addColorStop(1, "rgba(160, 155, 145, 0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(x - r, y - r, r * 2, r * 2);
+        }
+
+        return makeTex(c, true);
+      }
+
+      /** Ornate blacksmith-forged iron arrow pointer */
+      function createIronPointer(side, mat) {
+        const group = new THREE.Group();
+        const dir = side;
+        const d = (x) => x * dir;
+
+        const extrudeOpts = {
+          depth: 0.07,
+          bevelEnabled: true,
+          bevelThickness: 0.014,
+          bevelSize: 0.012,
+          bevelSegments: 3,
+        };
+
+        // Main blade — leaf tip, barbs, openwork, flared tang
+        const blade = new THREE.Shape();
+        blade.moveTo(d(0), 0);
+        blade.quadraticCurveTo(d(0.08), 0.05, d(0.18), 0.12);
+        blade.lineTo(d(0.32), 0.28);
+        blade.lineTo(d(0.38), 0.18);
+        blade.lineTo(d(0.42), 0.22);
+        blade.quadraticCurveTo(d(0.55), 0.2, d(0.62), 0.14);
+        blade.lineTo(d(0.72), 0.12);
+        blade.lineTo(d(0.78), 0.22);
+        blade.quadraticCurveTo(d(0.7), 0.32, d(0.58), 0.28);
+        blade.lineTo(d(0.82), 0.1);
+        blade.lineTo(d(0.88), 0.06);
+        blade.lineTo(d(0.88), -0.06);
+        blade.lineTo(d(0.82), -0.1);
+        blade.lineTo(d(0.58), -0.28);
+        blade.quadraticCurveTo(d(0.7), -0.32, d(0.78), -0.22);
+        blade.lineTo(d(0.72), -0.12);
+        blade.lineTo(d(0.62), -0.14);
+        blade.quadraticCurveTo(d(0.55), -0.2, d(0.42), -0.22);
+        blade.lineTo(d(0.38), -0.18);
+        blade.lineTo(d(0.32), -0.28);
+        blade.lineTo(d(0.18), -0.12);
+        blade.quadraticCurveTo(d(0.08), -0.05, d(0), 0);
+        blade.closePath();
+
+        const pierc = new THREE.Path();
+        pierc.moveTo(d(0.22), 0);
+        pierc.quadraticCurveTo(d(0.32), 0.1, d(0.48), 0.08);
+        pierc.lineTo(d(0.52), 0);
+        pierc.lineTo(d(0.48), -0.08);
+        pierc.quadraticCurveTo(d(0.32), -0.1, d(0.22), 0);
+        pierc.closePath();
+        blade.holes.push(pierc);
+
+        const bladeGeo = new THREE.ExtrudeGeometry(blade, extrudeOpts);
+        bladeGeo.translate(0, 0, -0.035);
+        group.add(new THREE.Mesh(bladeGeo, mat));
+
+        // Raised fuller / ridge down the center of the blade
+        const ridge = new THREE.Mesh(
+          new THREE.BoxGeometry(0.4, 0.035, 0.09),
+          mat
+        );
+        ridge.position.set(d(0.28), 0, 0);
+        group.add(ridge);
+
+        // Forged collar rings near the tang
+        [0.58, 0.68].forEach((x, i) => {
+          const ring = new THREE.Mesh(
+            new THREE.TorusGeometry(0.07 + i * 0.01, 0.016, 8, 16),
+            mat
+          );
+          ring.rotation.y = Math.PI / 2;
+          ring.position.set(d(x), 0, 0);
+          group.add(ring);
+        });
+
+        // Hammered rivets along the blade spine
+        [0.2, 0.34, 0.5].forEach((x) => {
+          const rivet = new THREE.Mesh(
+            new THREE.SphereGeometry(0.022, 8, 8),
+            mat
+          );
+          rivet.position.set(d(x), 0, 0.04);
+          group.add(rivet);
+        });
+
+        // Decorative scrolled flourishes (upper & lower)
+        function addScroll(ySign) {
+          const scroll = new THREE.Shape();
+          scroll.moveTo(d(0.7), ySign * 0.1);
+          scroll.quadraticCurveTo(d(0.86), ySign * 0.08, d(0.92), ySign * 0.22);
+          scroll.quadraticCurveTo(d(0.84), ySign * 0.38, d(0.7), ySign * 0.3);
+          scroll.quadraticCurveTo(d(0.78), ySign * 0.22, d(0.74), ySign * 0.14);
+          scroll.quadraticCurveTo(d(0.7), ySign * 0.18, d(0.7), ySign * 0.1);
+          scroll.closePath();
+
+          const hole = new THREE.Path();
+          hole.moveTo(d(0.76), ySign * 0.16);
+          hole.quadraticCurveTo(d(0.84), ySign * 0.2, d(0.82), ySign * 0.26);
+          hole.quadraticCurveTo(d(0.76), ySign * 0.24, d(0.76), ySign * 0.16);
+          hole.closePath();
+          scroll.holes.push(hole);
+
+          const geo = new THREE.ExtrudeGeometry(scroll, {
+            depth: 0.05,
+            bevelEnabled: true,
+            bevelThickness: 0.008,
+            bevelSize: 0.006,
+            bevelSegments: 2,
+          });
+          geo.translate(0, 0, -0.025);
+          group.add(new THREE.Mesh(geo, mat));
+        }
+        addScroll(1);
+        addScroll(-1);
+
+        // Faceted tang stub
+        const tang = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.04, 0.055, 0.2, 6),
+          mat
+        );
+        tang.rotation.z = Math.PI / 2;
+        tang.position.set(d(0.95), 0, 0);
+        group.add(tang);
+
+        // Finial knob + spike at the outer end
+        const finial = new THREE.Mesh(
+          new THREE.SphereGeometry(0.055, 10, 10),
+          mat
+        );
+        finial.position.set(d(1.08), 0, 0);
+        group.add(finial);
+        const finialTip = new THREE.Mesh(
+          new THREE.ConeGeometry(0.03, 0.08, 8),
+          mat
+        );
+        finialTip.rotation.z = -dir * (Math.PI / 2);
+        finialTip.position.set(d(1.14), 0, 0);
+        group.add(finialTip);
+
+        // Tip sits just outside the wheel (clear of the side face & rim)
+        group.scale.setScalar(0.78);
+        group.position.set(
+          side * (WHEEL.thickness * 0.5 + 0.06),
+          0,
+          WHEEL.radius + 0.05
+        );
+        return group;
+      }
+
+      function createOakTexture() {
+        const w = 512;
+        const h = 512;
+        const c = document.createElement("canvas");
+        c.width = w;
+        c.height = h;
+        const ctx = c.getContext("2d");
+
+        ctx.fillStyle = "#7a4e28";
+        ctx.fillRect(0, 0, w, h);
+
+        const staveCount = 14;
+        const staveW = w / staveCount;
+        for (let s = 0; s < staveCount; s++) {
+          const x0 = s * staveW;
+          const tone = 0.88 + Math.random() * 0.22;
+          const r = Math.floor(122 * tone);
+          const g = Math.floor(78 * tone);
+          const b = Math.floor(40 * tone);
+          ctx.fillStyle = `rgb(${r},${g},${b})`;
+          ctx.fillRect(x0, 0, staveW - 3, h);
+
+          const grain = ctx.createLinearGradient(x0, 0, x0 + staveW, 0);
+          grain.addColorStop(0, "rgba(40, 22, 8, 0.28)");
+          grain.addColorStop(0.45, "rgba(210, 170, 110, 0.12)");
+          grain.addColorStop(1, "rgba(30, 16, 6, 0.32)");
+          ctx.fillStyle = grain;
+          ctx.fillRect(x0, 0, staveW - 3, h);
+
+          for (let y = 0; y < h; y += 2) {
+            const wobble = Math.sin(y * 0.09 + s) * 2.5;
+            ctx.fillStyle = Math.random() > 0.55
+              ? "rgba(210, 175, 115, 0.12)"
+              : "rgba(45, 24, 10, 0.18)";
+            ctx.fillRect(x0 + 4 + wobble + Math.random() * 6, y, 1, 2 + Math.random() * 4);
+          }
+
+          ctx.fillStyle = "rgba(18, 10, 4, 0.72)";
+          ctx.fillRect(x0 + staveW - 3, 0, 3, h);
+        }
+
+        for (let i = 0; i < 40; i++) {
+          ctx.strokeStyle = `rgba(200, 165, 105, ${0.06 + Math.random() * 0.1})`;
+          ctx.lineWidth = 1;
+          const x = Math.random() * w;
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.quadraticCurveTo(x + 8, h * 0.5, x - 4, h);
+          ctx.stroke();
+        }
+
+        const map = makeTex(c, true);
+        map.repeat.set(1, 1);
+        return map;
+      }
+
+      function createRustyIronTexture() {
+        const size = 512;
+        const c = document.createElement("canvas");
+        c.width = size;
+        c.height = size;
+        const ctx = c.getContext("2d");
+
+        ctx.fillStyle = "#1a1614";
+        ctx.fillRect(0, 0, size, size);
+
+        for (let i = 0; i < 9000; i++) {
+          const x = Math.random() * size;
+          const y = Math.random() * size;
+          const v = 18 + Math.random() * 40;
+          ctx.fillStyle = `rgba(${v}, ${v - 4}, ${v - 8}, ${0.2 + Math.random() * 0.45})`;
+          ctx.fillRect(x, y, 1 + Math.random() * 2, 1 + Math.random() * 2);
+        }
+
+        for (let i = 0; i < 70; i++) {
+          const x = Math.random() * size;
+          const y = Math.random() * size;
+          const r = 8 + Math.random() * 40;
+          const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+          if (Math.random() > 0.35) {
+            g.addColorStop(0, "rgba(160, 62, 22, 0.7)");
+            g.addColorStop(0.4, "rgba(110, 42, 16, 0.4)");
+            g.addColorStop(1, "rgba(40, 18, 8, 0)");
+          } else {
+            g.addColorStop(0, "rgba(8, 8, 8, 0.75)");
+            g.addColorStop(1, "rgba(0,0,0,0)");
+          }
+          ctx.fillStyle = g;
+          ctx.fillRect(x - r, y - r, r * 2, r * 2);
+        }
+
+        ctx.strokeStyle = "rgba(90, 40, 18, 0.35)";
+        for (let i = 0; i < 25; i++) {
+          ctx.lineWidth = 1 + Math.random() * 2;
+          ctx.beginPath();
+          const x = Math.random() * size;
+          const y = Math.random() * size;
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + (Math.random() - 0.5) * 60, y + (Math.random() - 0.3) * 18);
+          ctx.stroke();
+        }
+
+        return makeTex(c, true);
+      }
+
+      function createBarrelPlanter() {
+        const group = new THREE.Group();
+        const oakMap = createOakTexture();
+        const oakMat = new THREE.MeshStandardMaterial({
+          map: oakMap,
+          color: 0xc08a4a,
+          roughness: 0.82,
+          metalness: 0.04,
+          envMapIntensity: 0.3,
+        });
+        const lidMat = oakMat.clone();
+        if (lidMat.map) {
+          lidMat.map = oakMap.clone();
+          lidMat.map.rotation = Math.PI / 2;
+          lidMat.map.needsUpdate = true;
+        }
+
+        const rustMap = createRustyIronTexture();
+        const hoopMat = new THREE.MeshPhysicalMaterial({
+          map: rustMap,
+          color: 0x2a221c,
+          metalness: 0.45,
+          roughness: 0.72,
+          clearcoat: 0.08,
+          clearcoatRoughness: 0.7,
+          envMapIntensity: 0.55,
+          side: THREE.DoubleSide,
+        });
+
+        const bottom = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.29, 0.3, 0.06, 24),
+          lidMat
+        );
+        bottom.position.y = 0.03;
+        group.add(bottom);
+
+        const tiers = [
+          { y: 0.12, rBot: 0.3, rTop: 0.34, h: 0.16 },
+          { y: 0.28, rBot: 0.34, rTop: 0.39, h: 0.16 },
+          { y: 0.44, rBot: 0.39, rTop: 0.4, h: 0.16 },
+          { y: 0.6, rBot: 0.4, rTop: 0.36, h: 0.16 },
+          { y: 0.72, rBot: 0.36, rTop: 0.32, h: 0.1 },
+        ];
+        tiers.forEach((t) => {
+          const ring = new THREE.Mesh(
+            new THREE.CylinderGeometry(t.rTop, t.rBot, t.h, 28),
+            oakMat
+          );
+          ring.position.y = t.y;
+          group.add(ring);
+        });
+
+        [
+          { y: 0.1, r: 0.322, band: 0.048 },
+          { y: 0.26, r: 0.372, band: 0.05 },
+          { y: 0.52, r: 0.412, band: 0.05 },
+          { y: 0.7, r: 0.352, band: 0.046 },
+        ].forEach((h) => {
+          const hoop = new THREE.Mesh(
+            new THREE.CylinderGeometry(h.r, h.r, h.band, 40, 1, true),
+            hoopMat
+          );
+          hoop.position.y = h.y;
+          group.add(hoop);
+
+          for (let i = 0; i < 8; i++) {
+            const a = (i / 8) * Math.PI * 2 + 0.15;
+            const rivet = new THREE.Mesh(
+              new THREE.SphereGeometry(0.011, 8, 8),
+              hoopMat
+            );
+            rivet.position.set(Math.cos(a) * h.r, h.y, Math.sin(a) * h.r);
+            group.add(rivet);
+          }
+        });
+
+        const rim = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.328, 0.328, 0.036, 40, 1, true),
+          hoopMat
+        );
+        rim.position.y = 0.77;
+        group.add(rim);
+
+        const bung = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.032, 0.038, 0.06, 12),
+          oakMat
+        );
+        bung.rotation.z = Math.PI / 2;
+        bung.position.set(0.4, 0.44, 0);
+        group.add(bung);
+
+        const soil = new THREE.Mesh(
+          new THREE.SphereGeometry(0.3, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.5),
+          new THREE.MeshStandardMaterial({
+            color: 0x3d2a18,
+            roughness: 0.96,
+            metalness: 0.02,
+          })
+        );
+        soil.position.y = 0.74;
+        soil.scale.set(1.02, 0.42, 1.02);
+        group.add(soil);
+
+        const reds = [0xce2029, 0xe01018, 0xd40000, 0xdc143c, 0xc4000c];
+        const placements = [
+          { x: 0.00, z: 0.00, h: 0.46, lean: 0.04, tilt: 0, color: 0 },
+          { x: 0.06, z: 0.05, h: 0.40, lean: 0.10, tilt: 0.05, color: 1 },
+          { x: -0.07, z: 0.04, h: 0.42, lean: -0.12, tilt: -0.04, color: 2 },
+          { x: 0.04, z: -0.07, h: 0.38, lean: 0.08, tilt: 0.08, color: 3 },
+          { x: -0.05, z: -0.05, h: 0.36, lean: -0.08, tilt: -0.06, color: 4 },
+          { x: 0.10, z: 0.00, h: 0.32, lean: 0.16, tilt: 0.04, color: 0 },
+          { x: -0.10, z: 0.02, h: 0.30, lean: -0.18, tilt: 0.02, color: 1 },
+          { x: 0.00, z: 0.11, h: 0.34, lean: 0.06, tilt: 0.16, color: 2 },
+          { x: 0.02, z: -0.11, h: 0.31, lean: -0.05, tilt: -0.14, color: 3 },
+          { x: 0.14, z: 0.10, h: 0.26, lean: 0.28, tilt: 0.18, color: 4 },
+          { x: -0.14, z: 0.09, h: 0.24, lean: -0.30, tilt: 0.16, color: 0 },
+          { x: 0.13, z: -0.10, h: 0.25, lean: 0.26, tilt: -0.18, color: 1 },
+          { x: -0.12, z: -0.11, h: 0.23, lean: -0.28, tilt: -0.16, color: 2 },
+          { x: 0.16, z: 0.02, h: 0.22, lean: 0.38, tilt: 0.08, color: 3 },
+          { x: -0.16, z: -0.02, h: 0.21, lean: -0.40, tilt: -0.06, color: 4 },
+          { x: 0.22, z: 0.08, h: 0.18, lean: 0.72, tilt: 0.22, color: 0 },
+          { x: -0.22, z: 0.06, h: 0.17, lean: -0.75, tilt: 0.18, color: 1 },
+          { x: 0.20, z: -0.10, h: 0.16, lean: 0.68, tilt: -0.28, color: 2 },
+          { x: -0.18, z: -0.12, h: 0.16, lean: -0.70, tilt: -0.24, color: 3 },
+          { x: 0.08, z: 0.22, h: 0.17, lean: 0.22, tilt: 0.78, color: 4 },
+          { x: -0.06, z: 0.23, h: 0.15, lean: -0.18, tilt: 0.82, color: 0 },
+          { x: 0.07, z: -0.22, h: 0.16, lean: 0.16, tilt: -0.76, color: 1 },
+          { x: -0.09, z: -0.21, h: 0.15, lean: -0.20, tilt: -0.80, color: 2 },
+          { x: 0.24, z: -0.02, h: 0.14, lean: 0.88, tilt: 0.05, color: 3 },
+          { x: -0.24, z: 0.03, h: 0.14, lean: -0.90, tilt: 0.04, color: 4 },
+        ];
+        placements.forEach((p) => {
+          const rose = createRose(reds[p.color], p.h);
+          rose.position.set(p.x, 0.76, p.z);
+          rose.rotation.z = p.lean;
+          rose.rotation.x = p.tilt;
+          rose.rotation.y = Math.random() * Math.PI * 2;
+          group.add(rose);
+        });
+
+        return group;
+      }
+
+      function createPetalGeometry() {
+        const shape = new THREE.Shape();
+        shape.moveTo(0, 0);
+        shape.quadraticCurveTo(0.038, 0.018, 0.042, 0.068);
+        shape.quadraticCurveTo(0.022, 0.1, 0, 0.112);
+        shape.quadraticCurveTo(-0.022, 0.1, -0.042, 0.068);
+        shape.quadraticCurveTo(-0.038, 0.018, 0, 0);
+        const geo = new THREE.ExtrudeGeometry(shape, {
+          depth: 0.006,
+          bevelEnabled: true,
+          bevelThickness: 0.003,
+          bevelSize: 0.004,
+          bevelSegments: 2,
+        });
+        geo.translate(0, 0, -0.003);
+        return geo;
+      }
+
+      function createLeafShapeGeometry() {
+        const shape = new THREE.Shape();
+        shape.moveTo(0, 0);
+        shape.quadraticCurveTo(0.045, 0.04, 0.02, 0.12);
+        shape.quadraticCurveTo(0, 0.14, -0.02, 0.12);
+        shape.quadraticCurveTo(-0.045, 0.04, 0, 0);
+        const geo = new THREE.ExtrudeGeometry(shape, {
+          depth: 0.005,
+          bevelEnabled: false,
+        });
+        geo.center();
+        return geo;
+      }
+
+      function createRose(bloomColor, stemHeight) {
+        const group = new THREE.Group();
+        const petalGeo = createPetalGeometry();
+        const leafGeo = createLeafShapeGeometry();
+
+        const stemMat = new THREE.MeshStandardMaterial({
+          color: 0x2a5c28,
+          roughness: 0.86,
+          metalness: 0.04,
+        });
+        const leafMat = new THREE.MeshStandardMaterial({
+          color: 0x2e6b32,
+          roughness: 0.72,
+          metalness: 0.03,
+          side: THREE.DoubleSide,
+        });
+        const sepalMat = new THREE.MeshStandardMaterial({
+          color: 0x245828,
+          roughness: 0.78,
+          side: THREE.DoubleSide,
+        });
+
+        const outerMat = new THREE.MeshPhysicalMaterial({
+          color: bloomColor,
+          roughness: 0.42,
+          metalness: 0.02,
+          clearcoat: 0.22,
+          clearcoatRoughness: 0.5,
+          emissive: 0xb00008,
+          emissiveIntensity: 0.22,
+          side: THREE.DoubleSide,
+          envMapIntensity: 0.3,
+        });
+        const innerMat = outerMat.clone();
+        innerMat.color = new THREE.Color(bloomColor).offsetHSL(0, 0.04, -0.03);
+        innerMat.emissive = new THREE.Color(0x9a0006);
+
+        const stem = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.009, 0.013, stemHeight, 8),
+          stemMat
+        );
+        stem.position.y = stemHeight / 2;
+        group.add(stem);
+
+        for (let i = 0; i < 3; i++) {
+          const a = i * 2.15;
+          const leaf = new THREE.Mesh(leafGeo, leafMat);
+          leaf.scale.set(1.15, 1.2, 1.15);
+          leaf.position.set(
+            Math.cos(a) * 0.035,
+            stemHeight * (0.28 + i * 0.18),
+            Math.sin(a) * 0.035
+          );
+          leaf.rotation.set(0.55, a, Math.cos(a) * 0.45);
+          group.add(leaf);
+        }
+
+        const bloomY = stemHeight;
+
+        // Calyx / sepals under the bloom
+        for (let i = 0; i < 5; i++) {
+          const a = (i / 5) * Math.PI * 2;
+          const sepal = new THREE.Mesh(leafGeo, sepalMat);
+          sepal.scale.set(0.55, 0.7, 0.55);
+          sepal.position.set(Math.cos(a) * 0.018, bloomY - 0.01, Math.sin(a) * 0.018);
+          sepal.rotation.set(1.05, a, 0);
+          group.add(sepal);
+        }
+
+        function addPetalRing(count, radius, y, tilt, scale, yawOff, mat) {
+          for (let i = 0; i < count; i++) {
+            const a = (i / count) * Math.PI * 2 + yawOff;
+            const petal = new THREE.Mesh(petalGeo, mat);
+            petal.position.set(
+              Math.cos(a) * radius,
+              bloomY + y,
+              Math.sin(a) * radius
+            );
+            petal.rotation.y = a;
+            petal.rotation.x = tilt + (Math.random() - 0.5) * 0.12;
+            petal.rotation.z = (Math.random() - 0.5) * 0.15;
+            petal.scale.setScalar(scale);
+            group.add(petal);
+          }
+        }
+
+        // Open outer petals → tight inner spiral
+        addPetalRing(8, 0.042, 0.008, 0.95, 1.28, 0, outerMat);
+        addPetalRing(7, 0.03, 0.028, 0.62, 1.08, 0.22, outerMat);
+        addPetalRing(6, 0.018, 0.046, 0.38, 0.88, 0.4, innerMat);
+        addPetalRing(5, 0.008, 0.06, 0.18, 0.62, 0.55, innerMat);
+
+        const heart = new THREE.Mesh(
+          new THREE.SphereGeometry(0.016, 10, 8),
+          innerMat
+        );
+        heart.scale.set(1, 0.85, 1);
+        heart.position.y = bloomY + 0.068;
+        group.add(heart);
+
+        return group;
+      }
+
+      // -----------------------------------------------------------------------
+      // Wheel
+      // -----------------------------------------------------------------------
+
+      function createSegment(index, total, name) {
+        const group = new THREE.Group();
+        const anglePer = (Math.PI * 2) / Math.max(total, 1);
+        const start = -index * anglePer;
+        const end = -(index + 1) * anglePer;
+        const mid = (start + end) / 2;
+        // Keep buckets/labels at a 12-slice size so 1–3 results don't stretch around the rim
+        const visAngle = total < 8
+          ? Math.min(anglePer, (Math.PI * 2) / 12)
+          : anglePer;
+        const visStart = mid + visAngle / 2;
+        const visEnd = mid - visAngle / 2;
+        const wet = isWetIndex(index);
+        const colorHex = colorForIndex(index);
+
+        const shape = new THREE.Shape();
+        shape.moveTo(0, 0);
+        shape.absarc(0, 0, WHEEL.radius, visEnd, visStart, false);
+        shape.lineTo(0, 0);
+
+        const geo = new THREE.ExtrudeGeometry(shape, {
+          depth: WHEEL.thickness,
+          bevelEnabled: false,
+          curveSegments: 28,
+        });
+        geo.translate(0, 0, -WHEEL.thickness / 2);
+        geo.rotateY(-Math.PI / 2);
+
+        const woodMap = createWoodTexture(wet);
+        const mat = new THREE.MeshStandardMaterial({
+          color: new THREE.Color(colorHex),
+          map: woodMap,
+          roughness: wet ? 0.28 : 0.82,
+          metalness: wet ? 0.08 : 0.02,
+          envMapIntensity: wet ? 0.95 : 0.35,
+        });
+        group.add(new THREE.Mesh(geo, mat));
+
+        // Bucket face label — sized to the visible bucket, not the empty gap
+        const labelTex = createLabelTexture(name, wet);
+        const arcLen = WHEEL.radius * visAngle * 0.88;
+        const label = new THREE.Mesh(
+          new THREE.PlaneGeometry(WHEEL.thickness * 0.94, arcLen * 0.92),
+          new THREE.MeshBasicMaterial({
+            map: labelTex,
+            transparent: true,
+            depthWrite: false,
+          })
+        );
+        const r = WHEEL.radius + 0.02;
+        label.position.set(0, Math.sin(mid) * r, Math.cos(mid) * r);
+        const outward = new THREE.Vector3(0, Math.sin(mid), Math.cos(mid));
+        const tangent = new THREE.Vector3(0, Math.cos(mid), -Math.sin(mid));
+        label.setRotationFromMatrix(
+          new THREE.Matrix4().makeBasis(new THREE.Vector3(1, 0, 0), tangent, outward)
+        );
+        group.add(label);
+
+        const plankMat = new THREE.MeshStandardMaterial({
+          color: 0x3a3024,
+          map: createWoodTexture(false),
+          roughness: 0.88,
+          metalness: 0.02,
+        });
+        function addPlank(angle) {
+          const plank = new THREE.Mesh(
+            new THREE.BoxGeometry(
+              WHEEL.thickness + 0.08,
+              WHEEL.finThickness,
+              WHEEL.radius * 0.98
+            ),
+            plankMat
+          );
+          plank.position.set(
+            0,
+            Math.sin(angle) * (WHEEL.radius * 0.5),
+            Math.cos(angle) * (WHEEL.radius * 0.5)
+          );
+          plank.rotation.x = -angle;
+          group.add(plank);
+        }
+        if (visAngle < anglePer - 0.001) {
+          addPlank(visStart);
+          addPlank(visEnd);
+        } else {
+          addPlank(start);
+        }
+
+        return group;
+      }
+
+      function createRimAndHub() {
+        const group = new THREE.Group();
+        const spokeTex = createSpokeFaceTexture();
+        const faceMat = new THREE.MeshStandardMaterial({
+          map: spokeTex,
+          roughness: 0.75,
+          metalness: 0.06,
+          envMapIntensity: 0.4,
+        });
+
+        const faceGeo = new THREE.CircleGeometry(WHEEL.radius * 0.995, 64);
+        const faceL = new THREE.Mesh(faceGeo, faceMat);
+        faceL.rotation.y = Math.PI / 2;
+        faceL.position.x = -WHEEL.thickness / 2 - 0.001;
+        const faceR = new THREE.Mesh(faceGeo, faceMat.clone());
+        faceR.rotation.y = -Math.PI / 2;
+        faceR.position.x = WHEEL.thickness / 2 + 0.001;
+        group.add(faceL, faceR);
+
+        // Outer timber bands — same oak as the planter barrels
+        const bandMat = new THREE.MeshStandardMaterial({
+          map: createOakTexture(),
+          color: 0x9a6230,
+          roughness: 0.88,
+          metalness: 0.04,
+          envMapIntensity: 0.22,
+        });
+        const bandGeo = new THREE.TorusGeometry(WHEEL.radius, 0.07, 10, 80);
+        const bandL = new THREE.Mesh(bandGeo, bandMat);
+        bandL.rotation.y = Math.PI / 2;
+        bandL.position.x = -WHEEL.thickness / 2;
+        const bandR = bandL.clone();
+        bandR.position.x = WHEEL.thickness / 2;
+        group.add(bandL, bandR);
+
+        // Iron hub
+        const ironMat = new THREE.MeshPhysicalMaterial({
+          color: 0x4a4a4a,
+          metalness: 0.95,
+          roughness: 0.28,
+          clearcoat: 0.35,
+          clearcoatRoughness: 0.25,
+          envMapIntensity: 1.25,
+        });
+        const hub = new THREE.Mesh(
+          new THREE.CylinderGeometry(WHEEL.innerRadius, WHEEL.innerRadius * 1.1, WHEEL.thickness + 0.2, 24),
+          ironMat
+        );
+        hub.rotation.z = Math.PI / 2;
+        group.add(hub);
+
+        return group;
+      }
+
+      function priceTier(price) {
+        return PRICES.indexOf(price);
+      }
+
+      function syncPriceRange(changed) {
+        const minVal = filterPriceMin.value;
+        const maxVal = filterPriceMax.value;
+        if (!minVal || !maxVal) return;
+        if (priceTier(minVal) <= priceTier(maxVal)) return;
+        if (changed === "min") filterPriceMax.value = minVal;
+        else filterPriceMin.value = maxVal;
+      }
+
+      function placePriceTiers(place) {
+        const min = priceTier(place.price);
+        const max = priceTier(place.priceMax || place.price);
+        if (min < 0 || max < 0) return [-1, -1];
+        return [Math.min(min, max), Math.max(min, max)];
+      }
+
+      function placeMatchesPriceRange(place) {
+        const minVal = filterPriceMin.value;
+        const maxVal = filterPriceMax.value;
+        if (!minVal && !maxVal) return true;
+        const [placeMin, placeMax] = placePriceTiers(place);
+        if (placeMin < 0) return false;
+        const filterMin = minVal ? priceTier(minVal) : 0;
+        const filterMax = maxVal ? priceTier(maxVal) : PRICES.length - 1;
+        return placeMin <= filterMax && placeMax >= filterMin;
+      }
+
+      function cuisineTags(cuisine) {
+        const tags = [];
+        String(cuisine || "").split("/").forEach((part) => {
+          const trimmed = part.trim();
+          if (!trimmed) return;
+          const paren = trimmed.match(/^(.+?)\s*\((.+)\)\s*$/);
+          if (paren) {
+            tags.push(paren[1].trim());
+            paren[2].split(/[-–—,]/).forEach((bit) => {
+              const t = bit.trim();
+              if (t) tags.push(t);
+            });
+          } else {
+            tags.push(trimmed);
+          }
+        });
+        return [...new Set(tags)];
+      }
+
+      function placeMatchesCuisine(place, selected) {
+        if (!selected || !selected.length) return true;
+        return selected.some((sel) => placeMatchesCuisineTag(place, sel));
+      }
+
+      function placeMatchesCuisineTag(place, selected) {
+        const sel = selected.toLowerCase();
+        return cuisineTags(place.cuisine).some((tag) => {
+          const lower = tag.toLowerCase();
+          if (lower === sel) return true;
+          return lower.split(/\s+/).includes(sel);
+        });
+      }
+
+      function getSelectedCuisines() {
+        return [...filterCuisineOptions.querySelectorAll('input[type="checkbox"]:checked')].map(
+          (cb) => cb.value
+        );
+      }
+
+      function updateCuisineSummary() {
+        const selected = getSelectedCuisines();
+        if (!selected.length) {
+          filterCuisineSummary.textContent = "Any cuisine";
+          return;
+        }
+        if (selected.length <= 2) {
+          filterCuisineSummary.textContent = selected.join(", ");
+          return;
+        }
+        filterCuisineSummary.textContent = selected.slice(0, 2).join(", ") + " +" + (selected.length - 2);
+      }
+
+      function setCuisinePanelOpen(open) {
+        filterCuisineOptions.hidden = !open;
+        filterCuisineToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        reportEmbedHeight();
+      }
+
+      function setFiltersCollapsed(collapsed) {
+        if (!filtersEl || !filtersCollapse) return;
+        filtersEl.classList.toggle("is-collapsed", collapsed);
+        filtersCollapse.setAttribute("aria-expanded", collapsed ? "false" : "true");
+        if (filtersCollapseLabel) {
+          filtersCollapseLabel.textContent = collapsed ? "Expand filters" : "Collapse filters";
+        }
+        filtersCollapse.querySelectorAll(".filters-collapse-chevron").forEach((el) => {
+          el.textContent = collapsed ? "▼" : "▲";
+        });
+        if (collapsed) setCuisinePanelOpen(false);
+        requestAnimationFrame(() => {
+          layoutListColumns();
+          fitAppToViewport();
+          reportEmbedHeight();
+          updateListScrollCue();
+        });
+      }
+
+      function setCuisineFilterDisabled(disabled) {
+        filterCuisineToggle.disabled = disabled;
+        filterCuisineOptions.querySelectorAll("input").forEach((cb) => {
+          cb.disabled = disabled;
+        });
+      }
+
+      function dayToken(raw) {
+        return String(raw || "").trim().slice(0, 3).toLowerCase();
+      }
+
+      function addDayRange(open, startRaw, endRaw) {
+        const start = dayToken(startRaw);
+        const end = dayToken(endRaw);
+        const a = DAYS.indexOf(start);
+        const b = DAYS.indexOf(end);
+        if (a < 0 || b < 0) return;
+        if (a <= b) {
+          for (let i = a; i <= b; i++) open.add(DAYS[i]);
+          return;
+        }
+        for (let i = a; i < DAYS.length; i++) open.add(DAYS[i]);
+        for (let i = 0; i <= b; i++) open.add(DAYS[i]);
+      }
+
+      function parseDaysOpen(raw) {
+        const text = String(raw || "").trim();
+        if (!text || text.toLowerCase() === "daily") {
+          return new Set(DAYS);
+        }
+        const open = new Set();
+        text.replace(/[–—]/g, "-").split(",").forEach((segment) => {
+          const part = segment.trim();
+          if (!part) return;
+          if (part.includes("-")) {
+            const pieces = part.split("-");
+            addDayRange(open, pieces[0], pieces[pieces.length - 1]);
+            return;
+          }
+          const day = dayToken(part);
+          if (DAYS.includes(day)) open.add(day);
+        });
+        return open.size ? open : new Set(DAYS);
+      }
+
+      function placeMatchesDay(place, selectedDay) {
+        if (!selectedDay) return true;
+        return parseDaysOpen(place.daysOpen).has(selectedDay);
+      }
+
+      function placeMatchesMeal(place, selectedMeal) {
+        if (!selectedMeal) return true;
+        return place.meals.includes(selectedMeal);
+      }
+
+      function todayFilterDay() {
+        const weekday = new Date().toLocaleDateString("en-US", {
+          weekday: "short",
+          timeZone: FBG_TIMEZONE,
+        });
+        const day = String(weekday || "").slice(0, 3).toLowerCase();
+        return FILTER_DAYS.includes(day) ? day : "";
+      }
+
+      function markTodayDayOption() {
+        const today = todayFilterDay();
+        filterDay.querySelectorAll("option[data-label]").forEach((opt) => {
+          const base = opt.getAttribute("data-label") || opt.textContent;
+          opt.textContent = opt.value && opt.value === today ? base + " (today)" : base;
+        });
+      }
+
+      function reservationFilterValue(place) {
+        const raw = String(place.reservationsRecommended || "No").trim();
+        if (raw === "Required") return "required";
+        if (raw === "Yes") return "recommended";
+        if (raw === "Optional") return "optional";
+        return "walkin";
+      }
+
+      function placeMatchesReservations(place, selected) {
+        if (!selected) return true;
+        return reservationFilterValue(place) === selected;
+      }
+
+      function getSelectedArea() {
+        const active = filterArea && filterArea.querySelector(".area-pill.is-active");
+        return active ? String(active.getAttribute("data-area") || "") : "";
+      }
+
+      function setSelectedArea(value) {
+        if (!filterArea) return;
+        const next = FILTER_AREAS.includes(value) ? value : "";
+        filterArea.querySelectorAll(".area-pill").forEach((btn) => {
+          const on = String(btn.getAttribute("data-area") || "") === next;
+          btn.classList.toggle("is-active", on);
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+      }
+
+      function placeMatchesArea(place, selected) {
+        if (!selected) return true;
+        return place.area === selected;
+      }
+
+      function matchingPlaces() {
+        if (spinnerTool) {
+          if (parentMatchIds) {
+            return restaurants.filter((p) => parentMatchIds.has(p.id));
+          }
+          return restaurants.slice();
+        }
+        const day = filterDay.value;
+        const meal = filterMeal.value;
+        const cuisines = getSelectedCuisines();
+        const seed = filterSeedOil.value;
+        const reservations = filterReservations.value;
+        const area = getSelectedArea();
+        return restaurants.filter((p) => {
+          if (!placeMatchesDay(p, day)) return false;
+          if (!placeMatchesMeal(p, meal)) return false;
+          if (!placeMatchesPriceRange(p)) return false;
+          if (!placeMatchesCuisine(p, cuisines)) return false;
+          if (seed === "yes" && !p.seedOilFree) return false;
+          if (!placeMatchesReservations(p, reservations)) return false;
+          if (!placeMatchesArea(p, area)) return false;
+          return true;
+        });
+      }
+
+      function pickWheelPlaces() {
+        const pool = matchingPlaces().slice();
+        for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const tmp = pool[i];
+          pool[i] = pool[j];
+          pool[j] = tmp;
+        }
+        displayedPlaces = pool.slice(0, MAX_SEGMENTS);
+        return displayedPlaces;
+      }
+
+      function wheelPlaces() {
+        if (!displayedPlaces.length) pickWheelPlaces();
+        return displayedPlaces;
+      }
+
+      function activePlaces() {
+        return spinning ? spinPool : wheelPlaces();
+      }
+
+      function rebuildWheel() {
+        while (wheelGroup.children.length) {
+          const child = wheelGroup.children[0];
+          wheelGroup.remove(child);
+          child.traverse((obj) => {
+            if (obj.geometry) obj.geometry.dispose();
+            if (obj.material) {
+              const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+              mats.forEach((m) => {
+                if (m.map) m.map.dispose();
+                m.dispose();
+              });
+            }
+          });
+        }
+
+        const places = wheelPlaces();
+        const n = places.length;
+        for (let i = 0; i < n; i++) {
+          wheelGroup.add(createSegment(i, n, places[i].name));
+        }
+        wheelGroup.add(createRimAndHub());
+
+        if (!spinning) {
+          wheelGroup.rotation.x = n ? baseRotationForIndex(0) : 0;
+        }
+
+        hideWinner();
+        updateSpinEnabled();
+      }
+
+      // -----------------------------------------------------------------------
+      // Spin sound (Web Audio — no external files)
+      // -----------------------------------------------------------------------
+
+      const spinSound = {
+        ctx: null,
+        ambience: null,
+        lastBoundary: null,
+      };
+
+      function ensureAudio() {
+        if (!spinSound.ctx) {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          if (!Ctx) return null;
+          spinSound.ctx = new Ctx();
+        }
+        if (spinSound.ctx.state === "suspended") {
+          spinSound.ctx.resume();
+        }
+        return spinSound.ctx;
+      }
+
+      function stopSpinAmbience() {
+        if (!spinSound.ambience || !spinSound.ctx) return;
+        const { source, gain } = spinSound.ambience;
+        const t = spinSound.ctx.currentTime;
+        gain.gain.cancelScheduledValues(t);
+        gain.gain.setValueAtTime(gain.gain.value, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+        source.stop(t + 0.2);
+        spinSound.ambience = null;
+      }
+
+      function startSpinAmbience() {
+        const ctx = ensureAudio();
+        if (!ctx) return;
+        stopSpinAmbience();
+
+        const bufferSize = ctx.sampleRate * 2;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        let last = 0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          last = (last + 0.02 * white) / 1.02;
+          data[i] = last * 3.5;
+        }
+
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.loop = true;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = "bandpass";
+        filter.frequency.value = 520;
+        filter.Q.value = 0.6;
+
+        const gain = ctx.createGain();
+        gain.gain.value = 0.035;
+
+        source.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        source.start();
+
+        spinSound.ambience = { source, gain, filter };
+      }
+
+      function playSpinStart() {
+        const ctx = ensureAudio();
+        if (!ctx) return;
+        const t = ctx.currentTime;
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(180, t);
+        osc.frequency.exponentialRampToValueAtTime(420, t + 0.12);
+        gain.gain.setValueAtTime(0.001, t);
+        gain.gain.linearRampToValueAtTime(0.07, t + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.2);
+      }
+
+      function playTick(velocity) {
+        const ctx = ensureAudio();
+        if (!ctx) return;
+        const t = ctx.currentTime;
+        const speed = Math.min(Math.abs(velocity), 20);
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.value = 520;
+        osc.type = "sine";
+        osc.frequency.value = 165 + speed * 5;
+        gain.gain.setValueAtTime(0.001, t);
+        gain.gain.linearRampToValueAtTime(0.07 + speed * 0.0025, t + 0.005);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.065);
+      }
+
+      function playWinnerDing() {
+        const ctx = ensureAudio();
+        if (!ctx) return;
+        const notes = [523.25, 659.25, 783.99];
+
+        notes.forEach((freq, i) => {
+          const t = ctx.currentTime + i * 0.09;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.001, t);
+          gain.gain.linearRampToValueAtTime(0.14, t + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(t);
+          osc.stop(t + 0.6);
+        });
+      }
+
+      function resetSpinTicks(rotationX, segmentCount) {
+        if (!segmentCount) {
+          spinSound.lastBoundary = null;
+          return;
+        }
+        const anglePer = (Math.PI * 2) / segmentCount;
+        spinSound.lastBoundary = Math.floor(rotationX / anglePer);
+      }
+
+      function updateSpinTicks(rotationX, segmentCount, velocity) {
+        if (!segmentCount) return;
+        const anglePer = (Math.PI * 2) / segmentCount;
+        const boundary = Math.floor(rotationX / anglePer);
+        if (spinSound.lastBoundary === null) {
+          spinSound.lastBoundary = boundary;
+          return;
+        }
+        const delta = boundary - spinSound.lastBoundary;
+        if (delta === 0) return;
+        spinSound.lastBoundary = boundary;
+        const ticks = Math.min(Math.abs(delta), 4);
+        for (let i = 0; i < ticks; i++) playTick(velocity);
+      }
+
+      // -----------------------------------------------------------------------
+      // Physics
+      // -----------------------------------------------------------------------
+
+      function getIndexAtPointer(rotationX) {
+        const n = activePlaces().length;
+        if (n === 0) return -1;
+        const anglePer = (Math.PI * 2) / n;
+        const rot = ((rotationX % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+        let idx = Math.round(-rot / anglePer - 0.5);
+        return ((idx % n) + n) % n;
+      }
+
+      function baseRotationForIndex(index) {
+        const n = activePlaces().length || 1;
+        const anglePer = (Math.PI * 2) / n;
+        return -(index + 0.5) * anglePer;
+      }
+
+      function nearestSegmentRotation(currentX) {
+        const n = activePlaces().length;
+        let best = currentX;
+        let bestDist = Infinity;
+        for (let i = 0; i < n; i++) {
+          const base = baseRotationForIndex(i);
+          let candidate = base + Math.PI * 2 * Math.round((currentX - base) / (Math.PI * 2));
+          if (candidate < currentX - 0.0001) candidate += Math.PI * 2;
+          const dist = Math.abs(candidate - currentX);
+          if (dist < bestDist) {
+            bestDist = dist;
+            best = candidate;
+          }
+        }
+        return best;
+      }
+
+      function startSpin() {
+        if (spinning) return;
+        pickWheelPlaces();
+        if (displayedPlaces.length < 2) return;
+        rebuildWheel();
+        spinPool = displayedPlaces.slice();
+        spinning = true;
+        settling = false;
+        lastWinnerId = null;
+        hideWinner();
+        updateSpinEnabled();
+        renderList();
+        angularVelocity =
+          PHYSICS.minInitialOmega +
+          Math.random() * (PHYSICS.maxInitialOmega - PHYSICS.minInitialOmega);
+        lastTime = performance.now();
+        playSpinStart();
+        startSpinAmbience();
+        resetSpinTicks(wheelGroup.rotation.x, spinPool.length);
+        trackGa4Event("spin", {
+          matching_count: matchingPlaces().length,
+          wheel_count: spinPool.length,
+        });
+        if (spinnerTool) notifyParent("restaurant-spinner-busy", { spinning: true });
+      }
+
+      function finishSpin() {
+        const idx = getIndexAtPointer(wheelGroup.rotation.x);
+        spinning = false;
+        settling = false;
+        angularVelocity = 0;
+        wheelGroup.rotation.x = targetRotation;
+        stopSpinAmbience();
+        playWinnerDing();
+        spinSound.lastBoundary = null;
+        const pick = spinPool[idx];
+        lastWinnerId = pick ? pick.id : null;
+        showWinner(pick ? pick.name : "—");
+        trackGa4Event("spin_complete", {
+          winner: pick ? pick.name : "",
+        });
+        spinPool = [];
+        updateSpinEnabled();
+        renderList();
+        if (spinnerTool) {
+          notifyParent("restaurant-spinner-winner", {
+            id: pick ? pick.id : "",
+            name: pick ? pick.name : "",
+          });
+          notifyParent("restaurant-spinner-busy", { spinning: false });
+        }
+      }
+
+      function updatePhysics(dt) {
+        if (!spinning) return;
+        const segmentCount = activePlaces().length;
+        if (!settling) {
+          angularVelocity *= Math.exp(-PHYSICS.friction * dt);
+          wheelGroup.rotation.x += angularVelocity * dt;
+          updateSpinTicks(wheelGroup.rotation.x, segmentCount, angularVelocity);
+          if (angularVelocity < PHYSICS.settleThreshold) {
+            settling = true;
+            targetRotation = nearestSegmentRotation(wheelGroup.rotation.x);
+          }
+        } else {
+          const remaining = targetRotation - wheelGroup.rotation.x;
+          if (Math.abs(remaining) < 0.001) {
+            finishSpin();
+            return;
+          }
+          wheelGroup.rotation.x += remaining * Math.min(1, PHYSICS.settleSpeed * dt);
+          updateSpinTicks(wheelGroup.rotation.x, segmentCount, angularVelocity);
+          if (Math.abs(targetRotation - wheelGroup.rotation.x) < 0.001) finishSpin();
+        }
+      }
+
+      // -----------------------------------------------------------------------
+      // UI
+      // -----------------------------------------------------------------------
+
+      function showWinner(name) {
+        winnerName.textContent = name;
+        winnerBanner.classList.add("visible");
+      }
+
+      function hideWinner() {
+        winnerBanner.classList.remove("visible");
+      }
+
+      function updateSpinEnabled() {
+        spinBtn.disabled = spinning || matchingPlaces().length < 2;
+        [filterDay, filterMeal, filterPriceMin, filterPriceMax, filterSeedOil, filterReservations, filterShare, filterReset].forEach((el) => {
+          el.disabled = spinning;
+        });
+        if (filterArea) {
+          filterArea.querySelectorAll(".area-pill").forEach((btn) => {
+            btn.disabled = spinning;
+          });
+        }
+        if (filtersCollapse) filtersCollapse.disabled = spinning;
+        setCuisineFilterDisabled(spinning);
+      }
+
+      function prefersAppleMaps() {
+        const ua = navigator.userAgent || "";
+        return /iPhone|iPad|iPod|Macintosh/i.test(ua);
+      }
+
+      function isMacDesktop() {
+        const ua = navigator.userAgent || "";
+        return /Macintosh/i.test(ua) && !/iPhone|iPad|iPod/i.test(ua);
+      }
+
+      function mapsDirectionsUrl(place) {
+        const query = [place.name, place.address].filter(Boolean).join(", ");
+        const q = encodeURIComponent(query);
+        if (prefersAppleMaps()) {
+          return "https://maps.apple.com/?daddr=" + q;
+        }
+        return "https://www.google.com/maps/dir/?api=1&destination=" + q;
+      }
+
+      function priceLabel(place) {
+        if (place.priceMax && place.priceMax !== place.price) {
+          return place.price + "–" + place.priceMax;
+        }
+        return place.price;
+      }
+
+      function mealLabel(meals) {
+        const map = { breakfast: "B", lunch: "L", dinner: "D" };
+        return meals.map((m) => map[m] || m).join("/");
+      }
+
+      function reservationsLabel(value) {
+        if (value === "Required") return "Reservations required";
+        if (value === "Yes") return "Reservations recommended";
+        if (value === "Optional") return "Reservations optional";
+        return "Walk-ins ok";
+      }
+
+      function metaLine(place) {
+        const bits = [priceLabel(place), place.cuisine, place.daysOpen, mealLabel(place.meals)];
+        if (place.seedOilFree) bits.push("seed oil free");
+        return bits.join(" · ");
+      }
+
+      function refreshCuisineFilter() {
+        const selected = new Set(
+          (pendingCuisines || getSelectedCuisines()).map((c) => c.toLowerCase())
+        );
+        pendingCuisines = null;
+        const unique = [...new Set(restaurants.flatMap((p) => cuisineTags(p.cuisine)))]
+          .sort((a, b) => a.localeCompare(b));
+        filterCuisineOptions.innerHTML = "";
+        unique.forEach((c) => {
+          const label = document.createElement("label");
+          label.className = "cuisine-filter-option";
+          const cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.value = c;
+          cb.checked = selected.has(c.toLowerCase());
+          label.append(cb, document.createTextNode(c));
+          filterCuisineOptions.appendChild(label);
+        });
+        updateCuisineSummary();
+        setCuisineFilterDisabled(spinning);
+      }
+
+      function updateListScrollCue() {
+        if (!listEl || !listMore) return;
+        const overflow = listEl.scrollHeight - listEl.clientHeight > 12;
+        const remaining = listEl.scrollHeight - listEl.scrollTop - listEl.clientHeight;
+        listMore.classList.toggle("is-visible", overflow && remaining > 20);
+      }
+
+      function updateSpinMatch() {
+        if (!spinMatch) return;
+        const eligible = matchingPlaces().length;
+        const total = restaurants.length;
+        if (!eligible) {
+          spinMatch.textContent = "No matches yet — widen the filters to spin.";
+        } else {
+          spinMatch.textContent =
+            eligible + " matching of " + total + " restaurants · Wheel pulls from filtered list";
+        }
+      }
+
+      function renderList() {
+        updateSpinMatch();
+        if (spinnerTool) {
+          reportEmbedHeight();
+          return;
+        }
+        const matching = matchingPlaces();
+        const matchingIds = new Set(matching.map((p) => p.id));
+        listEl.innerHTML = "";
+        const sorted = restaurants.slice().sort((a, b) => {
+          if (lastWinnerId) {
+            if (a.id === lastWinnerId) return -1;
+            if (b.id === lastWinnerId) return 1;
+          }
+          const aMatch = matchingIds.has(a.id);
+          const bMatch = matchingIds.has(b.id);
+          if (aMatch === bMatch) return 0;
+          return aMatch ? -1 : 1;
+        });
+        sorted.forEach((place) => {
+          const li = document.createElement("li");
+          if (!matchingIds.has(place.id)) li.classList.add("off-wheel");
+          if (place.id === lastWinnerId) li.classList.add("is-winner");
+          const body = document.createElement("div");
+          body.className = "item-body";
+          const label = document.createElement("span");
+          label.className = "item-name";
+          label.textContent = place.name;
+          label.title = place.name;
+          const meta = document.createElement("span");
+          meta.className = "item-meta";
+          meta.textContent = metaLine(place);
+          body.append(label, meta);
+          if (place.description) {
+            const desc = document.createElement("span");
+            desc.className = "item-desc";
+            desc.textContent = place.description;
+            body.appendChild(desc);
+          }
+          if (place.address) {
+            const addr = document.createElement("a");
+            addr.className = "item-address";
+            addr.href = mapsDirectionsUrl(place);
+            if (isMacDesktop()) {
+              addr.target = "_top";
+            } else {
+              addr.target = "_blank";
+              addr.rel = "noopener";
+            }
+            addr.textContent = place.address;
+            addr.setAttribute("aria-label", "Directions to " + place.name);
+            addr.addEventListener("click", () => {
+              trackGa4Event("maps_click", { restaurant_name: place.name });
+            });
+            body.appendChild(addr);
+          }
+          const footer = document.createElement("div");
+          footer.className = "item-footer";
+          const footerBits = [];
+          if (place.id === lastWinnerId) {
+            const sharePick = document.createElement("button");
+            sharePick.type = "button";
+            sharePick.className = "item-share-pick";
+            sharePick.textContent = "Share pick";
+            sharePick.addEventListener("click", () => openShareModal("pick"));
+            footerBits.push(sharePick);
+          }
+          if (place.website) {
+            const link = document.createElement("a");
+            link.className = "item-link";
+            link.href = place.website;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.textContent = "Website";
+            footerBits.push(link);
+          }
+          footerBits.forEach((bit, i) => {
+            if (i) {
+              const sep = document.createElement("span");
+              sep.className = "item-sep";
+              sep.textContent = "|";
+              sep.setAttribute("aria-hidden", "true");
+              footer.appendChild(sep);
+            }
+            footer.appendChild(bit);
+          });
+          if (footerBits.length) {
+            const sep = document.createElement("span");
+            sep.className = "item-sep";
+            sep.textContent = "|";
+            sep.setAttribute("aria-hidden", "true");
+            footer.appendChild(sep);
+          }
+          const res = document.createElement("span");
+          res.className = "item-reservations";
+          res.textContent = reservationsLabel(place.reservationsRecommended);
+          footer.appendChild(res);
+          body.appendChild(footer);
+          li.append(body);
+          listEl.appendChild(li);
+        });
+        refreshCuisineFilter();
+        requestAnimationFrame(() => {
+          layoutListColumns();
+          const winnerEl = listEl.querySelector("li.is-winner");
+          if (winnerEl) {
+            winnerEl.scrollIntoView({ block: "nearest", behavior: "smooth" });
+          }
+          updateListScrollCue();
+          reportEmbedHeight();
+        });
+      }
+
+      const STACK_BREAKPOINT = 900;
+      const LAYOUT_BASE_WIDTH = 1280;
+      const PANEL_MIN = 400;
+      const PANEL_MAX = 640;
+      const appScale = document.getElementById("app-scale");
+      const appOuter = document.getElementById("app-outer");
+      let fitting = false;
+      let embedHeightTimer = 0;
+
+      function isEmbedded() {
+        try {
+          return window.self !== window.top;
+        } catch (err) {
+          return true;
+        }
+      }
+
+      if (isEmbedded()) {
+        document.documentElement.classList.add("is-embedded");
+      }
+
+      function reportEmbedHeight() {
+        if (!isEmbedded()) return;
+        window.clearTimeout(embedHeightTimer);
+        embedHeightTimer = window.setTimeout(() => {
+          let height = 0;
+          const stacked = window.innerWidth <= STACK_BREAKPOINT;
+          if (stacked) {
+            const root = appScale || document.body;
+            height = Math.ceil(
+              Math.max(
+                root ? root.scrollHeight : 0,
+                root ? root.offsetHeight : 0
+              ) + 8
+            );
+          } else if (appOuter) {
+            // Use rendered box height only — do not add rect.top (causes empty iframe gap)
+            height = Math.ceil(appOuter.offsetHeight + 4);
+          }
+          if (!height && appScale) {
+            height = Math.ceil(appScale.offsetHeight + 4);
+          }
+          if (!height) {
+            height = Math.ceil(
+              Math.max(
+                document.documentElement.scrollHeight,
+                document.body ? document.body.scrollHeight : 0
+              )
+            );
+          }
+          if (height >= 400) {
+            notifyParent("restaurant-spinner-resize", { height });
+          }
+        }, 80);
+      }
+
+      function isStackedLayout() {
+        if (spinnerTool) return true;
+        return window.innerWidth <= STACK_BREAKPOINT;
+      }
+
+      function resetWideLayoutStyles() {
+        if (!appScale || !appOuter) return;
+        appScale.style.width = "";
+        appScale.style.minWidth = "";
+        appOuter.style.width = "";
+        appOuter.style.height = "";
+        appScale.style.transform = "none";
+        const panel = listEl.closest(".panel");
+        if (panel) {
+          panel.style.width = "";
+          panel.style.flex = "";
+          panel.style.maxWidth = "";
+          panel.style.minWidth = "";
+          panel.style.height = "";
+          panel.style.maxHeight = "";
+        }
+        const stageCol = stage.closest(".stage-col");
+        if (stageCol) {
+          stageCol.style.minHeight = "";
+          stageCol.style.flex = "";
+          stageCol.style.width = "";
+          stageCol.style.maxWidth = "";
+          stageCol.style.minWidth = "";
+          const wheelBlock = stageCol.querySelector(".wheel-block");
+          if (wheelBlock) wheelBlock.style.height = "";
+        }
+        listEl.style.maxHeight = "";
+      }
+
+      function applyWidePanelWidth() {
+        const panel = listEl.closest(".panel");
+        if (!panel || !appScale) return;
+
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        // Embeds (landscape / wide): equal-width wheel + restaurant columns at iframe width
+        if (isEmbedded()) {
+          const gap = 18; // ~1.15rem, matches .play-area gap
+          const canvasWidth = Math.floor(vw);
+          const colWidth = Math.max(280, Math.floor((canvasWidth - gap) / 2));
+          const stageCol = stage.closest(".stage-col");
+
+          appScale.style.width = canvasWidth + "px";
+          appScale.style.minWidth = canvasWidth + "px";
+
+          if (stageCol) {
+            stageCol.style.flex = "0 0 " + colWidth + "px";
+            stageCol.style.width = colWidth + "px";
+            stageCol.style.maxWidth = colWidth + "px";
+            stageCol.style.minWidth = "0";
+          }
+
+          panel.style.width = colWidth + "px";
+          panel.style.flex = "0 0 " + colWidth + "px";
+          panel.style.maxWidth = colWidth + "px";
+          panel.style.minWidth = "0";
+          return;
+        }
+
+        // Standalone: measure at the base desktop width first
+        appScale.style.width = LAYOUT_BASE_WIDTH + "px";
+        appScale.style.minWidth = LAYOUT_BASE_WIDTH + "px";
+        panel.style.width = PANEL_MIN + "px";
+        panel.style.flex = "0 0 " + PANEL_MIN + "px";
+        panel.style.maxWidth = PANEL_MAX + "px";
+
+        const baseHeight = appScale.offsetHeight;
+        if (!baseHeight) return;
+
+        const scaleByHeight = vh / baseHeight;
+        const usedWidth = LAYOUT_BASE_WIDTH * scaleByHeight;
+        let panelWidth = PANEL_MIN;
+        let canvasWidth = LAYOUT_BASE_WIDTH;
+
+        if (usedWidth < vw * 0.96) {
+          const targetCanvas = (vw * 0.96) / scaleByHeight;
+          const extra = Math.max(0, targetCanvas - LAYOUT_BASE_WIDTH);
+          panelWidth = Math.min(PANEL_MAX, PANEL_MIN + extra);
+          canvasWidth = LAYOUT_BASE_WIDTH + (panelWidth - PANEL_MIN);
+        }
+
+        appScale.style.width = Math.round(canvasWidth) + "px";
+        appScale.style.minWidth = Math.round(canvasWidth) + "px";
+        panel.style.width = Math.round(panelWidth) + "px";
+        panel.style.flex = "0 0 " + Math.round(panelWidth) + "px";
+        panel.style.maxWidth = Math.round(panelWidth) + "px";
+      }
+
+      function layoutListColumns() {
+        const panel = listEl.closest(".panel");
+        const stageCol = stage.closest(".stage-col");
+
+        if (isStackedLayout()) {
+          resetWideLayoutStyles();
+          if (panel) {
+            panel.style.width = "100%";
+            panel.style.maxWidth = "100%";
+            panel.style.minWidth = "0";
+            panel.style.flex = "none";
+          }
+          return;
+        }
+
+        applyWidePanelWidth();
+
+        if (panel && stageCol) {
+          panel.style.height = "auto";
+          panel.style.maxHeight = "none";
+          stageCol.style.minHeight = "";
+          const wheelBlock = stageCol.querySelector(".wheel-block");
+          if (wheelBlock) wheelBlock.style.height = "";
+
+          const heading = panel.querySelector(".panel-head") || panel.querySelector("h2");
+          const filters = panel.querySelector(".filters");
+          const footer = panel.querySelector(".site-footer");
+          const styles = getComputedStyle(panel);
+          const pad = parseFloat(styles.paddingTop) + parseFloat(styles.paddingBottom);
+          const chrome =
+            (heading ? heading.offsetHeight : 0) +
+            (filters ? filters.offsetHeight : 0) +
+            (footer ? footer.offsetHeight : 0) +
+            pad +
+            16;
+
+          const colHeight = stageCol.offsetHeight;
+          if (colHeight > 0) {
+            panel.style.height = colHeight + "px";
+            panel.style.maxHeight = colHeight + "px";
+            listEl.style.maxHeight = Math.max(80, colHeight - chrome) + "px";
+          }
+        }
+        fitAppToViewport();
+      }
+
+      function currentFilterQuery() {
+        const p = new URLSearchParams();
+        if (filterDay.value) p.set("day", filterDay.value);
+        else p.set("day", "any");
+        if (filterMeal.value) p.set("meal", filterMeal.value);
+        const cuisines = getSelectedCuisines();
+        if (cuisines.length) p.set("cuisine", cuisines.join(","));
+        if (filterPriceMin.value) p.set("min", filterPriceMin.value);
+        if (filterPriceMax.value) p.set("max", filterPriceMax.value);
+        if (filterSeedOil.value === "yes") p.set("seed", "yes");
+        if (filterReservations.value) p.set("res", filterReservations.value);
+        const area = getSelectedArea();
+        if (area && AREA_SHARE[area]) p.set("area", AREA_SHARE[area]);
+        return p.toString().replace(/%24/g, "$").replace(/%2C/gi, ",");
+      }
+
+      function sharePageUrl() {
+        const q = currentFilterQuery();
+        return q ? SHARE_PAGE + "?" + q : SHARE_PAGE;
+      }
+
+      function winnerPlace() {
+        if (!lastWinnerId) return null;
+        return restaurants.find((p) => p.id === lastWinnerId) || null;
+      }
+
+      function sharePickLine(place) {
+        return "We're going to " + place.name + ", thanks to DiscoverFBG.com!";
+      }
+
+      function sharePickMessage(place) {
+        const parts = [sharePickLine(place)];
+        if (place.website) parts.push(place.website);
+        if (place.address) parts.push(mapsDirectionsUrl(place));
+        return parts.join("\n\n");
+      }
+
+      function shareMessage() {
+        if (shareKind === "pick") {
+          const place = winnerPlace();
+          if (place) return sharePickMessage(place);
+        }
+        return SHARE_INTRO + "\n" + sharePageUrl();
+      }
+
+      function syncFilterQueryToHistory() {
+        const q = currentFilterQuery();
+        const next = q
+          ? location.pathname + "?" + q + location.hash
+          : location.pathname + location.hash;
+        const current = location.pathname + location.search + location.hash;
+        if (next === current) return;
+        history.replaceState(null, "", next);
+      }
+
+      function applyFiltersFromSearch(search) {
+        const raw = String(search || "").replace(/^\?/, "");
+        if (!raw) return;
+        const p = new URLSearchParams(raw);
+        const day = String(p.get("day") || "").toLowerCase();
+        if (day === "any") filterDay.value = "";
+        else if (FILTER_DAYS.includes(day)) filterDay.value = day;
+        const meal = String(p.get("meal") || "").toLowerCase();
+        if (FILTER_MEALS.includes(meal)) filterMeal.value = meal;
+        const min = p.get("min") || "";
+        const max = p.get("max") || "";
+        if (FILTER_PRICES.includes(min)) filterPriceMin.value = min;
+        if (FILTER_PRICES.includes(max)) filterPriceMax.value = max;
+        if (min || max) syncPriceRange(min ? "min" : "max");
+        const seed = String(p.get("seed") || "").toLowerCase();
+        if (seed === "yes") filterSeedOil.value = "yes";
+        const res = String(p.get("res") || "").toLowerCase();
+        if (FILTER_RESERVATIONS.includes(res)) filterReservations.value = res;
+        const area = String(p.get("area") || "").toLowerCase().replace("_", "-");
+        if (area === "off-main" || area === "offmain") setSelectedArea("drive");
+        else if (FILTER_AREAS.includes(area)) setSelectedArea(area);
+        const cuisineRaw = p.get("cuisine") || "";
+        if (cuisineRaw) {
+          pendingCuisines = cuisineRaw.split(",").map((s) => s.trim()).filter(Boolean);
+        }
+      }
+
+      function applyFilters() {
+        if (spinning) return;
+        if (lastWinnerId && !matchingPlaces().some((p) => p.id === lastWinnerId)) {
+          lastWinnerId = null;
+        }
+        pickWheelPlaces();
+        rebuildWheel();
+        renderList();
+        if (!spinnerTool) syncFilterQueryToHistory();
+      }
+
+      function closeShareModal() {
+        if (shareModal.hidden) return;
+        shareModal.hidden = true;
+        if (shareFocusEl && typeof shareFocusEl.focus === "function") {
+          shareFocusEl.focus();
+        }
+        shareFocusEl = null;
+      }
+
+      function openShareModal(kind) {
+        if (spinning) return;
+        const place = kind === "pick" ? winnerPlace() : null;
+        shareKind = place ? "pick" : "list";
+        shareModalTitle.textContent = place ? sharePickLine(place) : SHARE_INTRO;
+        shareModalUrl.value = shareMessage();
+        shareNativeBtn.hidden = typeof navigator.share !== "function";
+        shareCopyBtn.textContent = "Copy";
+        shareFocusEl = document.activeElement;
+        shareModal.hidden = false;
+        shareCopyBtn.focus();
+        trackGa4Event("share_open", {
+          share_type: shareKind,
+          matching_count: matchingPlaces().length,
+          winner: place ? place.name : "",
+        });
+      }
+
+      function copyShareMessage() {
+        const text = shareMessage();
+        shareModalUrl.value = text;
+        shareModalUrl.focus();
+        shareModalUrl.select();
+        const done = () => {
+          shareCopyBtn.textContent = "Copied!";
+          window.setTimeout(() => {
+            if (shareCopyBtn.textContent === "Copied!") shareCopyBtn.textContent = "Copy";
+          }, 1600);
+          trackGa4Event("share_copy", {
+            share_type: shareKind,
+            matching_count: matchingPlaces().length,
+            winner: shareKind === "pick" && winnerPlace() ? winnerPlace().name : "",
+          });
+        };
+        const fallback = () => {
+          try {
+            if (document.execCommand("copy")) done();
+          } catch (err) {
+            /* leave text selected for a manual copy */
+          }
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(fallback);
+          return;
+        }
+        fallback();
+      }
+
+      function nativeSharePayload() {
+        const data = { text: shareMessage() };
+        if (typeof navigator.canShare === "function") {
+          try {
+            if (!navigator.canShare(data)) return null;
+          } catch (err) {
+            return null;
+          }
+        }
+        return data;
+      }
+
+      function nativeShareMessage() {
+        if (typeof navigator.share !== "function") {
+          copyShareMessage();
+          return;
+        }
+        const data = nativeSharePayload();
+        if (!data) {
+          copyShareMessage();
+          return;
+        }
+        navigator.share(data).then(() => {
+          trackGa4Event("share_native", {
+            share_type: shareKind,
+            matching_count: matchingPlaces().length,
+            winner: shareKind === "pick" && winnerPlace() ? winnerPlace().name : "",
+          });
+          closeShareModal();
+        }).catch((err) => {
+          if (err && err.name === "AbortError") return;
+          copyShareMessage();
+        });
+      }
+
+      function trackFilterChange(name, value) {
+        trackGa4Event("filter_change", {
+          filter_name: name,
+          filter_value: value || "any",
+          matching_count: matchingPlaces().length,
+        });
+      }
+
+      function resetFilters() {
+        if (spinning) return;
+        filterDay.value = todayFilterDay();
+        filterMeal.value = "";
+        filterPriceMin.value = "";
+        filterPriceMax.value = "";
+        filterCuisineOptions.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+          cb.checked = false;
+        });
+        updateCuisineSummary();
+        setCuisinePanelOpen(false);
+        filterSeedOil.value = "";
+        filterReservations.value = "";
+        setSelectedArea("");
+        lastWinnerId = null;
+        closeShareModal();
+        trackGa4Event("filter_reset");
+        applyFilters();
+      }
+
+      spinBtn.addEventListener("click", startSpin);
+      filterShare.addEventListener("click", () => openShareModal("list"));
+      filterReset.addEventListener("click", resetFilters);
+      shareCopyBtn.addEventListener("click", copyShareMessage);
+      shareNativeBtn.addEventListener("click", nativeShareMessage);
+      shareModal.addEventListener("click", (e) => {
+        if (e.target.closest("[data-share-close]")) closeShareModal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeShareModal();
+      });
+      filterDay.addEventListener("change", () => {
+        trackFilterChange("day", filterDay.value);
+        applyFilters();
+      });
+      filterMeal.addEventListener("change", () => {
+        trackFilterChange("meal", filterMeal.value);
+        applyFilters();
+      });
+      filterCuisineToggle.addEventListener("click", (e) => {
+        if (spinning) return;
+        e.stopPropagation();
+        setCuisinePanelOpen(filterCuisineOptions.hidden);
+      });
+      filterCuisineOptions.addEventListener("change", (e) => {
+        if (e.target.type !== "checkbox") return;
+        updateCuisineSummary();
+        trackFilterChange("cuisine", getSelectedCuisines().join(", "));
+        applyFilters();
+      });
+      document.addEventListener("click", (e) => {
+        if (filterCuisineOptions.hidden) return;
+        if (e.target.closest("#filter-cuisine")) return;
+        setCuisinePanelOpen(false);
+      });
+      filterSeedOil.addEventListener("change", () => {
+        trackFilterChange("seed_oil", filterSeedOil.value);
+        applyFilters();
+      });
+      filterReservations.addEventListener("change", () => {
+        trackFilterChange("reservations", filterReservations.value);
+        applyFilters();
+      });
+      filterArea.addEventListener("click", (e) => {
+        const btn = e.target.closest(".area-pill");
+        if (!btn || spinning) return;
+        setSelectedArea(btn.getAttribute("data-area") || "");
+        trackFilterChange("area", getSelectedArea());
+        applyFilters();
+      });
+      if (filtersCollapse) {
+        filtersCollapse.addEventListener("click", () => {
+          if (spinning) return;
+          const collapsed = !filtersEl.classList.contains("is-collapsed");
+          setFiltersCollapsed(collapsed);
+          trackFilterChange("filters_chrome", collapsed ? "collapsed" : "expanded");
+        });
+      }
+      filterPriceMin.addEventListener("change", () => {
+        syncPriceRange("min");
+        trackFilterChange("price_min", filterPriceMin.value);
+        applyFilters();
+      });
+      filterPriceMax.addEventListener("change", () => {
+        syncPriceRange("max");
+        trackFilterChange("price_max", filterPriceMax.value);
+        applyFilters();
+      });
+
+      function fitAppToViewport() {
+        if (!appScale || !appOuter || fitting) return;
+
+        // Mobile/stacked: fluid CSS layout, no scale transform
+        if (isStackedLayout()) {
+          appScale.style.transform = "none";
+          appOuter.style.width = "";
+          appOuter.style.height = "";
+          return;
+        }
+
+        fitting = true;
+        appScale.style.transform = "none";
+        appOuter.style.width = "auto";
+        appOuter.style.height = "auto";
+
+        const w = appScale.offsetWidth;
+        const h = appScale.offsetHeight;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const scale = Math.min(vw / Math.max(w, 1), vh / Math.max(h, 1), 1);
+
+        appOuter.style.width = w * scale + "px";
+        appOuter.style.height = h * scale + "px";
+        appScale.style.transform = `scale(${scale})`;
+        fitting = false;
+      }
+
+      function resize() {
+        const { clientWidth: w, clientHeight: h } = stage;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / Math.max(h, 1);
+        camera.updateProjectionMatrix();
+        layoutListColumns();
+        fitAppToViewport();
+        reportEmbedHeight();
+        updateListScrollCue();
+      }
+
+      window.addEventListener("resize", resize);
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", resize);
+      }
+      listEl.addEventListener("scroll", updateListScrollCue, { passive: true });
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          requestAnimationFrame(resize);
+        }
+      });
+      window.addEventListener("pageshow", () => {
+        requestAnimationFrame(resize);
+      });
+
+      function animate(now) {
+        requestAnimationFrame(animate);
+        const dt = Math.min(0.05, (now - (lastTime || now)) / 1000);
+        lastTime = now;
+        updatePhysics(dt);
+        if (pondWaterMaps.normal) {
+          pondWaterMaps.normal.offset.x += dt * 0.045;
+          pondWaterMaps.normal.offset.y += dt * 0.028;
+        }
+        if (pondWaterMaps.color) {
+          pondWaterMaps.color.offset.x += dt * 0.012;
+          pondWaterMaps.color.offset.y += dt * 0.008;
+        }
+        try {
+          renderer.render(scene, camera);
+        } catch (err) {
+          /* WebGL context can be lost when returning from Maps */
+        }
+      }
+
+      if (spinnerTool) {
+        window.addEventListener("message", (event) => {
+          if (!isTrustedParentOrigin(event.origin)) return;
+          const data = event.data;
+          if (!data || typeof data !== "object") return;
+          rememberParentOrigin(event.origin);
+          if (data.type === "restaurant-spinner-hello") {
+            notifyParent("restaurant-spinner-ready");
+            return;
+          }
+          if (data.type !== "restaurant-spinner-filter") return;
+          const ids = Array.isArray(data.ids) ? data.ids : [];
+          parentMatchIds = new Set(ids.map(String));
+          applyFilters();
+        });
+      } else {
+        applyFiltersFromSearch(window.location.search);
+        markTodayDayOption();
+        if (!new URLSearchParams(window.location.search).has("day")) {
+          const today = todayFilterDay();
+          if (today) filterDay.value = today;
+        }
+      }
+      refreshCuisineFilter();
+      buildStageDressing(stageGroup);
+      resize();
+      rebuildWheel();
+      renderList();
+      if (!spinnerTool) syncFilterQueryToHistory();
+      updateSpinEnabled();
+      requestAnimationFrame(animate);
+      reportEmbedHeight();
+      window.addEventListener("load", reportEmbedHeight);
+      if (spinnerTool) notifyParent("restaurant-spinner-ready");
+    })();
+  </script>
+</body>
+</html>

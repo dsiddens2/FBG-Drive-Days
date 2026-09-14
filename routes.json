@@ -1,0 +1,498 @@
+[
+  {
+    "id": "twisted-sisters",
+    "name": "Twisted Sisters",
+    "title": "Twisted Sisters Full Day",
+    "tagline": "The bucket-list loop. RM 335, 336, and 337 through the Frio and Nueces canyons.",
+    "miles": "~200 mi round-trip",
+    "time": "full",
+    "timeLabel": "Full day from FBG",
+    "roads": "technical",
+    "roadsLabel": "Technical",
+    "eat": [
+      "bbq",
+      "mix"
+    ],
+    "eatLabel": "BBQ / grill",
+    "vehicle": [
+      "motorcycle",
+      "sports"
+    ],
+    "vehicleLabel": "Motorcycle or sports car",
+    "difficulty": "4 / 5",
+    "description": "Leave Fredericksburg via TX 16, pick up the three sisters in Medina, and give the day to the canyons. This is the road everyone asks about \u2014 package it as a day that actually works from town.",
+    "routeLabel": "FBG \u2192 Kerrville \u2192 Medina \u2192 Leakey \u2192 Camp Wood \u2192 home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Medina,+TX/Leakey,+TX/Camp+Wood,+TX/Leakey,+TX/Fredericksburg,+TX",
+    "stops": [
+      "Lost Maples Country Store, Vanderpool \u2014 fuel, snacks, the pause before the hard miles",
+      "Bent Rim Grill / Frio Canyon Motorcycle Stop, Leakey \u2014 burgers, Frito pie, bike parking",
+      "The Hog Pen, RM 336 \u2014 BBQ and a beer if the hours line up (Wed / Fri\u2013Sun)"
+    ],
+    "gotchas": "Fuel in Medina, Leakey, and Camp Wood. Blind crests, free-range cattle, thin shoulders. The Hog Pen is not daily. This is not a wine-tasting day.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Kerrville",
+        "lat": 30.0474,
+        "lng": -99.1403,
+        "kind": "via"
+      },
+      {
+        "name": "Medina",
+        "lat": 29.7966,
+        "lng": -99.2464,
+        "kind": "via"
+      },
+      {
+        "name": "Lost Maples Country Store",
+        "lat": 29.7458,
+        "lng": -99.557,
+        "kind": "stop"
+      },
+      {
+        "name": "Bent Rim Grill, Leakey",
+        "lat": 29.7255,
+        "lng": -99.768,
+        "kind": "stop"
+      },
+      {
+        "name": "Camp Wood",
+        "lat": 29.6694,
+        "lng": -100.0115,
+        "kind": "via"
+      },
+      {
+        "name": "RM 335 & TX 41",
+        "lat": 30.0578,
+        "lng": -99.9918,
+        "kind": "via"
+      },
+      {
+        "name": "The Hog Pen, RM 336",
+        "lat": 29.821,
+        "lng": -99.7625,
+        "kind": "stop"
+      },
+      {
+        "name": "Leakey",
+        "lat": 29.7288,
+        "lng": -99.7614,
+        "kind": "via"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
+    "id": "willow-city",
+    "name": "Willow City Loop",
+    "title": "Enchanted Rock + Willow City Loop",
+    "tagline": "The local classic. FM 965 sweepers, granite, then the 13-mile Willow City ribbon.",
+    "miles": "~99 mi loop",
+    "time": "half",
+    "timeLabel": "Half day, or full with a Llano lunch",
+    "roads": "scenic",
+    "roadsLabel": "Scenic sweepers",
+    "eat": [
+      "german",
+      "mix"
+    ],
+    "eatLabel": "FBG breakfast / lunch",
+    "vehicle": [
+      "motorcycle",
+      "sports",
+      "cruise"
+    ],
+    "vehicleLabel": "Anything. Convertibles love it.",
+    "difficulty": "2 / 5",
+    "description": "North on FM 965 to Enchanted Rock, then the Willow City Loop and home via FM 1323 or TX 16. The drive you can do after coffee and still make dinner in town.",
+    "routeLabel": "FBG \u2192 FM 965 \u2192 Enchanted Rock \u2192 Willow City Loop \u2192 home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Enchanted+Rock+State+Natural+Area/Willow+City,+TX/Fredericksburg,+TX",
+    "stops": [
+      "Breakfast in Fredericksburg before you roll \u2014 spin the Restaurant Finder",
+      "Enchanted Rock State Natural Area \u2014 stretch, granite, photos",
+      "Back on Main for lunch, or push north to Cooper's in Llano if you want BBQ as the destination"
+    ],
+    "gotchas": "Spring wildflower weekends turn Willow City into a parking lot. Private ranch land \u2014 stay on the pavement. Cattle, cattle guards, and low-water crossings.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Enchanted Rock",
+        "lat": 30.5066,
+        "lng": -98.8189,
+        "kind": "stop"
+      },
+      {
+        "name": "Willow City Loop",
+        "lat": 30.401,
+        "lng": -98.701,
+        "kind": "stop"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
+    "id": "llano-bbq",
+    "name": "Llano BBQ Run",
+    "title": "Llano BBQ Run",
+    "tagline": "Willow City or TX 16 north, then Cooper's. The food is the destination; the road is the excuse.",
+    "miles": "~80\u2013110 mi",
+    "time": "half",
+    "timeLabel": "Half to full day",
+    "roads": "scenic",
+    "roadsLabel": "Scenic",
+    "eat": [
+      "bbq"
+    ],
+    "eatLabel": "BBQ",
+    "vehicle": [
+      "motorcycle",
+      "sports",
+      "cruise"
+    ],
+    "vehicleLabel": "Any. Great club run.",
+    "difficulty": "2 / 5",
+    "description": "A Hill Country plate worth the tank of gas. Take TX 16 or peel onto Willow City, land in Llano for Cooper's, and roll home before dark.",
+    "routeLabel": "FBG \u2192 TX 16 / Willow City \u2192 Llano \u2192 home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Willow+City,+TX/Cooper's+Old+Time+Pit+Bar-B-Que,+Llano,+TX/Fredericksburg,+TX",
+    "stops": [
+      "Cooper's Old Time Pit Bar-B-Que, Llano \u2014 the pit stop that justifies the drive",
+      "Optional square-side stroll in Llano before the return",
+      "Evening pour back in Fredericksburg from the Bar Finder"
+    ],
+    "gotchas": "Cooper's lines on weekends. Leave early or eat a late lunch. Confirm hours before you commit the whole day to brisket.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Willow City",
+        "lat": 30.401,
+        "lng": -98.701,
+        "kind": "via"
+      },
+      {
+        "name": "Cooper's, Llano",
+        "lat": 30.7593,
+        "lng": -98.675,
+        "kind": "stop"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
+    "id": "medina-apples",
+    "name": "Medina Apples",
+    "title": "Medina Apple Country + 337 Warm-Up",
+    "tagline": "Pie, cider country, and the friendliest sister. A taste of Twisted Sisters without the full commitment.",
+    "miles": "~140 mi",
+    "time": "full",
+    "timeLabel": "Full day, easier pace",
+    "roads": "technical",
+    "roadsLabel": "Warm-up technical",
+    "eat": [
+      "pie",
+      "mix"
+    ],
+    "eatLabel": "Pie / cider",
+    "vehicle": [
+      "motorcycle",
+      "sports"
+    ],
+    "vehicleLabel": "Sports car or motorcycle",
+    "difficulty": "3 / 5",
+    "description": "TX 16 to Kerrville, then Medina for Love Creek / the Apple Store. Continue onto RM 337 toward Vanderpool if the group is up for it \u2014 turn around if they are not.",
+    "routeLabel": "FBG \u2192 Kerrville \u2192 Medina \u2192 Vanderpool (optional) \u2192 home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Kerrville,+TX/Medina,+TX/Lost+Maples+Country+Store,+Vanderpool,+TX/Fredericksburg,+TX",
+    "stops": [
+      "Love Creek Orchards / The Apple Store, Medina \u2014 pie and cider",
+      "Lost Maples Country Store if you continue west",
+      "Kerrville on the way home for a sit-down if the orchard is slammed"
+    ],
+    "gotchas": "Orchard hours and seasonal fruit. RM 337 west of Vanderpool ramps up fast. Confirm the Apple Store is open before you sell the day as a pie run.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Kerrville",
+        "lat": 30.0474,
+        "lng": -99.1403,
+        "kind": "via"
+      },
+      {
+        "name": "Love Creek / Apple Store",
+        "lat": 29.7975,
+        "lng": -99.248,
+        "kind": "stop"
+      },
+      {
+        "name": "Lost Maples Country Store",
+        "lat": 29.7458,
+        "lng": -99.557,
+        "kind": "stop"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
+    "id": "luckenbach",
+    "name": "Luckenbach",
+    "title": "Luckenbach Backroads Afternoon",
+    "tagline": "Short, pretty, and back in time for a brewery. The convertible cruise.",
+    "miles": "~40\u201360 mi",
+    "time": "half",
+    "timeLabel": "Half day",
+    "roads": "cruise",
+    "roadsLabel": "Easy cruise",
+    "eat": [
+      "brewery",
+      "mix"
+    ],
+    "eatLabel": "Brewery",
+    "vehicle": [
+      "cruise",
+      "sports"
+    ],
+    "vehicleLabel": "Convertible, cruiser, family car",
+    "difficulty": "1 / 5",
+    "description": "South and southeast farm roads to Luckenbach, home on backroads instead of 290. Proves the finder can do more than canyon-carving.",
+    "routeLabel": "FBG \u2192 Luckenbach \u2192 backroads home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Luckenbach,+TX/Fredericksburg,+TX",
+    "stops": [
+      "Luckenbach Texas \u2014 the postcard stop, not the technical one",
+      "Spin the Bar Finder for a brewery or beer garden once you are back",
+      "Skip a two-hour tasting unless this is explicitly a Sunday ramble"
+    ],
+    "gotchas": "Weekend tour-bus energy at Luckenbach. Go early or on a weekday.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Luckenbach",
+        "lat": 30.1813,
+        "lng": -98.7536,
+        "kind": "stop"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
+    "id": "pedernales",
+    "name": "Pedernales Cruise",
+    "title": "Pedernales River Cruise",
+    "tagline": "Ranch Road 1 along the river, LBJ country, Hye. Scenic, not spicy.",
+    "miles": "~50\u201370 mi",
+    "time": "half",
+    "timeLabel": "Half day",
+    "roads": "cruise",
+    "roadsLabel": "River scenic",
+    "eat": [
+      "german",
+      "mix"
+    ],
+    "eatLabel": "FBG dinner",
+    "vehicle": [
+      "cruise",
+      "sports",
+      "motorcycle"
+    ],
+    "vehicleLabel": "Any. Morning or golden-hour cruise.",
+    "difficulty": "1 / 5",
+    "description": "East toward Stonewall, peel onto Ranch Road 1 along the Pedernales, through LBJ country and Hye. A scenic loop for mixed groups who will not enjoy Twisted Sisters.",
+    "routeLabel": "FBG \u2192 Ranch Road 1 \u2192 LBJ / Hye \u2192 home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Lyndon+B.+Johnson+State+Park+and+Historic+Site/Hye,+TX/Fredericksburg,+TX",
+    "stops": [
+      "LBJ State Park & Historic Site \u2014 stretch and a view",
+      "Hye \u2014 a quick stop, then decide if you want wine-trail traffic or backroads home",
+      "Dinner back in Fredericksburg from the Restaurant Finder"
+    ],
+    "gotchas": "290 wine-trail congestion on Saturdays. Ranch Road 1 is the point; 290 is the compromise.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "LBJ State Park",
+        "lat": 30.2407,
+        "lng": -98.6274,
+        "kind": "stop"
+      },
+      {
+        "name": "Hye",
+        "lat": 30.2472,
+        "lng": -98.5836,
+        "kind": "stop"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
+    "id": "kerrville-16",
+    "name": "Kerrville TX 16",
+    "title": "Kerrville + TX 16 Connector",
+    "tagline": "The Hill Country artery. Rolling ranch land, long sight lines, and a river town turnaround.",
+    "miles": "~70 mi",
+    "time": "half",
+    "timeLabel": "Half day",
+    "roads": "cruise",
+    "roadsLabel": "Connector cruise",
+    "eat": [
+      "mix",
+      "bbq"
+    ],
+    "eatLabel": "Mix",
+    "vehicle": [
+      "motorcycle",
+      "sports",
+      "cruise"
+    ],
+    "vehicleLabel": "Any",
+    "difficulty": "2 / 5",
+    "description": "TX 16 south to Kerrville is not the most technical road in the catalog, but it is the one that connects everything else. Use it as a warm-up, a recovery day, or the gateway toward Medina.",
+    "routeLabel": "FBG \u2192 TX 16 \u2192 Kerrville \u2192 home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Kerrville,+TX/Fredericksburg,+TX",
+    "stops": [
+      "Downtown Kerrville / Guadalupe riverfront \u2014 stretch and coffee",
+      "Optional: keep going to Medina if the group wants more road",
+      "Home on 16, or peel onto a farm road if traffic piles up"
+    ],
+    "gotchas": "Weekend traffic between the two towns. This is a cruise, not a canyon. Watch for ranch traffic and left-turn backups.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Kerrville",
+        "lat": 30.0474,
+        "lng": -99.1403,
+        "kind": "stop"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
+    "id": "lost-maples",
+    "name": "Lost Maples",
+    "title": "Lost Maples Fall Color",
+    "tagline": "The seasonal scenic. Vanderpool, Sabinal Canyon, and a country-store pause.",
+    "miles": "~160 mi",
+    "time": "full",
+    "timeLabel": "Full day",
+    "roads": "scenic",
+    "roadsLabel": "Seasonal scenic",
+    "eat": [
+      "pie",
+      "mix"
+    ],
+    "eatLabel": "Country store",
+    "vehicle": [
+      "motorcycle",
+      "sports",
+      "cruise"
+    ],
+    "vehicleLabel": "Any, best in fall",
+    "difficulty": "3 / 5",
+    "description": "When the bigtooth maples turn, this becomes the Hill Country drive people plan weekends around. Same corridor as the sisters, different reason to go \u2014 color, not curves.",
+    "routeLabel": "FBG \u2192 Medina \u2192 Lost Maples SNA \u2192 home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Medina,+TX/Lost+Maples+State+Natural+Area/Fredericksburg,+TX",
+    "stops": [
+      "Lost Maples State Natural Area \u2014 the color is the destination",
+      "Lost Maples Country Store \u2014 fuel and a pause",
+      "Medina pie on the way out or back"
+    ],
+    "gotchas": "Peak color weekends fill the park and the road. Check foliage reports. Summer heat makes this a dawn start for motorcycles.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Medina",
+        "lat": 29.7966,
+        "lng": -99.2464,
+        "kind": "via"
+      },
+      {
+        "name": "Lost Maples SNA",
+        "lat": 29.8139,
+        "lng": -99.5844,
+        "kind": "stop"
+      },
+      {
+        "name": "Lost Maples Country Store",
+        "lat": 29.7458,
+        "lng": -99.557,
+        "kind": "stop"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  }
+]
