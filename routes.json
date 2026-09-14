@@ -296,10 +296,10 @@
     "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Luckenbach,+TX/Fredericksburg,+TX",
     "stops": [
       "Luckenbach Texas \u2014 the postcard stop, not the technical one",
-      "Spin the Bar Finder for a brewery or beer garden once you are back",
-      "Skip a two-hour tasting unless this is explicitly a Sunday ramble"
+      "Friday\u2013Sunday: Black Board Bar B Q is 15 minutes south on 1376 if you want lunch before the postcard",
+      "Spin the Bar Finder for a brewery or beer garden once you are back"
     ],
-    "gotchas": "Weekend tour-bus energy at Luckenbach. Go early or on a weekday.",
+    "gotchas": "Weekend tour-bus energy at Luckenbach. Go early or on a weekday. Black Board in Sisterdale is Friday\u2013Sunday only.",
     "waypoints": [
       {
         "name": "Fredericksburg",
@@ -312,6 +312,88 @@
         "lat": 30.1813,
         "lng": -98.7536,
         "kind": "stop"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
+    "id": "blanco-bbq",
+    "name": "Blanco BBQ",
+    "title": "Luckenbach to Blanco BBQ",
+    "tagline": "Postcard Luckenbach, then RM 1888 to the Blanco square. Old 300 for lunch. Home on 1623 and 2721.",
+    "miles": "~80\u2013100 mi",
+    "time": "half",
+    "timeLabel": "Half day",
+    "roads": "scenic",
+    "roadsLabel": "Scenic backroads",
+    "eat": [
+      "bbq",
+      "mix"
+    ],
+    "eatLabel": "BBQ / square",
+    "vehicle": [
+      "motorcycle",
+      "sports",
+      "cruise"
+    ],
+    "vehicleLabel": "Any. Convertibles and club runs.",
+    "difficulty": "2 / 5",
+    "description": "South to Luckenbach for the glance, then RM 1888 \u2014 River Road \u2014 the 16 miles of sweepers that motorcycle and sports-car people already know. Land on the Blanco square at Old 300 BBQ. Redbud Cafe is next door if the table wants a Reuben instead. Come home on RM 1623 along the Blanco River through Stonewall, then RM 2721 into Fredericksburg. That return is the point. Do not bail onto 290.",
+    "routeLabel": "FBG \u2192 Luckenbach \u2192 RM 1888 \u2192 Blanco \u2192 1623 \u2192 2721 \u2192 home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Luckenbach,+TX/Old+300+BBQ,+318+4th+Street,+Blanco,+TX/Stonewall,+TX/Fredericksburg,+TX",
+    "stops": [
+      "Luckenbach \u2014 the postcard pause, then keep rolling. Lunch is in Blanco",
+      "Old 300 BBQ, 318 4th St \u2014 brisket on the courthouse square. Open daily; Sunday closes at 3",
+      "Redbud Cafe on the square \u2014 the Reuben if the group is not in a BBQ mood"
+    ],
+    "gotchas": "Sunday Old 300 closes at 3. Weekend Luckenbach tour buses \u2014 go through early. RM 1888 is quiet ranch road, not a canyon. The 1623 / 2721 return skips the 290 wine trail; do not cheat it.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Luckenbach",
+        "lat": 30.1813,
+        "lng": -98.7536,
+        "kind": "via"
+      },
+      {
+        "name": "RM 1888 River Road",
+        "lat": 30.1141,
+        "lng": -98.6515,
+        "kind": "via"
+      },
+      {
+        "name": "Old 300 BBQ, Blanco",
+        "lat": 30.0977,
+        "lng": -98.4207,
+        "kind": "stop"
+      },
+      {
+        "name": "RM 1623",
+        "lat": 30.1284,
+        "lng": -98.5076,
+        "kind": "via"
+      },
+      {
+        "name": "Stonewall",
+        "lat": 30.2359,
+        "lng": -98.6646,
+        "kind": "via"
+      },
+      {
+        "name": "RM 2721 & 1623",
+        "lat": 30.278,
+        "lng": -98.662,
+        "kind": "via"
       },
       {
         "name": "Fredericksburg",
@@ -380,36 +462,36 @@
     ]
   },
   {
-    "id": "kerrville-16",
-    "name": "Kerrville TX 16",
-    "title": "Kerrville + TX 16 Connector",
-    "tagline": "The Hill Country artery. Rolling ranch land, long sight lines, and a river town turnaround.",
-    "miles": "~70 mi",
+    "id": "hunt-39",
+    "name": "Hunt TX 39",
+    "title": "Hunt + Guadalupe River Cruise",
+    "tagline": "TX 39 along the river to Hunt, then Black Board Bar B Q in Sisterdale on the way home.",
+    "miles": "~90\u2013110 mi",
     "time": "half",
     "timeLabel": "Half day",
     "roads": "cruise",
-    "roadsLabel": "Connector cruise",
+    "roadsLabel": "River cruise",
     "eat": [
-      "mix",
-      "bbq"
+      "bbq",
+      "mix"
     ],
-    "eatLabel": "Mix",
+    "eatLabel": "BBQ",
     "vehicle": [
       "motorcycle",
       "sports",
       "cruise"
     ],
-    "vehicleLabel": "Any",
-    "difficulty": "2 / 5",
-    "description": "TX 16 south to Kerrville is not the most technical road in the catalog, but it is the one that connects everything else. Use it as a warm-up, a recovery day, or the gateway toward Medina.",
-    "routeLabel": "FBG \u2192 TX 16 \u2192 Kerrville \u2192 home",
-    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Kerrville,+TX/Fredericksburg,+TX",
+    "vehicleLabel": "Any. Convertibles love it.",
+    "difficulty": "1 / 5",
+    "description": "West out of Kerrville on the Guadalupe to Ingram and Hunt \u2014 camps, cypress, and a road that follows the water. Turn around at Hunt and come home on 27 through Center Point and Comfort, then RM 473 into Sisterdale for Black Board Bar B Q. That is the lunch, and it is worth timing the river for. Backroads into Fredericksburg after. Luckenbach is a glance on 1376 if you still want it.",
+    "routeLabel": "FBG \u2192 Kerrville \u2192 Hunt \u2192 Comfort \u2192 Black Board, Sisterdale \u2192 home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Kerrville,+TX/Hunt,+TX/Center+Point,+TX/Comfort,+TX/Black+Board+Bar+B+Q,+Sisterdale,+TX/Fredericksburg,+TX",
     "stops": [
-      "Downtown Kerrville / Guadalupe riverfront \u2014 stretch and coffee",
-      "Optional: keep going to Medina if the group wants more road",
-      "Home on 16, or peel onto a farm road if traffic piles up"
+      "Hunt Store / the river pull-off \u2014 the turnaround, not a lunch destination",
+      "Black Board Bar B Q, Sisterdale \u2014 craft brisket on the way home. One of the best plates in the Hill Country",
+      "Backroads into FBG on 1376 \u2014 Luckenbach is optional if you still have daylight"
     ],
-    "gotchas": "Weekend traffic between the two towns. This is a cruise, not a canyon. Watch for ranch traffic and left-turn backups.",
+    "gotchas": "Black Board is Friday\u2013Sunday for BBQ (Thursday is burger night). Closed Monday\u2013Wednesday. Confirm hours; they sell out. Summer camp and tube traffic on 39. Crider's is evening / seasonal, not midday. Do not drop onto RM 1340 unless you want low-water crossings.",
     "waypoints": [
       {
         "name": "Fredericksburg",
@@ -421,6 +503,106 @@
         "name": "Kerrville",
         "lat": 30.0474,
         "lng": -99.1403,
+        "kind": "via"
+      },
+      {
+        "name": "Ingram",
+        "lat": 30.0774,
+        "lng": -99.2403,
+        "kind": "via"
+      },
+      {
+        "name": "Hunt",
+        "lat": 30.0708,
+        "lng": -99.3378,
+        "kind": "stop"
+      },
+      {
+        "name": "Center Point",
+        "lat": 29.9444,
+        "lng": -99.0342,
+        "kind": "via"
+      },
+      {
+        "name": "Comfort",
+        "lat": 29.9674,
+        "lng": -98.905,
+        "kind": "via"
+      },
+      {
+        "name": "Black Board Bar B Q",
+        "lat": 29.9678,
+        "lng": -98.7179,
+        "kind": "stop"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
+    "id": "bandera-16",
+    "name": "Bandera TX 16",
+    "title": "Kerrville to Bandera on 16",
+    "tagline": "The sweeper they mean by Highway 16. Medina as a via, Bandera for lunch, home on 173.",
+    "miles": "~110\u2013130 mi",
+    "time": "half",
+    "timeLabel": "Half to full day",
+    "roads": "scenic",
+    "roadsLabel": "Sweepers",
+    "eat": [
+      "mix",
+      "pie"
+    ],
+    "eatLabel": "Diner / mix",
+    "vehicle": [
+      "motorcycle",
+      "sports",
+      "cruise"
+    ],
+    "vehicleLabel": "Sports car, motorcycle, or convertible",
+    "difficulty": "3 / 5",
+    "description": "TX 16 south through Kerrville and Medina is the Hill Country 16 \u2014 sweepers, river crossings, ranch country \u2014 not the connector back to town. Land in Bandera, the Cowboy Capital, for lunch. Come home on 173 past Camp Verde so you are not retracing the same pavement. Skip the long orchard stop; that is the Medina pie day.",
+    "routeLabel": "FBG \u2192 Kerrville \u2192 Medina \u2192 Bandera \u2192 Camp Verde \u2192 home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Kerrville,+TX/Medina,+TX/Bandera,+TX/Camp+Verde+General+Store/Fredericksburg,+TX",
+    "stops": [
+      "Medina \u2014 fuel and a wave at the Apple Store, then keep rolling",
+      "O.S.T. Restaurant, Bandera \u2014 diner plates in the Cowboy Capital (check hours; Tue/Wed close early)",
+      "Camp Verde General Store on 173 \u2014 the historic pause on the way home"
+    ],
+    "gotchas": "Bandera weekends are cowboy-tourism busy. O.S.T. is not a late lunch on Tuesday or Wednesday. 16 has blind curves and ranch traffic. Do not turn this into the 337 / Lost Maples day.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Kerrville",
+        "lat": 30.0474,
+        "lng": -99.1403,
+        "kind": "via"
+      },
+      {
+        "name": "Medina",
+        "lat": 29.7966,
+        "lng": -99.2464,
+        "kind": "via"
+      },
+      {
+        "name": "O.S.T., Bandera",
+        "lat": 29.7266,
+        "lng": -99.0739,
+        "kind": "stop"
+      },
+      {
+        "name": "Camp Verde General Store",
+        "lat": 29.8939,
+        "lng": -99.1047,
         "kind": "stop"
       },
       {
