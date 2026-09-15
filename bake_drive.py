@@ -15,8 +15,9 @@ ROUTES = json.loads((ROOT / "routes.json").read_text())
 SRC_MILL = DOCS / "index.src.html"
 FINDER_CSS_SRC = ROOT / "finder.css"
 FINDER_JS = ROOT / "finder.js"
-EMBED_VERSION = "20260915-roads3"
+EMBED_VERSION = "20260915-roads5"
 EMBED_BASE = "https://dsiddens2.github.io/FBG-Drive-Days/"
+HOME_PAGE = "https://discoverfbg.com/"
 EMBED_OUT = ROOT / "squarespace-embed.html"
 CODE_BLOCK_LIMIT = 400 * 1024
 EXTRAS_MARK = "/* --- drive extras --- */"
@@ -292,7 +293,9 @@ def finder_snippet(
 <div id="fbg-finder-fit">
 <div id="fbg-drive-finder" data-embed-base="{esc(embed_base)}" data-embed-version="{EMBED_VERSION}">
   <header class="finder-brand">
-    <img src="{esc(logo_src)}" alt="Discover Fredericksburg" width="320" height="168">
+    <a class="finder-brand-home" href="{esc(HOME_PAGE)}" aria-label="Discover Fredericksburg">
+      <img src="{esc(logo_src)}" alt="Discover Fredericksburg" width="320" height="168">
+    </a>
   </header>
   <div class="finder-layout">
     <div class="finder-panel">
@@ -318,9 +321,9 @@ def finder_snippet(
             Kind of roads
             <select id="filter-road">
               <option value="">Any roads</option>
-              <option value="technical">Technical</option>
-              <option value="scenic">Scenic</option>
               <option value="cruise">Easy cruise</option>
+              <option value="scenic">Scenic</option>
+              <option value="technical">Technical</option>
             </select>
           </label>
           <label>

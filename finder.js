@@ -5,7 +5,7 @@
   if (!root) return;
 
   const FILTER_TIMES = ["half", "full"];
-  const FILTER_ROADS = ["technical", "scenic", "cruise"];
+  const FILTER_ROADS = ["cruise", "scenic", "technical"];
   const FILTER_EATS = ["bbq", "pie", "brewery", "german", "mix"];
   const FILTER_VEHICLES = ["motorcycle", "sports", "cruise"];
   const SHARE_PAGE = "https://discoverfbg.com/Best-Driving-Roads";

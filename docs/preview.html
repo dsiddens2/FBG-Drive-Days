@@ -21,11 +21,13 @@
 
 </style>
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
-<link rel="stylesheet" href="finder.css?_v=20260915-roads3">
+<link rel="stylesheet" href="finder.css?_v=20260915-roads5">
 <div id="fbg-finder-fit">
-<div id="fbg-drive-finder" data-embed-base="" data-embed-version="20260915-roads3">
+<div id="fbg-drive-finder" data-embed-base="" data-embed-version="20260915-roads5">
   <header class="finder-brand">
-    <img src="assets/discover-fredericksburg.png?v=2" alt="Discover Fredericksburg" width="320" height="168">
+    <a class="finder-brand-home" href="https://discoverfbg.com/" aria-label="Discover Fredericksburg">
+      <img src="assets/discover-fredericksburg.png?v=2" alt="Discover Fredericksburg" width="320" height="168">
+    </a>
   </header>
   <div class="finder-layout">
     <div class="finder-panel">
@@ -51,9 +53,9 @@
             Kind of roads
             <select id="filter-road">
               <option value="">Any roads</option>
-              <option value="technical">Technical</option>
-              <option value="scenic">Scenic</option>
               <option value="cruise">Easy cruise</option>
+              <option value="scenic">Scenic</option>
+              <option value="technical">Technical</option>
             </select>
           </label>
           <label>
@@ -295,7 +297,7 @@
   </div>
 </div>
 <script src="vendor/leaflet/leaflet.js"></script>
-<script src="finder.js?_v=20260915-roads3" defer></script>
+<script src="finder.js?_v=20260915-roads5" defer></script>
   </div>
 </body>
 </html>
