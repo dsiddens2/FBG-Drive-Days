@@ -414,6 +414,93 @@
     ]
   },
   {
+    "id": "tivydale-white-oak",
+    "name": "Tivydale / White Oak",
+    "title": "Tivydale to Cafe at The Ridge",
+    "tagline": "Tivydale to White Oak to 783. The short twisty lunch. Same roads home.",
+    "miles": "~55 mi",
+    "time": "half",
+    "timeLabel": "Short lunch run",
+    "roads": "scenic",
+    "roadsLabel": "Twisty ranch roads",
+    "eat": [
+      "mix"
+    ],
+    "eatLabel": "Cafe lunch",
+    "vehicle": [
+      "motorcycle",
+      "sports",
+      "cruise"
+    ],
+    "vehicleLabel": "Motorcycle, sports car, or convertible",
+    "difficulty": "2 / 5",
+    "description": "West out of town on Tivydale — FM 2093 — then White Oak Road, the ribbon that packs the turns into a few miles. Land on South Ranch Road 783 at Cafe at The Ridge: scratch comfort food, patio, bakery next door. Come home the same way. Those ranch roads are why you came, and they are still the fastest twisty pavement back. 16 to Kerrville is the cheat. Harper and 290 are the long way around, not a clever loop. Keep it short and sweet — this is the time-crunch carve, not a half-day wander.",
+    "routeLabel": "FBG → Tivydale / 2093 → White Oak → RM 783 → Cafe at The Ridge → same roads home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/30.24472,-99.05367/30.22127,-99.09684/30.18102,-99.20165/Cafe+at+the+Ridge,+13439+S+Ranch+Road+783,+Kerrville,+TX/30.18102,-99.20165/30.22127,-99.09684/30.24472,-99.05367/Fredericksburg,+TX",
+    "stops": [
+      "White Oak Road — the twisty cut. Stay on it; 2093 west to Harper is not this drive",
+      "Cafe at The Ridge, 13439 S Ranch Rd 783 — lunch. Closed Monday; Tuesday–Thursday opens at 11",
+      "Wild Flour Bakery next door — pie and coffee if the table wants a lighter stop"
+    ],
+    "gotchas": "Cafe is closed Monday. Tuesday–Thursday lunch starts at 11; Friday–Sunday they open at 8. Maps will offer 16 to Kerrville — decline. Thin ranch pavement, cattle, no services once you leave town. Do not turn north on 783 to Harper. Bandera on 16 and Hunt on 27 are other drives, not the way home.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Tivydale Rd & White Oak",
+        "lat": 30.2447,
+        "lng": -99.0537,
+        "kind": "via"
+      },
+      {
+        "name": "White Oak Road",
+        "lat": 30.2213,
+        "lng": -99.0968,
+        "kind": "via"
+      },
+      {
+        "name": "White Oak & RM 783",
+        "lat": 30.181,
+        "lng": -99.2017,
+        "kind": "via"
+      },
+      {
+        "name": "Cafe at The Ridge",
+        "lat": 30.1462,
+        "lng": -99.1588,
+        "kind": "stop"
+      },
+      {
+        "name": "White Oak & RM 783",
+        "lat": 30.181,
+        "lng": -99.2017,
+        "kind": "via"
+      },
+      {
+        "name": "White Oak Road",
+        "lat": 30.2213,
+        "lng": -99.0968,
+        "kind": "via"
+      },
+      {
+        "name": "Tivydale Rd & White Oak",
+        "lat": 30.2447,
+        "lng": -99.0537,
+        "kind": "via"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
     "id": "blanco-bbq",
     "name": "Blanco BBQ",
     "title": "Luckenbach to Blanco BBQ",
