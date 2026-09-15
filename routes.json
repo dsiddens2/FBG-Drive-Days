@@ -1022,6 +1022,99 @@
     ]
   },
   {
+    "id": "apache-comfort",
+    "name": "Apache Gun Range",
+    "title": "Apache Indoor Range + High's in Comfort",
+    "tagline": "Indoor gun range in Comfort, then High's for lunch. Same ranch roads home.",
+    "miles": "~85–95 mi",
+    "time": "half",
+    "timeLabel": "Half day",
+    "roads": "cruise",
+    "roadsLabel": "Easy cruise",
+    "eat": [
+      "mix"
+    ],
+    "eatLabel": "Cafe lunch",
+    "vehicle": [
+      "motorcycle",
+      "sports",
+      "cruise"
+    ],
+    "vehicleLabel": "Any. Convertibles and club runs.",
+    "difficulty": "1 / 5",
+    "description": "This is a gun-range day. South on 1376 through Luckenbach — glance, keep rolling — then RM 473 into Comfort. The last couple of miles are I-10 frontage to Apache Rifleworks: a 25-yard indoor pistol and rifle range. Bring your own, or call ahead if you need to rent one. After the lanes, back into town for High's Cafe on High Street — sandwiches, soup, the Comfort lunch people actually drive for. Come home the same ranch roads. US 87 is the cheat. 16 to Kerrville and I-10 is the other one.",
+    "routeLabel": "FBG → 1376 → Sisterdale → Apache gun range → High's, Comfort → same roads home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Luckenbach,+TX/Sisterdale,+TX/Apache+Rifleworks,+50502+Interstate+10+West,+Comfort,+TX/High's+Cafe+%26+Store,+726+High+Street,+Comfort,+TX/Sisterdale,+TX/Luckenbach,+TX/Fredericksburg,+TX",
+    "stops": [
+      "RM 1376 through Luckenbach — the glance, then keep rolling. Lunch is in Comfort",
+      "Apache Rifleworks indoor gun range, 50502 I-10 W, Comfort — 25-yard pistol and rifle. Closed Sunday–Monday. Call ahead to rent a gun if you do not have your own",
+      "High's Cafe & Store, 726 High St — sandwiches and soup on High Street. Closed Monday–Tuesday"
+    ],
+    "gotchas": "The day that does both is Wednesday–Saturday. Apache is closed Sunday–Monday; the range runs 10–5 Tuesday–Saturday. High's is closed Monday–Tuesday and shuts at 5, so shoot first. No gun of your own? Call Apache first (210-972-3607) to rent one. Lanes get reserved for private events. No shotguns, no open-toe shoes; eye and ear protection rent there. Maps will offer 87 both ways — decline. This is not the Hunt river day. Black Board in Sisterdale is Friday–Sunday if High's is slammed.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Luckenbach",
+        "lat": 30.1813,
+        "lng": -98.7536,
+        "kind": "via"
+      },
+      {
+        "name": "Sisterdale / RM 473",
+        "lat": 29.9796,
+        "lng": -98.7229,
+        "kind": "via"
+      },
+      {
+        "name": "RM 473",
+        "lat": 29.978,
+        "lng": -98.812,
+        "kind": "via"
+      },
+      {
+        "name": "Apache Indoor Gun Range",
+        "lat": 29.94305,
+        "lng": -98.87183,
+        "kind": "stop"
+      },
+      {
+        "name": "High's Cafe & Store",
+        "lat": 29.96682,
+        "lng": -98.90678,
+        "kind": "stop"
+      },
+      {
+        "name": "RM 473",
+        "lat": 29.978,
+        "lng": -98.812,
+        "kind": "via"
+      },
+      {
+        "name": "Sisterdale / RM 473",
+        "lat": 29.9796,
+        "lng": -98.7229,
+        "kind": "via"
+      },
+      {
+        "name": "Luckenbach",
+        "lat": 30.1813,
+        "lng": -98.7536,
+        "kind": "via"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
     "id": "bandera-16",
     "name": "Bandera TX 16",
     "title": "Kerrville to Bandera on 16",
