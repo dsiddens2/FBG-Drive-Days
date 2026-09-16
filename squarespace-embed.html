@@ -1,6 +1,6 @@
 <!--
   Discover FBG Best Driving Roads — paste into ONE Squarespace Code Block (HTML).
-  Squarespace limit is 400 KB. This bake is 79,225 bytes (19.3% of that).
+  Squarespace limit is 400 KB. This bake is 79,506 bytes (19.4% of that).
   CSS, JS, map library, and the logo load from GitHub Pages.
 
   1. Create a Squarespace page with slug /Best-Driving-Roads and drag it to Not Linked.
@@ -39,8 +39,18 @@
   padding-right:0!important;
   max-width:none!important;
 }
+.page-section:has(#fbg-finder-fit) .fluid-engine{
+  display:flex!important;
+  flex-direction:column!important;
+  height:auto!important;
+}
+.page-section:has(#fbg-finder-fit) .fluid-engine > .fe-block{
+  width:100%!important;
+  height:auto!important;
+  align-self:stretch!important;
+  grid-area:auto!important;
+}
 .page-section:has(#fbg-finder-fit) .fluid-engine > .fe-block:not(:has(#fbg-finder-fit)){
-  grid-column:1/-1!important;
   box-sizing:border-box;
   padding:0.85rem clamp(1.15rem,4vw,2.25rem) 1.35rem!important;
   margin:0!important;
@@ -49,10 +59,10 @@
   #fbg-drive-finder{border-radius:0}
 }
 </style>
-<link rel="stylesheet" href="https://dsiddens2.github.io/FBG-Drive-Days/vendor/leaflet/leaflet.css?_v=20260916-roads2">
-<link rel="stylesheet" href="https://dsiddens2.github.io/FBG-Drive-Days/finder.css?_v=20260916-roads2" integrity="sha384-75HWuoYFvGuIc+A90pmOFLTLCUxJuZqrp/IU6gZTSvX21B9BXnwToMzgvXgNZj+U" crossorigin="anonymous">
+<link rel="stylesheet" href="https://dsiddens2.github.io/FBG-Drive-Days/vendor/leaflet/leaflet.css?_v=20260916-roads3">
+<link rel="stylesheet" href="https://dsiddens2.github.io/FBG-Drive-Days/finder.css?_v=20260916-roads3" integrity="sha384-75HWuoYFvGuIc+A90pmOFLTLCUxJuZqrp/IU6gZTSvX21B9BXnwToMzgvXgNZj+U" crossorigin="anonymous">
 <div id="fbg-finder-fit">
-<div id="fbg-drive-finder" data-embed-base="https://dsiddens2.github.io/FBG-Drive-Days/" data-embed-version="20260916-roads2">
+<div id="fbg-drive-finder" data-embed-base="https://dsiddens2.github.io/FBG-Drive-Days/" data-embed-version="20260916-roads3">
   <header class="finder-brand">
     <a class="finder-brand-home" href="https://discoverfbg.com/" aria-label="Discover Fredericksburg">
       <img src="https://dsiddens2.github.io/FBG-Drive-Days/assets/discover-fredericksburg.png?v=2" alt="Discover Fredericksburg" width="320" height="168">
@@ -325,6 +335,6 @@
     </div>
   </div>
 </div>
-<script src="https://dsiddens2.github.io/FBG-Drive-Days/vendor/leaflet/leaflet.js?_v=20260916-roads2"></script>
-<script src="https://dsiddens2.github.io/FBG-Drive-Days/finder.js?_v=20260916-roads2" defer integrity="sha384-pkGPs/jzHCipLRnGQr2hPNWvRtcbjaPvwd/BiCAOtbkg9NGrLU5rvIU9aNWq8/V/" crossorigin="anonymous"></script>
+<script src="https://dsiddens2.github.io/FBG-Drive-Days/vendor/leaflet/leaflet.js?_v=20260916-roads3"></script>
+<script src="https://dsiddens2.github.io/FBG-Drive-Days/finder.js?_v=20260916-roads3" defer integrity="sha384-pkGPs/jzHCipLRnGQr2hPNWvRtcbjaPvwd/BiCAOtbkg9NGrLU5rvIU9aNWq8/V/" crossorigin="anonymous"></script>
 <!-- ========== END CODE BLOCK ========== -->

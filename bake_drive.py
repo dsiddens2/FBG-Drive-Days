@@ -15,7 +15,7 @@ ROUTES = json.loads((ROOT / "routes.json").read_text())
 SRC_MILL = DOCS / "index.src.html"
 FINDER_CSS_SRC = ROOT / "finder.css"
 FINDER_JS = ROOT / "finder.js"
-EMBED_VERSION = "20260916-roads2"
+EMBED_VERSION = "20260916-roads3"
 EMBED_BASE = "https://dsiddens2.github.io/FBG-Drive-Days/"
 HOME_PAGE = "https://discoverfbg.com/"
 EMBED_OUT = ROOT / "squarespace-embed.html"
@@ -445,8 +445,18 @@ def squarespace_css() -> str:
   padding-right:0!important;
   max-width:none!important;
 }
+.page-section:has(#fbg-finder-fit) .fluid-engine{
+  display:flex!important;
+  flex-direction:column!important;
+  height:auto!important;
+}
+.page-section:has(#fbg-finder-fit) .fluid-engine > .fe-block{
+  width:100%!important;
+  height:auto!important;
+  align-self:stretch!important;
+  grid-area:auto!important;
+}
 .page-section:has(#fbg-finder-fit) .fluid-engine > .fe-block:not(:has(#fbg-finder-fit)){
-  grid-column:1/-1!important;
   box-sizing:border-box;
   padding:0.85rem clamp(1.15rem,4vw,2.25rem) 1.35rem!important;
   margin:0!important;
