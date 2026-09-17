@@ -11,6 +11,7 @@
   const SHARE_PAGE = "https://discoverfbg.com/Best-Driving-Roads";
   const SHARE_INTRO = "Check out these driving roads from Fredericksburg.";
   const LISTINGS_PAGE = "https://reataranchrealty.com/agents/doug-siddens";
+  const LISTINGS_SEARCH = "https://reataranchrealty.com/home-search/listings?sortBy=LIST_PRICE&regions=%5B%7B%22regionId%22%3A%22d2b75ba0-dc7d-48d4-8cb5-1e5a823eda96%22%2C%22address%22%3A%22Fredericksburg%2C+TX%2C+USA%22%7D%5D&center=%7B%22lat%22%3A30.2544044893871%2C%22lng%22%3A-98.889515%7D&boundary=%5B%5B%5B30.58599013173766%2C-99.20846183837891%5D%2C%5B30.58599013173766%2C-98.5705681616211%5D%2C%5B29.921695749509272%2C-98.5705681616211%5D%2C%5B29.921695749509272%2C-99.20846183837891%5D%2C%5B30.58599013173766%2C-99.20846183837891%5D%5D%5D&cityName=Fredericksburg&stateName=TX";
   const FBG = [30.2752, -98.8717];
   let fitting = false;
 
@@ -94,6 +95,8 @@
   function renderListings(listings) {
     const row = document.getElementById("fbg-listings");
     const scroller = document.getElementById("listings-scroller");
+    const seeAll = row && row.querySelector(".listings-all");
+    if (seeAll) seeAll.href = LISTINGS_SEARCH;
     if (!row || !scroller) return;
     const items = Array.isArray(listings) ? listings.filter((item) => item && item.url) : [];
     if (!items.length) {
@@ -106,6 +109,8 @@
   }
 
   function loadListings() {
+    const seeAll = document.querySelector("#fbg-listings .listings-all");
+    if (seeAll) seeAll.href = LISTINGS_SEARCH;
     fetch(listingsUrl(), { credentials: "omit" })
       .then((response) => (response.ok ? response.json() : null))
       .then((data) => {

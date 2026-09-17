@@ -19,10 +19,11 @@ ROUTES = json.loads((ROOT / "routes.json").read_text())
 SRC_MILL = DOCS / "index.src.html"
 FINDER_CSS_SRC = ROOT / "finder.css"
 FINDER_JS = ROOT / "finder.js"
-EMBED_VERSION = "20260916-roads4"
+EMBED_VERSION = "20260916-roads6"
 EMBED_BASE = "https://dsiddens2.github.io/FBG-Drive-Days/"
 HOME_PAGE = "https://discoverfbg.com/"
 LISTINGS_PAGE = "https://reataranchrealty.com/agents/doug-siddens"
+LISTINGS_SEARCH = "https://reataranchrealty.com/home-search/listings?sortBy=LIST_PRICE&regions=%5B%7B%22regionId%22%3A%22d2b75ba0-dc7d-48d4-8cb5-1e5a823eda96%22%2C%22address%22%3A%22Fredericksburg%2C+TX%2C+USA%22%7D%5D&center=%7B%22lat%22%3A30.2544044893871%2C%22lng%22%3A-98.889515%7D&boundary=%5B%5B%5B30.58599013173766%2C-99.20846183837891%5D%2C%5B30.58599013173766%2C-98.5705681616211%5D%2C%5B29.921695749509272%2C-98.5705681616211%5D%2C%5B29.921695749509272%2C-99.20846183837891%5D%2C%5B30.58599013173766%2C-99.20846183837891%5D%5D%5D&cityName=Fredericksburg&stateName=TX"
 LISTINGS_ENDPOINT = "https://reataranchrealty.com/api-gw/graphql"
 LP_COMPANY_ID = "d35b0af8-248c-413b-b5f9-d720b12d0bc1"
 LP_AGENT_ID = "b459b58a-06e5-4f6a-8e91-dcdca5fb0dc9"
@@ -479,7 +480,7 @@ def listings_row_html() -> str:
       <h2>Homes and land on the market</h2>
       <p class="listings-sub">Browse a listing while you pick a drive.</p>
     </div>
-    <a class="listings-all" href="{esc(LISTINGS_PAGE)}" target="_blank" rel="noopener noreferrer">See all listings</a>
+    <a class="listings-all" href="{esc(LISTINGS_SEARCH)}" target="_blank" rel="noopener noreferrer">See all listings</a>
   </div>
   <div class="listings-scroller" id="listings-scroller">{cards}</div>
   <p class="listings-disclaimer">Listings courtesy of Reata Ranch Realty. Information believed reliable, not guaranteed — verify independently. Doug Siddens, REALTOR®, TREC #840460.</p>
