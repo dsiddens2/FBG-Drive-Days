@@ -17,7 +17,7 @@ ROUTES = json.loads((ROOT / "routes.json").read_text())
 SRC_MILL = DOCS / "index.src.html"
 FINDER_CSS_SRC = ROOT / "finder.css"
 FINDER_JS = ROOT / "finder.js"
-EMBED_VERSION = "20260917-roads1"
+EMBED_VERSION = "20260917-roads2"
 EMBED_BASE = "https://dsiddens2.github.io/FBG-Drive-Days/"
 HOME_PAGE = "https://discoverfbg.com/"
 LISTINGS_JSON = "https://dsiddens2.github.io/FBG-Listings/listings.json"
@@ -250,7 +250,7 @@ EXTRA_CSS = """
 }
 #fbg-drive-finder .listings-card-photo {
   display: block;
-  height: 148px;
+  height: 198px;
   background: #142018;
   overflow: hidden;
 }
@@ -258,7 +258,7 @@ EXTRA_CSS = """
 #fbg-drive-finder .listings-card-ph {
   display: block;
   width: 100%;
-  height: 148px;
+  height: 198px;
   object-fit: cover;
 }
 #fbg-drive-finder .listings-card-ph {
@@ -267,24 +267,32 @@ EXTRA_CSS = """
 #fbg-drive-finder .listings-card-body {
   display: flex;
   flex-direction: column;
-  gap: 0.18rem;
-  padding: 0.7rem 0.75rem 0.8rem;
+  gap: 0.08rem;
+  padding: 0.5rem 0.7rem 0.55rem;
+  background: #16211a;
 }
 #fbg-drive-finder .listings-card-price {
-  font-size: 1.02rem;
+  font-size: 0.98rem;
   font-weight: 800;
   color: #e0b060;
   letter-spacing: 0.02em;
 }
 #fbg-drive-finder .listings-card-name {
-  font-size: 0.86rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.22;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 #fbg-drive-finder .listings-card-meta {
-  font-size: 0.72rem;
-  line-height: 1.35;
+  font-size: 0.68rem;
+  line-height: 1.2;
   color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 #fbg-drive-finder .listings-disclaimer {
   margin: 0.7rem 0.2rem 0.15rem;
