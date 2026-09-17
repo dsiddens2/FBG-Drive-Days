@@ -4,7 +4,11 @@ from __future__ import annotations
 
 import json
 import re
+import sys
+import urllib.error
+import urllib.request
 from base64 import b64encode
+from datetime import datetime, timezone
 from hashlib import sha384
 from html import escape
 from pathlib import Path
@@ -15,12 +19,36 @@ ROUTES = json.loads((ROOT / "routes.json").read_text())
 SRC_MILL = DOCS / "index.src.html"
 FINDER_CSS_SRC = ROOT / "finder.css"
 FINDER_JS = ROOT / "finder.js"
-EMBED_VERSION = "20260916-roads3"
+EMBED_VERSION = "20260916-roads4"
 EMBED_BASE = "https://dsiddens2.github.io/FBG-Drive-Days/"
 HOME_PAGE = "https://discoverfbg.com/"
+LISTINGS_PAGE = "https://reataranchrealty.com/agents/doug-siddens"
+LISTINGS_ENDPOINT = "https://reataranchrealty.com/api-gw/graphql"
+LP_COMPANY_ID = "d35b0af8-248c-413b-b5f9-d720b12d0bc1"
+LP_AGENT_ID = "b459b58a-06e5-4f6a-8e91-dcdca5fb0dc9"
+LISTINGS_OUT = DOCS / "listings.json"
 EMBED_OUT = ROOT / "squarespace-embed.html"
 CODE_BLOCK_LIMIT = 400 * 1024
 EXTRAS_MARK = "/* --- drive extras --- */"
+LISTINGS_QUERY = """
+query Properties($agentIds: [ID!], $companyId: String, $archived: Boolean, $offset: Int, $limit: Int) {
+  properties(agentIds: $agentIds, companyId: $companyId, archived: $archived, offset: $offset, limit: $limit) {
+    id
+    name
+    status
+    salesPrice
+    fullAddress
+    addressCity
+    bedroomCount
+    bathCount
+    livingSpaceSize
+    lotAreaSize
+    lotAreaUnits
+    slug
+    media { mediumUrl largeUrl }
+  }
+}
+""".strip()
 
 EXTRA_CSS = """
 #fbg-drive-finder .filter-reset-wrap {
@@ -174,6 +202,136 @@ EXTRA_CSS = """
     height: var(--spinner-h, 800px);
   }
 }
+#fbg-drive-finder .listings-row {
+  margin-top: 0.7rem;
+  padding: 0.85rem 0.35rem 0.15rem;
+  border-top: 1px solid rgba(224, 176, 96, 0.28);
+}
+#fbg-drive-finder .listings-row[hidden] {
+  display: none;
+}
+#fbg-drive-finder .listings-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.7rem;
+  padding: 0 0.2rem;
+}
+#fbg-drive-finder .listings-head h2 {
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #e0b060;
+}
+#fbg-drive-finder .listings-sub {
+  margin-top: 0.22rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+#fbg-drive-finder .listings-all {
+  flex: none;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e0b060;
+  text-decoration: none;
+  white-space: nowrap;
+}
+#fbg-drive-finder .listings-all:hover,
+#fbg-drive-finder .listings-all:focus-visible {
+  color: #f0c878;
+  text-decoration: underline;
+}
+#fbg-drive-finder .listings-scroller {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+#fbg-drive-finder .listings-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--bg-1);
+  border: 1px solid rgba(224, 176, 96, 0.28);
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+}
+#fbg-drive-finder .listings-card:hover,
+#fbg-drive-finder .listings-card:focus-visible {
+  border-color: #e0b060;
+  filter: brightness(1.05);
+}
+#fbg-drive-finder .listings-card:focus-visible {
+  outline: 2px solid #e0b060;
+  outline-offset: 2px;
+}
+#fbg-drive-finder .listings-card-photo {
+  display: block;
+  height: 148px;
+  background: #142018;
+  overflow: hidden;
+}
+#fbg-drive-finder .listings-card-photo img,
+#fbg-drive-finder .listings-card-ph {
+  display: block;
+  width: 100%;
+  height: 148px;
+  object-fit: cover;
+}
+#fbg-drive-finder .listings-card-ph {
+  background: linear-gradient(135deg, #2a382c, #1a241c);
+}
+#fbg-drive-finder .listings-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  padding: 0.7rem 0.75rem 0.8rem;
+}
+#fbg-drive-finder .listings-card-price {
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: #e0b060;
+  letter-spacing: 0.02em;
+}
+#fbg-drive-finder .listings-card-name {
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+#fbg-drive-finder .listings-card-meta {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+#fbg-drive-finder .listings-disclaimer {
+  margin: 0.7rem 0.2rem 0.15rem;
+  font-size: 0.64rem;
+  line-height: 1.4;
+  color: rgba(243, 239, 230, 0.5);
+}
+@media (max-width: 767px) {
+  #fbg-drive-finder .listings-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  #fbg-drive-finder .listings-scroller {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.45rem;
+  }
+  #fbg-drive-finder .listings-card {
+    flex: 0 0 min(78vw, 270px);
+    scroll-snap-align: start;
+  }
+}
 """
 
 
@@ -187,6 +345,145 @@ def csv(values) -> str:
 
 def sri_sha384(path: Path) -> str:
     return "sha384-" + b64encode(sha384(path.read_bytes()).digest()).decode("ascii")
+
+
+def format_price(value) -> str:
+    if value in (None, ""):
+        return "Price on request"
+    number = int(round(float(value)))
+    return f"${number:,}"
+
+
+def listing_meta(raw: dict) -> str:
+    parts = []
+    beds = raw.get("bedroomCount") or 0
+    baths = raw.get("bathCount")
+    sqft = raw.get("livingSpaceSize")
+    acres = raw.get("lotAreaSize")
+    city = (raw.get("addressCity") or "").strip()
+    if beds:
+        parts.append(f"{int(beds)} bd")
+    if baths:
+        count = float(baths)
+        parts.append(f"{int(count) if count == int(count) else count:g} ba")
+    if sqft:
+        parts.append(f"{int(float(sqft)):,} sq ft")
+    if acres:
+        size = float(acres)
+        parts.append("1 acre" if size == 1 else f"{size:g} acres")
+    if city:
+        parts.append(city)
+    return " · ".join(parts)
+
+
+def normalize_listing(raw: dict) -> dict:
+    media = raw.get("media") or []
+    photo = ""
+    if media:
+        photo = media[0].get("mediumUrl") or media[0].get("largeUrl") or ""
+    slug = (raw.get("slug") or "").strip()
+    return {
+        "id": raw.get("id") or "",
+        "title": (raw.get("name") or "").strip(),
+        "price": raw.get("salesPrice"),
+        "priceLabel": format_price(raw.get("salesPrice")),
+        "address": (raw.get("fullAddress") or "").strip(),
+        "city": (raw.get("addressCity") or "").strip(),
+        "photo": photo,
+        "url": f"https://reataranchrealty.com/properties/{slug}" if slug else LISTINGS_PAGE,
+        "meta": listing_meta(raw),
+    }
+
+
+def fetch_listings() -> dict:
+    payload = {
+        "operationName": "Properties",
+        "query": LISTINGS_QUERY,
+        "variables": {
+            "companyId": LP_COMPANY_ID,
+            "agentIds": [LP_AGENT_ID],
+            "archived": False,
+            "offset": 0,
+            "limit": 24,
+        },
+    }
+    request = urllib.request.Request(
+        LISTINGS_ENDPOINT,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "content-type": "application/json",
+            "accept": "application/json",
+            "user-agent": "DiscoverFBG-Driving-Roads/1.0",
+        },
+        method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=20) as response:
+        body = json.loads(response.read().decode("utf-8"))
+    errors = body.get("errors") or []
+    if errors:
+        raise RuntimeError(errors[0].get("message") or "listings GraphQL error")
+    props = body.get("data", {}).get("properties") or []
+    active = [item for item in props if item.get("status") == "FOR_SALE"]
+    active.sort(key=lambda item: float(item.get("salesPrice") or 0), reverse=True)
+    return {
+        "updated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "source": LISTINGS_PAGE,
+        "listings": [normalize_listing(item) for item in active],
+    }
+
+
+def load_listings() -> dict:
+    if not LISTINGS_OUT.exists():
+        return {"updated": "", "source": LISTINGS_PAGE, "listings": []}
+    try:
+        data = json.loads(LISTINGS_OUT.read_text())
+    except json.JSONDecodeError:
+        return {"updated": "", "source": LISTINGS_PAGE, "listings": []}
+    listings = data.get("listings") if isinstance(data, dict) else []
+    return {
+        "updated": data.get("updated") or "",
+        "source": data.get("source") or LISTINGS_PAGE,
+        "listings": listings if isinstance(listings, list) else [],
+    }
+
+
+def write_listings(data: dict) -> None:
+    LISTINGS_OUT.write_text(json.dumps(data, indent=2) + "\n")
+
+
+def listing_card(item: dict) -> str:
+    photo = item.get("photo") or ""
+    if photo:
+        media = f'<img src="{esc(photo)}" alt="" width="480" height="300" loading="lazy">'
+    else:
+        media = '<span class="listings-card-ph" aria-hidden="true"></span>'
+    title = item.get("title") or item.get("address") or "Listing"
+    return f'''<a class="listings-card" href="{esc(item.get("url") or LISTINGS_PAGE)}" target="_blank" rel="noopener noreferrer">
+<span class="listings-card-photo">{media}</span>
+<span class="listings-card-body">
+<span class="listings-card-price">{esc(item.get("priceLabel") or "Price on request")}</span>
+<span class="listings-card-name">{esc(title)}</span>
+<span class="listings-card-meta">{esc(item.get("meta") or item.get("city") or "")}</span>
+</span>
+</a>'''
+
+
+def listings_row_html() -> str:
+    data = load_listings()
+    listings = data.get("listings") or []
+    hidden = "" if listings else " hidden"
+    cards = "\n".join(listing_card(item) for item in listings)
+    return f'''<section class="listings-row" id="fbg-listings"{hidden} aria-label="Hill Country listings">
+  <div class="listings-head">
+    <div>
+      <h2>Homes and land on the market</h2>
+      <p class="listings-sub">Browse a listing while you pick a drive.</p>
+    </div>
+    <a class="listings-all" href="{esc(LISTINGS_PAGE)}" target="_blank" rel="noopener noreferrer">See all listings</a>
+  </div>
+  <div class="listings-scroller" id="listings-scroller">{cards}</div>
+  <p class="listings-disclaimer">Listings courtesy of Reata Ranch Realty. Information believed reliable, not guaranteed — verify independently. Doug Siddens, REALTOR®, TREC #840460.</p>
+</section>'''
 
 
 def mill_places() -> str:
@@ -374,6 +671,7 @@ def finder_snippet(
       </div>
     </div>
   </div>
+  {listings_row_html()}
 </div>
 <script type="application/json" id="drive-routes">{routes_json}</script>
   <div class="share-modal" id="share-modal" hidden>
@@ -505,7 +803,27 @@ def write_embed() -> str:
     return combined
 
 
-def main() -> None:
+def refresh_listings(required: bool = False) -> dict:
+    try:
+        data = fetch_listings()
+        write_listings(data)
+        print(f"Wrote {len(data['listings'])} listings → {LISTINGS_OUT}")
+        return data
+    except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError) as err:
+        if required:
+            raise
+        print(f"Listings fetch skipped: {err}")
+        if not LISTINGS_OUT.exists():
+            write_listings({"updated": "", "source": LISTINGS_PAGE, "listings": []})
+        return load_listings()
+
+
+def main(argv: list[str] | None = None) -> None:
+    args = argv if argv is not None else sys.argv[1:]
+    listings_only = "--listings-only" in args
+    refresh_listings(required=listings_only)
+    if listings_only:
+        return
     css = transform_css(FINDER_CSS_SRC.read_text())
     (DOCS / "finder.css").write_text(css)
     (ROOT / "finder.css").write_text(css)

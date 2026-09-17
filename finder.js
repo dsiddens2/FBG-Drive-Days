@@ -10,6 +10,7 @@
   const FILTER_VEHICLES = ["motorcycle", "sports", "cruise"];
   const SHARE_PAGE = "https://discoverfbg.com/Best-Driving-Roads";
   const SHARE_INTRO = "Check out these driving roads from Fredericksburg.";
+  const LISTINGS_PAGE = "https://reataranchrealty.com/agents/doug-siddens";
   const FBG = [30.2752, -98.8717];
   let fitting = false;
 
@@ -59,6 +60,58 @@
     } catch (err) {
       return {};
     }
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function listingsUrl() {
+    const base = root.getAttribute("data-embed-base") || "";
+    return base + "listings.json";
+  }
+
+  function listingCardHtml(item) {
+    const url = item.url || LISTINGS_PAGE;
+    const title = item.title || item.address || "Listing";
+    const photo = item.photo
+      ? `<img src="${escapeHtml(item.photo)}" alt="" width="480" height="300" loading="lazy">`
+      : `<span class="listings-card-ph" aria-hidden="true"></span>`;
+    return `<a class="listings-card" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">
+<span class="listings-card-photo">${photo}</span>
+<span class="listings-card-body">
+<span class="listings-card-price">${escapeHtml(item.priceLabel || "Price on request")}</span>
+<span class="listings-card-name">${escapeHtml(title)}</span>
+<span class="listings-card-meta">${escapeHtml(item.meta || item.city || "")}</span>
+</span>
+</a>`;
+  }
+
+  function renderListings(listings) {
+    const row = document.getElementById("fbg-listings");
+    const scroller = document.getElementById("listings-scroller");
+    if (!row || !scroller) return;
+    const items = Array.isArray(listings) ? listings.filter((item) => item && item.url) : [];
+    if (!items.length) {
+      row.hidden = true;
+      scroller.innerHTML = "";
+      return;
+    }
+    scroller.innerHTML = items.map(listingCardHtml).join("");
+    row.hidden = false;
+  }
+
+  function loadListings() {
+    fetch(listingsUrl(), { credentials: "omit" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data.listings)) renderListings(data.listings);
+      })
+      .catch(() => {});
   }
 
   function trackGa4Event(name, params) {
@@ -662,6 +715,7 @@
   fitFinderToViewport();
   initMap();
   applyFilters();
+  loadListings();
   scheduleFit();
   window.setTimeout(scheduleFit, 300);
   window.setTimeout(scheduleFit, 1200);
