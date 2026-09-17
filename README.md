@@ -13,6 +13,9 @@ Open http://127.0.0.1:8770/
 
 Catalog lives in `routes.json`. Re-run `bake_drive.py` after editing routes, copy, or `finder.js` / `finder.css`.
 
+Listings cards fetch the shared snapshot at `https://dsiddens2.github.io/FBG-Listings/listings.json`. Do not copy that JSON into this repo.
+
+
 ## Live (Squarespace)
 
 GitHub Pages serves CSS, JS, the map library, and the logo:

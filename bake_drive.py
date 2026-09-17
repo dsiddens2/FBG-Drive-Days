@@ -4,11 +4,9 @@ from __future__ import annotations
 
 import json
 import re
-import sys
 import urllib.error
 import urllib.request
 from base64 import b64encode
-from datetime import datetime, timezone
 from hashlib import sha384
 from html import escape
 from pathlib import Path
@@ -19,37 +17,15 @@ ROUTES = json.loads((ROOT / "routes.json").read_text())
 SRC_MILL = DOCS / "index.src.html"
 FINDER_CSS_SRC = ROOT / "finder.css"
 FINDER_JS = ROOT / "finder.js"
-EMBED_VERSION = "20260916-roads6"
+EMBED_VERSION = "20260917-roads1"
 EMBED_BASE = "https://dsiddens2.github.io/FBG-Drive-Days/"
 HOME_PAGE = "https://discoverfbg.com/"
+LISTINGS_JSON = "https://dsiddens2.github.io/FBG-Listings/listings.json"
 LISTINGS_PAGE = "https://reataranchrealty.com/agents/doug-siddens"
 LISTINGS_SEARCH = "https://reataranchrealty.com/home-search/listings?sortBy=LIST_PRICE&regions=%5B%7B%22regionId%22%3A%22d2b75ba0-dc7d-48d4-8cb5-1e5a823eda96%22%2C%22address%22%3A%22Fredericksburg%2C+TX%2C+USA%22%7D%5D&center=%7B%22lat%22%3A30.2544044893871%2C%22lng%22%3A-98.889515%7D&boundary=%5B%5B%5B30.58599013173766%2C-99.20846183837891%5D%2C%5B30.58599013173766%2C-98.5705681616211%5D%2C%5B29.921695749509272%2C-98.5705681616211%5D%2C%5B29.921695749509272%2C-99.20846183837891%5D%2C%5B30.58599013173766%2C-99.20846183837891%5D%5D%5D&cityName=Fredericksburg&stateName=TX"
-LISTINGS_ENDPOINT = "https://reataranchrealty.com/api-gw/graphql"
-LP_COMPANY_ID = "d35b0af8-248c-413b-b5f9-d720b12d0bc1"
-LP_AGENT_ID = "b459b58a-06e5-4f6a-8e91-dcdca5fb0dc9"
-LISTINGS_OUT = DOCS / "listings.json"
 EMBED_OUT = ROOT / "squarespace-embed.html"
 CODE_BLOCK_LIMIT = 400 * 1024
 EXTRAS_MARK = "/* --- drive extras --- */"
-LISTINGS_QUERY = """
-query Properties($agentIds: [ID!], $companyId: String, $archived: Boolean, $offset: Int, $limit: Int) {
-  properties(agentIds: $agentIds, companyId: $companyId, archived: $archived, offset: $offset, limit: $limit) {
-    id
-    name
-    status
-    salesPrice
-    fullAddress
-    addressCity
-    bedroomCount
-    bathCount
-    livingSpaceSize
-    lotAreaSize
-    lotAreaUnits
-    slug
-    media { mediumUrl largeUrl }
-  }
-}
-""".strip()
 
 EXTRA_CSS = """
 #fbg-drive-finder .filter-reset-wrap {
@@ -348,108 +324,21 @@ def sri_sha384(path: Path) -> str:
     return "sha384-" + b64encode(sha384(path.read_bytes()).digest()).decode("ascii")
 
 
-def format_price(value) -> str:
-    if value in (None, ""):
-        return "Price on request"
-    number = int(round(float(value)))
-    return f"${number:,}"
-
-
-def listing_meta(raw: dict) -> str:
-    parts = []
-    beds = raw.get("bedroomCount") or 0
-    baths = raw.get("bathCount")
-    sqft = raw.get("livingSpaceSize")
-    acres = raw.get("lotAreaSize")
-    city = (raw.get("addressCity") or "").strip()
-    if beds:
-        parts.append(f"{int(beds)} bd")
-    if baths:
-        count = float(baths)
-        parts.append(f"{int(count) if count == int(count) else count:g} ba")
-    if sqft:
-        parts.append(f"{int(float(sqft)):,} sq ft")
-    if acres:
-        size = float(acres)
-        parts.append("1 acre" if size == 1 else f"{size:g} acres")
-    if city:
-        parts.append(city)
-    return " · ".join(parts)
-
-
-def normalize_listing(raw: dict) -> dict:
-    media = raw.get("media") or []
-    photo = ""
-    if media:
-        photo = media[0].get("mediumUrl") or media[0].get("largeUrl") or ""
-    slug = (raw.get("slug") or "").strip()
-    return {
-        "id": raw.get("id") or "",
-        "title": (raw.get("name") or "").strip(),
-        "price": raw.get("salesPrice"),
-        "priceLabel": format_price(raw.get("salesPrice")),
-        "address": (raw.get("fullAddress") or "").strip(),
-        "city": (raw.get("addressCity") or "").strip(),
-        "photo": photo,
-        "url": f"https://reataranchrealty.com/properties/{slug}" if slug else LISTINGS_PAGE,
-        "meta": listing_meta(raw),
-    }
-
-
-def fetch_listings() -> dict:
-    payload = {
-        "operationName": "Properties",
-        "query": LISTINGS_QUERY,
-        "variables": {
-            "companyId": LP_COMPANY_ID,
-            "agentIds": [LP_AGENT_ID],
-            "archived": False,
-            "offset": 0,
-            "limit": 24,
-        },
-    }
-    request = urllib.request.Request(
-        LISTINGS_ENDPOINT,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "content-type": "application/json",
-            "accept": "application/json",
-            "user-agent": "DiscoverFBG-Driving-Roads/1.0",
-        },
-        method="POST",
-    )
-    with urllib.request.urlopen(request, timeout=20) as response:
-        body = json.loads(response.read().decode("utf-8"))
-    errors = body.get("errors") or []
-    if errors:
-        raise RuntimeError(errors[0].get("message") or "listings GraphQL error")
-    props = body.get("data", {}).get("properties") or []
-    active = [item for item in props if item.get("status") == "FOR_SALE"]
-    active.sort(key=lambda item: float(item.get("salesPrice") or 0), reverse=True)
-    return {
-        "updated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "source": LISTINGS_PAGE,
-        "listings": [normalize_listing(item) for item in active],
-    }
-
-
 def load_listings() -> dict:
-    if not LISTINGS_OUT.exists():
-        return {"updated": "", "source": LISTINGS_PAGE, "listings": []}
     try:
-        data = json.loads(LISTINGS_OUT.read_text())
-    except json.JSONDecodeError:
+        with urllib.request.urlopen(LISTINGS_JSON, timeout=12) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as err:
+        print(f"Listings fetch skipped: {err}")
         return {"updated": "", "source": LISTINGS_PAGE, "listings": []}
     listings = data.get("listings") if isinstance(data, dict) else []
+    if not isinstance(listings, list):
+        listings = []
     return {
         "updated": data.get("updated") or "",
         "source": data.get("source") or LISTINGS_PAGE,
-        "listings": listings if isinstance(listings, list) else [],
+        "listings": [item for item in listings if isinstance(item, dict) and item.get("url")],
     }
-
-
-def write_listings(data: dict) -> None:
-    LISTINGS_OUT.write_text(json.dumps(data, indent=2) + "\n")
 
 
 def listing_card(item: dict) -> str:
@@ -474,7 +363,7 @@ def listings_row_html() -> str:
     listings = data.get("listings") or []
     hidden = "" if listings else " hidden"
     cards = "\n".join(listing_card(item) for item in listings)
-    return f'''<section class="listings-row" id="fbg-listings"{hidden} aria-label="Hill Country listings">
+    return f'''<section class="listings-row" id="fbg-listings"{hidden} aria-label="Hill Country listings" data-listings-url="{esc(LISTINGS_JSON)}">
   <div class="listings-head">
     <div>
       <h2>Homes and land on the market</h2>
@@ -804,27 +693,7 @@ def write_embed() -> str:
     return combined
 
 
-def refresh_listings(required: bool = False) -> dict:
-    try:
-        data = fetch_listings()
-        write_listings(data)
-        print(f"Wrote {len(data['listings'])} listings → {LISTINGS_OUT}")
-        return data
-    except (urllib.error.URLError, TimeoutError, RuntimeError, json.JSONDecodeError) as err:
-        if required:
-            raise
-        print(f"Listings fetch skipped: {err}")
-        if not LISTINGS_OUT.exists():
-            write_listings({"updated": "", "source": LISTINGS_PAGE, "listings": []})
-        return load_listings()
-
-
-def main(argv: list[str] | None = None) -> None:
-    args = argv if argv is not None else sys.argv[1:]
-    listings_only = "--listings-only" in args
-    refresh_listings(required=listings_only)
-    if listings_only:
-        return
+def main() -> None:
     css = transform_css(FINDER_CSS_SRC.read_text())
     (DOCS / "finder.css").write_text(css)
     (ROOT / "finder.css").write_text(css)

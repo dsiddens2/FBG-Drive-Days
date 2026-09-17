@@ -10,6 +10,7 @@
   const FILTER_VEHICLES = ["motorcycle", "sports", "cruise"];
   const SHARE_PAGE = "https://discoverfbg.com/Best-Driving-Roads";
   const SHARE_INTRO = "Check out these driving roads from Fredericksburg.";
+  const LISTINGS_JSON = "https://dsiddens2.github.io/FBG-Listings/listings.json";
   const LISTINGS_PAGE = "https://reataranchrealty.com/agents/doug-siddens";
   const LISTINGS_SEARCH = "https://reataranchrealty.com/home-search/listings?sortBy=LIST_PRICE&regions=%5B%7B%22regionId%22%3A%22d2b75ba0-dc7d-48d4-8cb5-1e5a823eda96%22%2C%22address%22%3A%22Fredericksburg%2C+TX%2C+USA%22%7D%5D&center=%7B%22lat%22%3A30.2544044893871%2C%22lng%22%3A-98.889515%7D&boundary=%5B%5B%5B30.58599013173766%2C-99.20846183837891%5D%2C%5B30.58599013173766%2C-98.5705681616211%5D%2C%5B29.921695749509272%2C-98.5705681616211%5D%2C%5B29.921695749509272%2C-99.20846183837891%5D%2C%5B30.58599013173766%2C-99.20846183837891%5D%5D%5D&cityName=Fredericksburg&stateName=TX";
   const FBG = [30.2752, -98.8717];
@@ -72,8 +73,8 @@
   }
 
   function listingsUrl() {
-    const base = root.getAttribute("data-embed-base") || "";
-    return base + "listings.json";
+    const row = document.getElementById("fbg-listings");
+    return (row && row.getAttribute("data-listings-url")) || LISTINGS_JSON;
   }
 
   function listingCardHtml(item) {
