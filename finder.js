@@ -77,6 +77,17 @@
     return (row && row.getAttribute("data-listings-url")) || LISTINGS_JSON;
   }
 
+  function shuffleListings(items) {
+    const shuffled = items.slice();
+    for (let i = shuffled.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const swap = shuffled[i];
+      shuffled[i] = shuffled[j];
+      shuffled[j] = swap;
+    }
+    return shuffled;
+  }
+
   function listingCardHtml(item) {
     const url = item.url || LISTINGS_PAGE;
     const title = item.title || item.address || "Listing";
@@ -105,7 +116,7 @@
       scroller.innerHTML = "";
       return;
     }
-    scroller.innerHTML = items.map(listingCardHtml).join("");
+    scroller.innerHTML = shuffleListings(items).map(listingCardHtml).join("");
     row.hidden = false;
   }
 
