@@ -28,7 +28,7 @@
       "Bent Rim Grill / Frio Canyon Motorcycle Stop, Leakey \u2014 burgers, Frito pie, bike parking",
       "The Hog Pen, RM 336 \u2014 BBQ and a beer if the hours line up (Wed / Fri\u2013Sun)"
     ],
-    "gotchas": "Fuel in Medina, Leakey, and Camp Wood. Blind crests, free-range cattle, thin shoulders. The Hog Pen is not daily. This is not a wine-tasting day. Already rode 335, 336, and 337? That is the Rocksprings / Highway 55 day.",
+    "gotchas": "Fuel in Medina, Leakey, and Camp Wood. Blind crests, free-range cattle, thin shoulders. The Hog Pen is not daily. This is not a wine-tasting day. Short on daylight, or skipping Camp Wood and 335? That is Two Sisters to Leakey. Already rode 335, 336, and 337? That is the Rocksprings / Highway 55 day.",
     "waypoints": [
       {
         "name": "Fredericksburg",
@@ -82,6 +82,117 @@
         "name": "Leakey",
         "lat": 29.7288,
         "lng": -99.7614,
+        "kind": "via"
+      },
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "end"
+      }
+    ]
+  },
+  {
+    "id": "leakey-two-sisters",
+    "name": "Two Sisters",
+    "title": "Two Sisters to Leakey",
+    "tagline": "337 out, 336 back. Leakey for lunch, then 41, 83, and river 39 home.",
+    "miles": "~210 mi round-trip",
+    "time": "full",
+    "timeLabel": "Full day, skip Camp Wood",
+    "roads": "technical",
+    "roadsLabel": "Technical",
+    "eat": [
+      "bbq",
+      "mix"
+    ],
+    "eatLabel": "BBQ / grill",
+    "vehicle": [
+      "motorcycle",
+      "sports"
+    ],
+    "vehicleLabel": "Motorcycle or sports car",
+    "difficulty": "4 / 5",
+    "description": "The shorter sisters day. TX 16 to Kerrville, Medina onto RM 337 — the twisty one everyone means — and lunch in Leakey. Skip Camp Wood and 335. Home is the other sister: RM 336 north to TX 41, a short drop on US 83, then TX 39 along the Guadalupe through Hunt and Ingram. Same canyon pavement from town without the full three-sister loop.",
+    "routeLabel": "FBG → Kerrville → Medina → 337 → Leakey → 336 → 41 → 83 → 39 → Hunt → Kerrville → home",
+    "mapsUrl": "https://www.google.com/maps/dir/Fredericksburg,+TX/Kerrville,+TX/Medina,+TX/Lost+Maples+Country+Store,+Vanderpool,+TX/Bent+Rim+Grill,+Leakey,+TX/29.821,-99.7625/30.0466,-99.8410/30.0668,-99.6938/29.9435,-99.6947/Hunt,+TX/Ingram,+TX/Fredericksburg,+TX",
+    "stops": [
+      "Lost Maples Country Store, Vanderpool — fuel and a pause before 337 west of Vanderpool",
+      "Bent Rim Grill / Frio Canyon Motorcycle Stop, Leakey — lunch. Burgers, Frito pie, bike parking",
+      "The Hog Pen, RM 336 — BBQ on the way north if the hours line up (Wed / Fri–Sun)"
+    ],
+    "gotchas": "Fuel in Medina and Leakey before you climb 336 — nothing honest until Ingram. Blind crests, cattle, thin shoulders. The Hog Pen is not daily. After 336, 41 east to 83, then 83 south to 39 through Hunt. That is the pavement line for mixed vehicles. FM 1340 off 41 is shorter into Hunt but it is low-water crossings — a dry-weather motorcycle cut, not the sports-car route. Skip 335 and Camp Wood on purpose; that is Twisted Sisters Full Day.",
+    "waypoints": [
+      {
+        "name": "Fredericksburg",
+        "lat": 30.2752,
+        "lng": -98.8717,
+        "kind": "start"
+      },
+      {
+        "name": "Kerrville",
+        "lat": 30.0474,
+        "lng": -99.1403,
+        "kind": "via"
+      },
+      {
+        "name": "Medina",
+        "lat": 29.7966,
+        "lng": -99.2464,
+        "kind": "via"
+      },
+      {
+        "name": "Lost Maples Country Store",
+        "lat": 29.7458,
+        "lng": -99.557,
+        "kind": "stop"
+      },
+      {
+        "name": "Bent Rim Grill, Leakey",
+        "lat": 29.7255,
+        "lng": -99.768,
+        "kind": "stop"
+      },
+      {
+        "name": "The Hog Pen, RM 336",
+        "lat": 29.821,
+        "lng": -99.7625,
+        "kind": "stop"
+      },
+      {
+        "name": "RM 336 & TX 41",
+        "lat": 30.0466,
+        "lng": -99.841,
+        "kind": "via"
+      },
+      {
+        "name": "TX 41 & US 83",
+        "lat": 30.0668,
+        "lng": -99.6938,
+        "kind": "via"
+      },
+      {
+        "name": "TX 39 & US 83",
+        "lat": 29.9435,
+        "lng": -99.6947,
+        "kind": "via"
+      },
+      {
+        "name": "Hunt",
+        "lat": 30.0708,
+        "lng": -99.3378,
+        "kind": "via"
+      },
+      {
+        "name": "Ingram",
+        "lat": 30.0774,
+        "lng": -99.2403,
+        "kind": "via"
+      },
+      {
+        "name": "Kerrville",
+        "lat": 30.0474,
+        "lng": -99.1403,
         "kind": "via"
       },
       {
